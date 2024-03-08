@@ -1,0 +1,9 @@
+{
+  "name": "backoffice-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/backoffice-e2e/src",
+  "targets": {},
+  "implicitDependencies": ["backoffice"],
+  "tags": []
+}
