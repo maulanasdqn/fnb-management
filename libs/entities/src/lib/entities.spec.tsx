@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import Atoms from './atoms';
+import Entities from './entities';
 
-describe('Atoms', () => {
+describe('Entities', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Atoms />);
+    const { baseElement } = render(<Entities />);
     expect(baseElement).toBeTruthy();
   });
 });

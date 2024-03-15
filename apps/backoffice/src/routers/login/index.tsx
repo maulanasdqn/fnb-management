@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
 
-export const MenuPage: FC = (): ReactElement => {
+export const LoginPage: FC = (): ReactElement => {
   return (
     <div className="bg-primary text-white">
       <h1>Welcome</h1>
