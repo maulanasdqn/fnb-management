@@ -1,0 +1,8 @@
+{
+  "name": "web-services",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/services/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {}
+}

@@ -1,0 +1,8 @@
+{
+  "name": "molecules",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/components/molecules/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {}
+}

@@ -14,7 +14,14 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@fms/atoms": ["libs/web/components/atoms/src/index.ts"],
+      "@fms/molecules": ["libs/web/components/molecules/src/index.ts"],
+      "@fms/organisms": ["libs/web/components/organisms/src/index.ts"],
+      "@fms/templates": ["libs/web/components/templates/src/index.ts"],
+      "@fms/web-modules": ["libs/web/modules/src/index.ts"],
+      "@fms/web-services": ["libs/web/services/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

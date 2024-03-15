@@ -1,0 +1,8 @@
+{
+  "name": "atoms",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/components/atoms/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {}
+}
