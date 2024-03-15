@@ -1,8 +1,8 @@
 {
-  "name": "backoffice-e2e",
+  "name": "warehouse-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/backoffice-e2e/src",
+  "sourceRoot": "apps/warehouse-e2e/src",
   "targets": {},
-  "implicitDependencies": ["backoffice"]
+  "implicitDependencies": ["warehouse"]
 }
