@@ -44,8 +44,8 @@ export const Button: FC<TButton> = ({
     },
     {
       'md:text-sm md:px-2 md:py-1': size === 'sm',
-      'md:text-md md:px-4 md:py-2': size === 'md',
-      'md:text-lg md:px-6 md:py-3': size === 'lg',
+      'md:text-lg md:px-4 md:py-2': size === 'md',
+      'md:text-xl md:px-6 md:py-3': size === 'lg',
     }
   );
 
