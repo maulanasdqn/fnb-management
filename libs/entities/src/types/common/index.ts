@@ -113,13 +113,8 @@ export type TMessage = DetailedHTMLProps<
 > &
   TInputExtend;
 
-export type TFieldSet = Omit<
-  DetailedHTMLProps<
-    FieldsetHTMLAttributes<HTMLFieldSetElement>,
-    HTMLFieldSetElement
-  >,
-  'size' | 'type'
-> &
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TFieldSet = Omit<DetailedHTMLProps<any, any>, 'size' | 'type'> &
   TInputExtend &
   Pick<InputHTMLAttributes<HTMLInputElement>, 'type'>;
 
