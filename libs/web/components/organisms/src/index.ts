@@ -1,2 +1,2 @@
-export * from './lib/organisms';
 export * from './controlled-fields';
+export * from './sidebar';

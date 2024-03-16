@@ -1,7 +1,6 @@
 import type {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
-  FieldsetHTMLAttributes,
   FormHTMLAttributes,
   HTMLAttributes,
   InputHTMLAttributes,

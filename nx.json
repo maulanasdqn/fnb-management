@@ -64,5 +64,12 @@
         "unitTestRunner": "vitest"
       }
     }
+  },
+  "targetDefaults": {
+    "@nx/vite:build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    }
   }
 }

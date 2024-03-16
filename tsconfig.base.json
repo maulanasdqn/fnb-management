@@ -20,6 +20,7 @@
       "@fms/molecules": ["libs/web/components/molecules/src/index.ts"],
       "@fms/organisms": ["libs/web/components/organisms/src/index.ts"],
       "@fms/templates": ["libs/web/components/templates/src/index.ts"],
+      "@fms/utilities": ["libs/utilities/src/index.ts"],
       "@fms/web-modules": ["libs/web/modules/src/index.ts"],
       "@fms/web-services": ["libs/web/services/src/index.ts"]
     }
