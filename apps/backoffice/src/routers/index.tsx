@@ -4,12 +4,7 @@ import { Dashboard } from './dashboard/default';
 import { DashboardOrder } from './dashboard/order';
 import { DashboardNotification } from './dashboard/notification';
 import { DashboardLayout } from './dashboard/layout';
-import {
-  isAuthenticated,
-  logOut,
-  permissionChecker,
-  userData,
-} from '@fms/utilities';
+import { isAuthenticated, logOut, pagePermission } from '@fms/utilities';
 import {
   PERMISSION_DASHBOARD,
   PERMISSION_NOTIFICATION,
@@ -41,35 +36,18 @@ export const router = createBrowserRouter([
       {
         path: '',
         element: <Dashboard />,
-        loader: () =>
-          permissionChecker(
-            [PERMISSION_DASHBOARD.READ_DASHBOARD],
-            userData.role.permissions
-          )
-            ? null
-            : redirect('/permission-denied'),
+        loader: () => pagePermission([PERMISSION_DASHBOARD.READ_DASHBOARD]),
       },
       {
         path: 'order',
         element: <DashboardOrder />,
-        loader: () =>
-          permissionChecker(
-            [PERMISSION_ORDER.READ_ORDER],
-            userData.role.permissions
-          )
-            ? null
-            : redirect('/permission-denied'),
+        loader: () => pagePermission([PERMISSION_ORDER.READ_ORDER]),
       },
       {
         path: 'notification',
         element: <DashboardNotification />,
         loader: () =>
-          permissionChecker(
-            [PERMISSION_NOTIFICATION.READ_NOTIFICATION],
-            userData.role.permissions
-          )
-            ? null
-            : redirect('/permission-denied'),
+          pagePermission([PERMISSION_NOTIFICATION.READ_NOTIFICATION]),
       },
     ],
   },

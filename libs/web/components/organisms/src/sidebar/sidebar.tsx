@@ -3,7 +3,8 @@ import { FC, Fragment, ReactElement } from 'react';
 import { Icon } from '@iconify/react';
 import { clsx } from 'clsx';
 import { PERMISSION_DASHBOARD, PERMISSION_ORDER } from '@fms/entities';
-import { logOut, permissionChecker, userData } from '@fms/utilities';
+import { permissionChecker } from '@fms/utilities';
+import { userService } from '@fms/web-services';
 
 type TSidebar = {
   name: string;
@@ -57,7 +58,7 @@ export const Sidebar: FC = (): ReactElement => {
           <Fragment key={key}>
             {permissionChecker(
               menu.permissions,
-              userData.role?.permissions
+              userService.getUserData()?.role?.permissions
             ) && (
               <Link to={menu.path}>
                 <li className={className(menu.path)}>

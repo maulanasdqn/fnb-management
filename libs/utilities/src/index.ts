@@ -1,4 +1,5 @@
-import { TUser } from '@fms/entities';
+import { redirect } from 'react-router-dom';
+import { tokenService, userService } from '@fms/web-services';
 
 export function permissionChecker<T>(arr1: T[], arr2: T[]): boolean {
   const [shorter, longer] =
@@ -7,14 +8,28 @@ export function permissionChecker<T>(arr1: T[], arr2: T[]): boolean {
   return longer?.some((element) => set.has(element));
 }
 
-export const isAuthenticated = localStorage.getItem('accessToken');
-
-export const userData: TUser = JSON.parse(
-  localStorage.getItem('userData') as string
-);
+export const isAuthenticated = tokenService.getAccessToken();
 
 export const logOut = () => {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('userData');
+  tokenService.removeAccessToken();
+  tokenService.removeRefreshToken();
+  userService.removeUserData();
   window.location.reload();
+};
+
+export const pagePermission = (permissions: Array<string>) => {
+  if (!isAuthenticated) {
+    return redirect('/auth/login');
+  }
+
+  if (
+    !permissionChecker(
+      permissions,
+      userService?.getUserData()?.role?.permissions
+    )
+  ) {
+    return redirect('/permission-denied');
+  }
+
+  return null;
 };
