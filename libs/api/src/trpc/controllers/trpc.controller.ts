@@ -1,19 +1,21 @@
-import { initTRPC } from '@trpc/server';
-import { z } from 'zod';
-import * as trpcExpress from '@trpc/server/adapters/express';
+import { authController } from '../../auth';
+import { router } from '../../common';
+import { roleController } from '../../iam/';
+import { userController } from '../../iam/';
+import { itemController } from '../../item/';
+import { orderController } from '../../order/';
+import { productController } from '../../product';
+import { purchaseController } from '../../purchase/';
+import { recipeController } from '../../recipe/';
 
-export const createContext = ({
-  req,
-  res,
-}: trpcExpress.CreateExpressContextOptions) => ({});
-type Context = Awaited<ReturnType<typeof createContext>>;
-const t = initTRPC.context<Context>().create();
-export const router = t.router;
-export const publicProcedure = t.procedure;
-
-export const appRouter = router({
-  hello: publicProcedure.query(() => {
-    return 'Hello tRPC';
-  }),
+export const trpcController = router({
+  user: userController,
+  role: roleController,
+  auth: authController,
+  item: itemController,
+  order: orderController,
+  product: productController,
+  purchase: purchaseController,
+  recipe: recipeController,
 });
-export type AppRouter = typeof appRouter;
+export type TrpcController = typeof trpcController;
