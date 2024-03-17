@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@fms/api": ["libs/api/src/index.ts"],
       "@fms/atoms": ["libs/web/components/atoms/src/index.ts"],
       "@fms/entities": ["libs/entities/src/index.ts"],
       "@fms/molecules": ["libs/web/components/molecules/src/index.ts"],
