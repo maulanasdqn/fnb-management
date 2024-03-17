@@ -1,4 +1,4 @@
-import { router, procedure } from '../../common';
+import { router, procedure } from '@fms/trpc-server';
 import { z } from 'zod';
 
 export const orderController = router({

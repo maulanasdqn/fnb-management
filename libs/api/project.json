@@ -3,17 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/api/src",
   "projectType": "library",
-  "targets": {
-    "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs/api",
-        "main": "libs/api/src/index.ts",
-        "tsConfig": "libs/api/tsconfig.lib.json",
-        "assets": ["libs/api/*.md"]
-      }
-    }
-  },
-  "tags": []
+  "tags": [],
+  "// targets": "to see all targets run: nx show project api-libs --web",
+  "targets": {}
 }

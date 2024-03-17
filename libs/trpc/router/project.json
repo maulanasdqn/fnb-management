@@ -1,0 +1,9 @@
+{
+  "name": "trpc-router",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/trpc/router/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project trpc-router --web",
+  "targets": {}
+}

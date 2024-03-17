@@ -1,4 +1,4 @@
-import { trpc } from '@fms/web-services';
+import { trpc } from '@fms/trpc-client';
 import { Button } from '@fms/atoms';
 import { FC, ReactElement } from 'react';
 

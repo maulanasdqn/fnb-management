@@ -15,12 +15,17 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@fms/api": ["libs/api/src/index.ts"],
+      "@fms/api-libs": ["libs/api/src/index.ts"],
       "@fms/atoms": ["libs/web/components/atoms/src/index.ts"],
       "@fms/entities": ["libs/entities/src/index.ts"],
       "@fms/molecules": ["libs/web/components/molecules/src/index.ts"],
       "@fms/organisms": ["libs/web/components/organisms/src/index.ts"],
       "@fms/templates": ["libs/web/components/templates/src/index.ts"],
+      "@fms/trpc-client": ["libs/trpc/client/src/index.ts"],
+      "@fms/trpc-router": ["libs/trpc/router/src/index.ts"],
+      "@fms/trpc-server": ["libs/trpc/server/src/index.ts"],
+      "@fms/trpc/client": ["libs/trpc/src/client.ts"],
+      "@fms/trpc/server": ["libs/trpc/src/server.ts"],
       "@fms/utilities": ["libs/utilities/src/index.ts"],
       "@fms/web-modules": ["libs/web/modules/src/index.ts"],
       "@fms/web-services": ["libs/web/services/src/index.ts"]

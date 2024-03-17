@@ -1,5 +1,5 @@
 {
-  "name": "@fms/api-libs",
+  "name": "@fms/trpc-router",
   "version": "0.0.1",
   "main": "./index.js",
   "types": "./index.d.ts",

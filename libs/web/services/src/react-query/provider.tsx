@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren, ReactElement } from 'react';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { trpc } from '../trpc';
+import { trpc } from '@fms/trpc-client';
 import { httpBatchLink } from '@trpc/client';
 
 export const ReactQueryProvider: FC<PropsWithChildren> = ({
@@ -11,7 +11,13 @@ export const ReactQueryProvider: FC<PropsWithChildren> = ({
   const trpcClient = trpc.createClient({
     links: [
       httpBatchLink({
-        url: import.meta.env.VITE_TRPC_URL || 'http://localhost:3000/trpc',
+        url: import.meta.env?.['VITE_TRPC_URL'] || 'http://localhost:3000/trpc',
+        headers() {
+          return {
+            cookie: document.cookie,
+            authorization: document.cookie,
+          };
+        },
       }),
     ],
   });

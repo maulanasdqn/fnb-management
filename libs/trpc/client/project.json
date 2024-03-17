@@ -1,0 +1,9 @@
+{
+  "name": "trpc-client",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/trpc/client/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project trpc-client --web",
+  "targets": {}
+}
