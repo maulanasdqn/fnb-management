@@ -29,7 +29,7 @@ export const Sidebar: FC<{ menu: TSidebar[] }> = (props): ReactElement => {
         'min-h-screen h-full bg-white shadow-md w-1/6 flex flex-col p-4'
       }
     >
-      <figure className="flex bg-grey-50 p-2 rounded-lg shadow-sm flex-col w-full">
+      <figure className="hidden md:flex bg-grey-50 p-2 rounded-lg shadow-sm flex-col w-full">
         <figcaption className="w-full text-1xl text-primary">
           Serasa Erat Backoffice
         </figcaption>

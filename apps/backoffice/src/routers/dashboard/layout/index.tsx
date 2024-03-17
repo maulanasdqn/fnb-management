@@ -28,6 +28,12 @@ export const DashboardLayout: FC = (): ReactElement => {
       ],
     },
     {
+      name: 'Stock Opname',
+      icon: <Icon icon="fa:calculator" />,
+      path: '/dashboard/stock-opname',
+      permissions: [PERMISSION_PURCHASE.REQUEST_PURCHASE],
+    },
+    {
       name: 'User',
       icon: <Icon icon="fa:users" />,
       path: '/dashboard/user',
@@ -47,9 +53,9 @@ export const DashboardLayout: FC = (): ReactElement => {
     },
   ];
   return (
-    <div className="flex gap-x-4">
+    <div className="flex gap-x-4 bg-grey-50 w-full">
       <Sidebar menu={sidebarMenu} />
-      <div className="p-6">
+      <div className="p-6 w-full">
         <Outlet />
       </div>
     </div>

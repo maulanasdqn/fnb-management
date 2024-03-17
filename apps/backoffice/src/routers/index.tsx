@@ -10,8 +10,13 @@ import {
   PERMISSION_NOTIFICATION,
   PERMISSION_ORDER,
   PERMISSION_PURCHASE,
+  PERMISSION_ROLE,
+  PERMISSION_USER,
 } from '@fms/entities';
 import { DashboardRequestPurchase } from './dashboard/request-purchase';
+import { DashboardUser } from './dashboard/user';
+import { DashboardRole } from './dashboard/role';
+import { DashboardStockOpname } from './dashboard/stock-opname';
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +55,21 @@ export const router = createBrowserRouter([
         element: <DashboardNotification />,
         loader: () =>
           pagePermission([PERMISSION_NOTIFICATION.READ_NOTIFICATION]),
+      },
+      {
+        path: 'user',
+        element: <DashboardUser />,
+        loader: () => pagePermission([PERMISSION_USER.READ_USER]),
+      },
+      {
+        path: 'role',
+        element: <DashboardRole />,
+        loader: () => pagePermission([PERMISSION_ROLE.READ_ROLE]),
+      },
+      {
+        path: 'stock-opname',
+        element: <DashboardStockOpname />,
+        loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
       },
       {
         path: 'request-purchase',
