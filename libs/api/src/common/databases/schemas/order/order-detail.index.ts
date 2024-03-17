@@ -5,7 +5,9 @@ import { products } from '../product/product.schema';
 
 export const orderDetails = pgTable('order_details', {
   id: uuid('id').defaultRandom().primaryKey(),
-  productId: text('product_id').notNull(),
+  productId: uuid('product_id')
+    .notNull()
+    .references(() => products.id),
   qty: text('qty').notNull(),
   price: text('price').notNull(),
   amount: text('amount').notNull(),

@@ -17,7 +17,7 @@ export const products = pgTable('products', {
   description: text('description'),
   recipeId: uuid('recipe_id')
     .notNull()
-    .references(() => productCategories.id),
+    .references(() => recipes.id),
   ...baseSchema,
 });
 

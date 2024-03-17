@@ -10,7 +10,9 @@ export const purchases = pgTable('purchases', {
   id: uuid('id').defaultRandom().primaryKey(),
   amountTotal: text('amount_total').notNull(),
   invoiceNumber: text('invoice_number').notNull(),
-  supplierId: text('supplier_id').notNull(),
+  supplierId: uuid('supplier_id')
+    .notNull()
+    .references(() => suppliers.id),
   status: purchaseEnum('status'),
   ...baseSchema,
 });

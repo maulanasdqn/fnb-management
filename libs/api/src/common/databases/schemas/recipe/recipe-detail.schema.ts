@@ -7,8 +7,12 @@ import { items } from '../item/item.schema';
 
 export const recipeDetails = pgTable('recipe_details', {
   id: uuid('id').defaultRandom().primaryKey(),
-  recipeId: text('recipe_id').notNull(),
-  itemId: text('item_id').notNull(),
+  recipeId: uuid('recipe_id')
+    .notNull()
+    .references(() => recipes.id),
+  itemId: uuid('item_id')
+    .notNull()
+    .references(() => items.id),
   amount: text('amount').notNull(),
   ...baseSchema,
 });

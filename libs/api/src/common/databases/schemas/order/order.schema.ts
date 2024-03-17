@@ -8,9 +8,13 @@ import { payments } from '../payment/payment.schema';
 export const orders = pgTable('orders', {
   id: uuid('id').defaultRandom().primaryKey(),
   customerId: text('customer_id').notNull(),
-  placeId: text('place_id').notNull(),
+  placeId: uuid('place_id')
+    .notNull()
+    .references(() => places.id),
   amountTotal: text('amount_total').notNull(),
-  paymentId: text('payment_id').notNull(),
+  paymentId: uuid('payment_id')
+    .notNull()
+    .references(() => payments.id),
   invoiceNumber: text('invoice_number').notNull(),
   ...baseSchema,
 });

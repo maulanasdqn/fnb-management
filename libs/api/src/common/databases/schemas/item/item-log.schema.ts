@@ -8,7 +8,9 @@ export const itemLogs = pgTable('item_logs', {
   qtyBefore: text('qty_before').notNull(),
   qtyCurrent: text('qty_current').notNull(),
   qtyAfter: text('qty_after').notNull(),
-  itemId: text('item_id').notNull(),
+  itemId: uuid('item_id')
+    .notNull()
+    .references(() => items.id),
   ...baseSchema,
 });
 

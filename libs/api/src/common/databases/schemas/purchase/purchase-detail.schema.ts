@@ -6,8 +6,12 @@ import { items } from '../item/item.schema';
 
 export const purchaseDetails = pgTable('purchase_details', {
   id: uuid('id').defaultRandom().primaryKey(),
-  purchaseId: text('purchase_id').notNull(),
-  itemId: text('item_id').notNull(),
+  purchaseId: uuid('purchase_id')
+    .notNull()
+    .references(() => purchases.id),
+  itemId: uuid('item_id')
+    .notNull()
+    .references(() => items.id),
   qty: text('qty').notNull(),
   price: text('price').notNull(),
   amount: text('amount').notNull(),
