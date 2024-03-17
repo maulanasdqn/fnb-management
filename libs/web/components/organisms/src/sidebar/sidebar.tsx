@@ -2,40 +2,26 @@ import { Link, useLocation } from 'react-router-dom';
 import { FC, Fragment, ReactElement } from 'react';
 import { Icon } from '@iconify/react';
 import { clsx } from 'clsx';
-import { PERMISSION_DASHBOARD, PERMISSION_ORDER } from '@fms/entities';
 import { permissionChecker } from '@fms/utilities';
 import { userService } from '@fms/web-services';
 
-type TSidebar = {
+export type TSidebar = {
   name: string;
   icon: ReactElement;
   path: string;
   permissions: Array<string>;
 };
 
-const sidebarMenu: TSidebar[] = [
-  {
-    name: 'Dashboard',
-    icon: <Icon icon="fa:desktop" />,
-    path: '/dashboard',
-    permissions: [PERMISSION_DASHBOARD.READ_DASHBOARD],
-  },
-
-  {
-    name: 'Order',
-    icon: <Icon icon="fa:shopping-cart" />,
-    path: '/dashboard/order',
-    permissions: [PERMISSION_ORDER.READ_ORDER, PERMISSION_ORDER.READ_ALL_ORDER],
-  },
-];
-
-export const Sidebar: FC = (): ReactElement => {
+export const Sidebar: FC<{ menu: TSidebar[] }> = (props): ReactElement => {
   const { pathname } = useLocation();
 
   const className = (url: string) =>
-    clsx('text-primary flex gap-x-4 hover:bg-primary-50 p-2 items-center', {
-      'bg-primary-50': pathname === url,
-    });
+    clsx(
+      'text-primary flex gap-x-2 hover:bg-primary-50 p-2 items-center justify-start',
+      {
+        'bg-primary-50': pathname === url,
+      }
+    );
 
   return (
     <aside
@@ -43,7 +29,7 @@ export const Sidebar: FC = (): ReactElement => {
         'min-h-screen h-full bg-white shadow-md w-1/6 flex flex-col p-4'
       }
     >
-      <figure className="flex bg-grey-50 p-2 rounded-lg shadow-sm flex-col w-full">
+      <figure className="hidden md:flex bg-grey-50 p-2 rounded-lg shadow-sm flex-col w-full">
         <figcaption className="w-full text-1xl text-primary">
           Serasa Erat Backoffice
         </figcaption>
@@ -54,7 +40,7 @@ export const Sidebar: FC = (): ReactElement => {
       </figure>
 
       <ul className="mt-6 flex flex-col gap-y-3 cursor-pointer w-full">
-        {sidebarMenu.map((menu, key) => (
+        {props.menu.map((menu, key) => (
           <Fragment key={key}>
             {permissionChecker(
               menu.permissions,
@@ -62,7 +48,7 @@ export const Sidebar: FC = (): ReactElement => {
             ) && (
               <Link to={menu.path}>
                 <li className={className(menu.path)}>
-                  {menu.icon}
+                  <div className="w-6 h-6 items-center flex">{menu.icon}</div>
                   <span className="font-medium text-[13px]">{menu.name}</span>
                 </li>
               </Link>
@@ -71,9 +57,11 @@ export const Sidebar: FC = (): ReactElement => {
         ))}
         <Link
           to="/auth/logout"
-          className="text-primary flex gap-x-4 hover:bg-primary-50 p-2 items-center"
+          className="text-primary flex gap-x-2 hover:bg-primary-50 p-2 items-center"
         >
-          <Icon icon="fa:sign-out" />
+          <div className="w-6 h-6 items-center flex">
+            <Icon icon="fa:sign-out" />
+          </div>
           <span className="font-medium text-[13px]">Logout</span>
         </Link>
       </ul>

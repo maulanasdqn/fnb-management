@@ -7,7 +7,7 @@ export const LoginPage: FC = (): ReactElement => {
   const { control } = useForm();
   return (
     <div className="bg-grey-100 flex items-center justify-center w-full h-screen text-white">
-      <form className="bg-white shadow-sm rounded-lg p-6 w-1/2 h-1/2 flex-col justify-start flex">
+      <form className="bg-white shadow-sm rounded-lg p-6 w-1/2 md:w-1/3 h-1/2 flex-col justify-start flex">
         <h1 className="text-black text-3xl font-medium">Login Warehouse</h1>
         <section className="flex flex-col gap-y-4 justify-center h-full">
           <ControlledFieldText

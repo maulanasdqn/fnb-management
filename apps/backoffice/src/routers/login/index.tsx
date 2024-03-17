@@ -23,7 +23,14 @@ export const LoginPage: FC = (): ReactElement => {
             role: {
               id: '1',
               name: 'Barista',
-              permissions: ['read-order', 'read-all-order', 'read-dashboard'],
+              permissions: [
+                'read-order',
+                'read-all-order',
+                'read-dashboard',
+                'read-user',
+                'request-purchase',
+                'read-role',
+              ],
             },
           });
         }}
