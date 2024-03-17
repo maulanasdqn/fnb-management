@@ -9,7 +9,9 @@ import {
   PERMISSION_DASHBOARD,
   PERMISSION_NOTIFICATION,
   PERMISSION_ORDER,
+  PERMISSION_PURCHASE,
 } from '@fms/entities';
+import { DashboardRequestPurchase } from './dashboard/request-purchase';
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +50,11 @@ export const router = createBrowserRouter([
         element: <DashboardNotification />,
         loader: () =>
           pagePermission([PERMISSION_NOTIFICATION.READ_NOTIFICATION]),
+      },
+      {
+        path: 'request-purchase',
+        element: <DashboardRequestPurchase />,
+        loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
       },
     ],
   },
