@@ -71,5 +71,6 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     }
-  }
+  },
+  "nxCloudAccessToken": "N2I4MWJlYzktM2UwYS00YTVlLThmOTUtMjY2NWI3YTQ0ODY0fHJlYWQtd3JpdGU="
 }
