@@ -5,7 +5,7 @@ if (!process.env.DATABASE_URL) {
 }
 
 export default {
-  schema: './libs/api/src/common/databases/schemas/index.ts',
+  schema: './libs/api/src/common/databases/schemas/*',
   out: './libs/api/src/common/databases/migrations',
   driver: 'pg',
   dbCredentials: {
