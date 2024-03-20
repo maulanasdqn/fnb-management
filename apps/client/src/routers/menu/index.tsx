@@ -2,14 +2,23 @@ import { Button } from '@fms/atoms';
 import { Icon } from '@iconify/react';
 import { FC, ReactElement, useEffect, useRef } from 'react';
 import { SelectedMenu } from './modules/selected-menu';
+import { trpc } from '@fms/trpc-client';
 
 export const MenuPage: FC = (): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
   }, [inputRef]);
+
+  const { data } = trpc.product.findMany.useQuery({
+    search: inputRef?.current?.value as string,
+  });
+
+  console.log(data, inputRef?.current?.value);
+
   return (
     <section className="w-full min-h-screen relative">
       <div className="flex items-center justify-center w-full h-56 bg-primary-800 p-2">
@@ -28,90 +37,34 @@ export const MenuPage: FC = (): ReactElement => {
         <h1>Rekomendasi</h1>
       </div>
       <section className="grid grid-cols-2 w-full px-3 gap-4">
-        <div className=" flex flex-col max-w-sm bg-white rounded-lg gap-y-3">
-          <figure className="flex flex-col gap-y-2">
-            <img
-              src="/asset1.jpg"
-              alt=""
-              className="object-contain rounded-lg"
-            />
-            <figcaption className="text-left font-bold text-base">
-              Serasa Kopi Susu
-            </figcaption>
-            <h2 className="text-left font-bold text-base">15.000</h2>
-          </figure>
-          <div>
-            <Button
-              type="button"
-              className="w-full bg-white border-primary-800  border rounded-2xl text-primary-800"
-            >
-              Pesan
-            </Button>
+        {data?.map((item) => (
+          <div
+            key={item.id}
+            className="flex flex-col max-w-sm bg-white rounded-lg gap-y-3"
+          >
+            <figure className="flex flex-col gap-y-2">
+              <img
+                src={item.image}
+                alt=""
+                className="object-contain rounded-lg"
+              />
+              <figcaption className="text-left font-bold text-base">
+                {item.name}
+              </figcaption>
+              <h2 className="text-left font-bold text-base">
+                {item.priceSelling}
+              </h2>
+            </figure>
+            <div>
+              <Button
+                type="button"
+                className="w-full bg-white border-primary-800  border rounded-2xl text-primary-800"
+              >
+                Pesan
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className=" flex flex-col max-w-sm bg-white rounded-lg gap-y-3">
-          <figure className="flex flex-col gap-y-2">
-            <img
-              src="/asset1.jpg"
-              alt=""
-              className="object-contain rounded-lg"
-            />
-            <figcaption className="text-left font-bold text-base">
-              Serasa Kopi Susu
-            </figcaption>
-            <h2 className="text-left font-bold text-base">15.000</h2>
-          </figure>
-          <div>
-            <Button
-              type="button"
-              className="w-full bg-white border-primary-800  border rounded-2xl text-primary-800"
-            >
-              Pesan
-            </Button>
-          </div>
-        </div>
-        <div className=" flex flex-col max-w-sm bg-white rounded-lg gap-y-3">
-          <figure className="flex flex-col gap-y-2">
-            <img
-              src="/asset1.jpg"
-              alt=""
-              className="object-contain rounded-lg"
-            />
-            <figcaption className="text-left font-bold text-base">
-              Serasa Kopi Susu
-            </figcaption>
-            <h2 className="text-left font-bold text-base">15.000</h2>
-          </figure>
-          <div>
-            <Button
-              type="button"
-              className="w-full bg-white border-primary-800  border rounded-2xl text-primary-800"
-            >
-              Pesan
-            </Button>
-          </div>
-        </div>
-        <div className=" flex flex-col max-w-sm bg-white rounded-lg gap-y-3">
-          <figure className="flex flex-col gap-y-2">
-            <img
-              src="/asset1.jpg"
-              alt=""
-              className="object-contain rounded-lg"
-            />
-            <figcaption className="text-left font-bold text-base">
-              Serasa Kopi Susu
-            </figcaption>
-            <h2 className="text-left font-bold text-base">15.000</h2>
-          </figure>
-          <div>
-            <Button
-              type="button"
-              className="w-full bg-white border-primary-800  border rounded-2xl text-primary-800"
-            >
-              Pesan
-            </Button>
-          </div>
-        </div>
+        ))}
       </section>
       <SelectedMenu />
     </section>
