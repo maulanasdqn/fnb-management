@@ -10,6 +10,7 @@ app.use(
     origin: '*',
   })
 );
+
 app.use(
   '/trpc',
   trpcExpress.createExpressMiddleware({

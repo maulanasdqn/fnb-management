@@ -1,13 +1,8 @@
-export type TCProductListResponse = {
-  id: string;
-  name: string;
-  priceSelling: number;
-  image: string;
-  description: string;
-};
+import {
+  productQueryParamSchema,
+  productResponseSchema,
+} from './product.schema';
+import { z } from 'zod';
 
-export type TCProductQueryParams = {
-  id?: string;
-  search?: string;
-  productCategoryId?: string;
-};
+export type TCProductListResponse = z.infer<typeof productResponseSchema>;
+export type TCProductQueryParams = z.infer<typeof productQueryParamSchema>;

@@ -1,0 +1,19 @@
+{
+  "name": "drizzle",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/drizzle/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/drizzle",
+        "main": "libs/drizzle/src/index.ts",
+        "tsConfig": "libs/drizzle/tsconfig.lib.json",
+        "assets": ["libs/drizzle/*.md"]
+      }
+    }
+  },
+  "tags": []
+}

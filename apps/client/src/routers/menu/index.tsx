@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import { FC, ReactElement, useEffect, useRef } from 'react';
 import { SelectedMenu } from './modules/selected-menu';
 import { trpc } from '@fms/trpc-client';
+import { currencyFormat } from '@fms/utilities';
 
 export const MenuPage: FC = (): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -24,7 +25,7 @@ export const MenuPage: FC = (): ReactElement => {
       <div className="flex items-center justify-center w-full h-56 bg-primary-800 p-2">
         <h1 className="text-2xl font-bold text-white">Serasa Erat Kopi</h1>
       </div>
-      <div className="flex items-center text-lg px-4 justify-center w-9/12 h-auto py-4 shadow-md rounded-lg -mt-8 bg-white mx-auto mb-3">
+      <div className="flex sticky items-center text-lg px-4 justify-center w-9/12 h-auto py-4 shadow-md rounded-lg -mt-8 bg-white mx-auto mb-3">
         <Icon icon="carbon:search" width="24" />
         <input
           ref={inputRef}
@@ -45,14 +46,14 @@ export const MenuPage: FC = (): ReactElement => {
             <figure className="flex flex-col gap-y-2">
               <img
                 src={item.image}
-                alt=""
+                alt={item.name}
                 className="object-contain rounded-lg"
               />
               <figcaption className="text-left font-bold text-base">
                 {item.name}
               </figcaption>
               <h2 className="text-left font-bold text-base">
-                {item.priceSelling}
+                {currencyFormat(item.priceSelling)}
               </h2>
             </figure>
             <div>

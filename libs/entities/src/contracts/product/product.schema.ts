@@ -7,3 +7,9 @@ export const productResponseSchema = z.object({
   image: z.string(),
   description: z.string(),
 });
+
+export const productQueryParamSchema = z.object({
+  id: z.string().optional(),
+  search: z.string().optional(),
+  productCategoryId: z.string().optional(),
+});

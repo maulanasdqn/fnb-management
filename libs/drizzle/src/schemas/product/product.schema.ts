@@ -12,7 +12,7 @@ export const products = pgTable('products', {
     .notNull()
     .references(() => productCategories.id),
   price: integer('price').notNull(),
-  price_selling: integer('price_selling').notNull(),
+  priceSelling: integer('price_selling').notNull(),
   image: text('image'),
   description: text('description'),
   recipeId: uuid('recipe_id')

@@ -33,3 +33,11 @@ export const pagePermission = (permissions: Array<string>) => {
 
   return null;
 };
+
+export const currencyFormat = (value: number) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    minimumFractionDigits: 0,
+    currency: 'IDR',
+  }).format(value);
+};

@@ -1,2 +1,2 @@
 export * from './product-category.schema';
-export * from './';
+export * from './product.schema';
