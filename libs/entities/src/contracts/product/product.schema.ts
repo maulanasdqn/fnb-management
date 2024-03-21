@@ -4,8 +4,8 @@ export const productResponseSchema = z.object({
   id: z.string(),
   name: z.string(),
   priceSelling: z.number(),
-  image: z.string(),
-  description: z.string(),
+  image: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
 });
 
 export const productQueryParamSchema = z.object({

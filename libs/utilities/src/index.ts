@@ -1,5 +1,6 @@
 import { redirect } from 'react-router-dom';
 import { tokenService, userService } from '@fms/web-services';
+import { useEffect, useState } from 'react';
 
 export function permissionChecker<T>(arr1: T[], arr2: T[]): boolean {
   const [shorter, longer] =
@@ -40,4 +41,17 @@ export const currencyFormat = (value: number) => {
     minimumFractionDigits: 0,
     currency: 'IDR',
   }).format(value);
+};
+
+export const useDebounce = <T>(value: T, delay: number): T => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+  return debouncedValue;
 };
