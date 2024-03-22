@@ -1,10 +1,10 @@
 import { Button } from '@fms/atoms';
-import { TProductListResponse } from '@fms/entities';
+import { TProductSingleResponse } from '@fms/entities';
 import { currencyFormat } from '@fms/utilities';
 import { FC, ReactElement } from 'react';
 
 export const ProductCard: FC<{
-  item: TProductListResponse;
+  item: TProductSingleResponse;
   loading?: boolean;
 }> = ({ item, loading }): ReactElement => {
   return loading ? (

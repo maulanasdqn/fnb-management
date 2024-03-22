@@ -1,7 +1,7 @@
 import { TMetaResponse } from '..';
 import { TBase } from '../common';
 
-export type TPlaceDetailResponse = TBase & {
+export type TPlace = TBase & {
   name: string;
 };
 
@@ -19,6 +19,5 @@ export type TPlaceUpdateRequest = {
   name?: string;
 };
 
-export type TPlaceCreateResponse = TMetaResponse<TPlaceDetailResponse>;
-export type TPlaceUpdateResponse = TMetaResponse<TPlaceDetailResponse>;
-export type TPlaceListResponse = TMetaResponse<TPlaceDetailResponse[]>;
+export type TPlaceSingleResponse = TMetaResponse<TPlace>;
+export type TPlaceResponse = TMetaResponse<TPlace[]>;

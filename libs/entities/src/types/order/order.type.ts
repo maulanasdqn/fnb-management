@@ -3,7 +3,7 @@ import { TMetaResponse } from '..';
 import { TBase } from '../common';
 import { TCommonObject } from '../common';
 
-export type TOrderDetailResponse = TBase & {
+export type TOrder = TBase & {
   customer: TCommonObject;
   place: TCommonObject;
   payment: TCommonObject;
@@ -41,6 +41,5 @@ export type TOrderUpdateRequest = {
   status?: EOrderStatus;
 };
 
-export type TOrderCreateResponse = TMetaResponse<TOrderDetailResponse>;
-export type TOrderUpdateResponse = TMetaResponse<TOrderDetailResponse>;
-export type TOrderListResponse = TMetaResponse<TOrderDetailResponse[]>;
+export type TOrderSingleResponse = TMetaResponse<TOrder>;
+export type TOrderResponse = TMetaResponse<TOrder[]>;

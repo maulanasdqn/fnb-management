@@ -4,7 +4,7 @@ import { TBase } from '../common';
 
 import { TCommonObject } from '../common';
 
-export type TPurchaseDetailResponse = TBase & {
+export type TPurchase = TBase & {
   amountTotal: number;
   invoiceNumber: string;
   supplier: TCommonObject;
@@ -49,6 +49,5 @@ export type TPurchaseUpdateRequest = {
   }>;
 };
 
-export type TPurchaseCreateResponse = TMetaResponse<TPurchaseDetailResponse>;
-export type TPurchaseUpdateResponse = TMetaResponse<TPurchaseDetailResponse>;
-export type TPurchaseListResponse = TMetaResponse<TPurchaseDetailResponse[]>;
+export type TPurchaseSingleResponse = TMetaResponse<TPurchase>;
+export type TPurchaseResponse = TMetaResponse<TPurchase[]>;

@@ -1,7 +1,7 @@
 import { TMetaResponse } from '..';
 import { TBase } from '../common';
 
-export type TPaymentDetailResponse = TBase & {
+export type TPayment = TBase & {
   name: string;
   accountName: string;
   accountNumber: string;
@@ -27,6 +27,5 @@ export type TPaymentUpdateRequest = {
   amount?: string;
 };
 
-export type TPaymentCreateResponse = TMetaResponse<TPaymentDetailResponse>;
-export type TPaymentUpdateResponse = TMetaResponse<TPaymentDetailResponse>;
-export type TPaymentListResponse = TMetaResponse<TPaymentDetailResponse[]>;
+export type TPaymentSingleResponse = TMetaResponse<TPayment>;
+export type TPaymentResponse = TMetaResponse<TPayment[]>;

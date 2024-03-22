@@ -1,26 +1,13 @@
 import { TMetaResponse } from '..';
 import { TBase } from '../common';
 
-import { TRoleDetailResponse } from './role.type';
+import { TRole } from './role.type';
 
-export type TUser = {
-  id: string;
+export type TUser = TBase & {
   fullname: string;
   email: string;
   password?: string;
-  role: {
-    id: string;
-    name: string;
-    permissions: Array<string>;
-  };
-};
-
-export type TUserDetailReponse = TBase & {
-  fullname: string;
-  username: string;
-  avatar: string;
-  password: string;
-  role: TRoleDetailResponse;
+  role: TRole;
 };
 
 export type TUserQueryParams = {
@@ -45,6 +32,5 @@ export type TUserUpdateRequest = {
   roleId?: string;
 };
 
-export type TUserCreateResponse = TMetaResponse<TUserDetailReponse>;
-export type TUserUpdateResponse = TMetaResponse<TUserDetailReponse>;
-export type TUserListResponse = TMetaResponse<TUserDetailReponse[]>;
+export type TUserResponse = TMetaResponse<TUser>;
+export type TUserSingleResponse = TMetaResponse<TUser[]>;

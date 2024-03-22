@@ -1,7 +1,7 @@
 import { TMetaResponse } from '..';
 import { TBase } from '../common';
 
-export type TCustomerDetailResponse = TBase & {
+export type TCustomer = TBase & {
   name: string;
   phoneNumber: string;
 };
@@ -22,6 +22,5 @@ export type TCustomerUpdateRequest = {
   phoneNumber?: string;
 };
 
-export type TCustomerCreateResponse = TMetaResponse<TCustomerDetailResponse>;
-export type TCustomerUpdateResponse = TMetaResponse<TCustomerDetailResponse>;
-export type TCustomerListResponse = TMetaResponse<TCustomerDetailResponse[]>;
+export type TCustomerSingleResponse = TMetaResponse<TCustomer>;
+export type TCustomerResponse = TMetaResponse<TCustomer[]>;

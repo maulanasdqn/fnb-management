@@ -1,7 +1,7 @@
 import { TMetaResponse } from '../../types';
 import { TBase } from '../common';
 
-export type TUnitTypeDetailResponse = TBase & {
+export type TUnitType = TBase & {
   name: string;
 };
 
@@ -19,6 +19,5 @@ export type TUnitTypeUpdateRequest = {
   name?: string;
 };
 
-export type TUnitTypeCreateResponse = TMetaResponse<TUnitTypeDetailResponse>;
-export type TUnitTypeUpdateResponse = TMetaResponse<TUnitTypeDetailResponse>;
-export type TUnitTypeListResponse = TMetaResponse<TUnitTypeDetailResponse[]>;
+export type TUnitTypeSingleResponse = TMetaResponse<TUnitType>;
+export type TUnitTypeResponse = TMetaResponse<TUnitType[]>;

@@ -20,3 +20,18 @@ export const findManyProducts = async (params?: TProductQueryParams) => {
 
   return data;
 };
+
+const findOne = async (id: string) => {
+  return;
+};
+
+const create = async () => {
+  return;
+};
+
+const update = async () => {
+  return;
+};
+const deleteData = async () => {
+  return;
+};
