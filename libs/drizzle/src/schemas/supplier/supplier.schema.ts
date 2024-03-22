@@ -7,7 +7,7 @@ export const suppliers = pgTable('suppliers', {
   id: uuid('id').defaultRandom().primaryKey(),
   fullname: text('fullname').notNull(),
   address: integer('address').notNull(),
-  phone_number: integer('phone_number').notNull(),
+  phoneNumber: integer('phone_number').notNull(),
   ...baseSchema,
 });
 

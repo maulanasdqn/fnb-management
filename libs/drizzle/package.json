@@ -1,7 +1,11 @@
 {
   "name": "@fms/drizzle",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "drizzle-kit": "^0.20.14",
+    "drizzle-orm": "^0.30.2",
+    "pg": "^8.11.3"
+  },
   "main": "./index.js",
   "module": "./index.mjs",
   "typings": "./index.d.ts",

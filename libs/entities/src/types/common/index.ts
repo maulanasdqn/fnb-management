@@ -10,6 +10,17 @@ import type {
 import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import { AxiosError } from 'axios';
 
+export type TBase = {
+  id: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type TCommonObject = {
+  id: string;
+  name: string;
+};
+
 export type TMetaResponse<T = null | undefined> = {
   message?: string;
   data?: T;
@@ -22,6 +33,12 @@ export type TMetaResponse<T = null | undefined> = {
     prev?: null | number;
     next?: null | number;
   };
+};
+
+export type TPaginationQueryParams = {
+  page?: string;
+  perPage?: string;
+  search?: string;
 };
 
 export type TMetaErrorResponse = AxiosError<

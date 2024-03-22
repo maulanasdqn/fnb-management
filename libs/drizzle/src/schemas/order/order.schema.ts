@@ -1,4 +1,4 @@
-import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { baseSchema } from '../base';
 import { customers } from '../customer/customer.schema';
@@ -11,11 +11,12 @@ export const orders = pgTable('orders', {
   placeId: uuid('place_id')
     .notNull()
     .references(() => places.id),
-  amountTotal: text('amount_total').notNull(),
+  amountTotal: integer('amount_total').notNull(),
   paymentId: uuid('payment_id')
     .notNull()
     .references(() => payments.id),
   invoiceNumber: text('invoice_number').notNull(),
+  status: text('status').notNull(),
   ...baseSchema,
 });
 

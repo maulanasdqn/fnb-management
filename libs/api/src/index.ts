@@ -1,5 +1,5 @@
 export * from './common';
-export * from './iam';
+export * from './me';
 export * from './item';
 export * from './order';
 export * from './product';
