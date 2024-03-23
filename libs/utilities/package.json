@@ -1,7 +1,11 @@
 {
   "name": "@fms/utilities",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "react-router-dom": "6.11.2",
+    "@fms/web-services": "0.0.1",
+    "react": "18.2.0"
+  },
   "main": "./index.js",
   "module": "./index.mjs",
   "typings": "./index.d.ts"

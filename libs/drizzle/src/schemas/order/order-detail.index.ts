@@ -1,4 +1,4 @@
-import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { integer, pgTable, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { baseSchema } from '../base';
 import { products } from '../product/product.schema';
@@ -8,9 +8,9 @@ export const orderDetails = pgTable('order_details', {
   productId: uuid('product_id')
     .notNull()
     .references(() => products.id),
-  qty: text('qty').notNull(),
-  price: text('price').notNull(),
-  amount: text('amount').notNull(),
+  qty: integer('qty').notNull(),
+  price: integer('price').notNull(),
+  amount: integer('amount').notNull(),
 
   ...baseSchema,
 });

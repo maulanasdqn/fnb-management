@@ -1,7 +1,6 @@
 import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { baseSchema } from '../base';
-import { products } from '../product/product.schema';
 import { recipes } from './recipe.schema';
 import { items } from '../item/item.schema';
 

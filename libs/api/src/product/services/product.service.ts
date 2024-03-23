@@ -1,8 +1,8 @@
 import { db, products } from '@fms/drizzle';
-import { TCProductQueryParams } from '@fms/entities';
+import { TProductQueryParams } from '@fms/entities';
 import { ilike, asc } from 'drizzle-orm';
 
-export const findManyProducts = async (params?: TCProductQueryParams) => {
+export const findManyProducts = async (params?: TProductQueryParams) => {
   const data = await db
     .select({
       id: products.id,
@@ -19,4 +19,19 @@ export const findManyProducts = async (params?: TCProductQueryParams) => {
   console.log(params);
 
   return data;
+};
+
+const findOne = async (id: string) => {
+  return;
+};
+
+const create = async () => {
+  return;
+};
+
+const update = async () => {
+  return;
+};
+const deleteData = async () => {
+  return;
 };
