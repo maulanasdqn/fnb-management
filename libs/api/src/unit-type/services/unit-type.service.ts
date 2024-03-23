@@ -19,7 +19,7 @@ export const findOneUnitType = async (
       updatedAt: unitTypes.updatedAt,
     })
     .from(unitTypes)
-    .where(eq(unitTypes.id, request.id as string))
+    .where(eq(unitTypes.id, request?.id as string))
     .then((res) => res.at(0));
 
   if (!res) {
@@ -57,7 +57,9 @@ export const createUnitType = async (
 ): Promise<TUnitTypeSingleResponse> => {
   const res = await db
     .insert(unitTypes)
-    .values(request)
+    .values({
+      name: request.name,
+    })
     .returning()
     .then((res) => res.at(0));
 
@@ -95,7 +97,7 @@ export const deleteUnitType = async (
 ): Promise<TUnitTypeSingleResponse> => {
   const res = await db
     .delete(unitTypes)
-    .where(eq(unitTypes.id, request.id as string))
+    .where(eq(unitTypes.id, request?.id as string))
     .returning()
     .then((res) => res.at(0));
 

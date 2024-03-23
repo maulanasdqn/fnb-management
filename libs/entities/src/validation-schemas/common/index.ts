@@ -6,7 +6,9 @@ export const baseSchema = z.object({
   updatedAt: z.date().optional().nullable(),
 });
 
-export const queryParamsSchema = z.object({
-  id: z.string().optional(),
-  search: z.string().optional(),
-});
+export const queryParamsSchema = z
+  .object({
+    id: z.string().optional(),
+    search: z.string().optional(),
+  })
+  .optional();
