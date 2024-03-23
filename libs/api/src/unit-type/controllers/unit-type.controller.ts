@@ -1,10 +1,30 @@
 import { router, procedure } from '@fms/trpc-server';
-import { z } from 'zod';
-
-export const recipeController = router({
-  hello: procedure
-    .input(z.object({ name: z.string() }))
-    .mutation(({ input }) => {
-      return input;
-    }),
+import {
+  createUnitType,
+  deleteUnitType,
+  findManyUnitType,
+  findOneUnitType,
+  updateUnitType,
+} from '../services/unit-type.service';
+import {
+  unitTypeCreateSchema,
+  unitTypeUpdateSchema,
+  queryParamsSchema,
+} from '@fms/entities';
+export const unitTypeController = router({
+  create: procedure.input(unitTypeCreateSchema).mutation(async ({ input }) => {
+    return await createUnitType(input);
+  }),
+  update: procedure.input(unitTypeUpdateSchema).mutation(async ({ input }) => {
+    return await updateUnitType(input);
+  }),
+  delete: procedure.input(queryParamsSchema).query(async ({ input }) => {
+    return await deleteUnitType(input);
+  }),
+  findMany: procedure.input(queryParamsSchema).query(async ({ input }) => {
+    return await findManyUnitType(input);
+  }),
+  findOne: procedure.input(queryParamsSchema).query(async ({ input }) => {
+    return await findOneUnitType(input);
+  }),
 });

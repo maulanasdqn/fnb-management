@@ -9,6 +9,10 @@ import type {
 } from 'react';
 import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import { AxiosError } from 'axios';
+import { z } from 'zod';
+import { queryParamsSchema } from '../../validation-schemas';
+
+export type TQueryParams = z.infer<typeof queryParamsSchema>;
 
 export type TBase = {
   id: string;

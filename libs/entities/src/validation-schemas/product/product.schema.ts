@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { baseSchema } from '../common';
 
 export const productResponseSchema = z.object({
   id: z.string(),
@@ -6,10 +7,11 @@ export const productResponseSchema = z.object({
   priceSelling: z.number(),
   image: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+  ...baseSchema.omit({ id: true }).shape,
 });
 
 export const productQueryParamSchema = z.object({
-  id: z.string().optional(),
   search: z.string().optional(),
   productCategoryId: z.string().optional(),
+  ...baseSchema.shape,
 });
