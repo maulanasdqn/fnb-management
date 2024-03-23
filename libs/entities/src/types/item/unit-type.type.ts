@@ -1,23 +1,16 @@
+import { z } from 'zod';
 import { TMetaResponse } from '../../types';
-import { TBase } from '../common';
+import {
+  unitTypeCreateSchema,
+  unitTypeSchema,
+  unitTypeUpdateSchema,
+} from '../../validation-schemas';
 
-export type TUnitType = TBase & {
-  name: string;
-};
+export type TUnitType = z.infer<typeof unitTypeSchema>;
 
-export type TUnitTypeQueryParams = {
-  id?: string;
-  search?: string;
-};
+export type TUnitTypeCreateRequest = z.infer<typeof unitTypeCreateSchema>;
 
-export type TUnitTypeCreateRequest = {
-  name: string;
-};
-
-export type TUnitTypeUpdateRequest = {
-  id?: string;
-  name?: string;
-};
+export type TUnitTypeUpdateRequest = z.infer<typeof unitTypeUpdateSchema>;
 
 export type TUnitTypeSingleResponse = TMetaResponse<TUnitType>;
 export type TUnitTypeResponse = TMetaResponse<TUnitType[]>;

@@ -6,3 +6,4 @@ export * from './product';
 export * from './purchase';
 export * from './recipe';
 export * from './auth';
+export * from './unit-type';
