@@ -1,9 +1,8 @@
-import { Button } from '@fms/atoms';
 import { Icon } from '@iconify/react';
 import { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import { SelectedMenu } from './modules/selected-menu';
 import { trpc } from '@fms/trpc-client';
-import { currencyFormat, useDebounce } from '@fms/utilities';
+import { useDebounce } from '@fms/utilities';
 import { ProductCard } from './modules/product-card';
 
 export const MenuPage: FC = (): ReactElement => {
