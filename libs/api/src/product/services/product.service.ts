@@ -2,7 +2,7 @@ import { db, products } from '@fms/drizzle';
 import { TProductQueryParams } from '@fms/entities';
 import { ilike, asc } from 'drizzle-orm';
 
-export const findManyProducts = async (params?: TProductQueryParams) => {
+export const findMany = async (params?: TProductQueryParams) => {
   const data = await db
     .select({
       id: products.id,
@@ -21,17 +21,17 @@ export const findManyProducts = async (params?: TProductQueryParams) => {
   return data;
 };
 
-const findOne = async (id: string) => {
+export const findOne = async (id: string) => {
   return;
 };
 
-const create = async () => {
+export const create = async () => {
   return;
 };
 
-const update = async () => {
+export const update = async () => {
   return;
 };
-const deleteData = async () => {
+export const deleteData = async () => {
   return;
 };

@@ -38,6 +38,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.0",
     "react-router-dom": "6.11.2",
+    "superjson": "^2.2.1",
     "ts-pattern": "^5.0.8",
     "zod": "^3.22.4"
   },
