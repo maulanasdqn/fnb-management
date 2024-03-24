@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react';
 import { FC, ReactElement, useEffect, useRef, useState } from 'react';
-import { SelectedMenu } from './modules/selected-menu';
 import { trpc } from '@fms/trpc-client';
 import { useDebounce } from '@fms/utilities';
 import { ProductCard } from './modules/product-card';
@@ -47,7 +46,7 @@ export const MenuPage: FC = (): ReactElement => {
           <ProductCard loading={isLoading} key={item.id} item={item} />
         ))}
       </section>
-      <SelectedMenu />
+  
     </section>
   );
 };
