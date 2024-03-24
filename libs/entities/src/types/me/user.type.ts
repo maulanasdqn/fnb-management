@@ -1,5 +1,4 @@
-import { TMetaResponse } from '..';
-import { TBase } from '../common';
+import { TBase, TBaseResponse } from '../common';
 
 import { TRole } from './role.type';
 
@@ -32,5 +31,5 @@ export type TUserUpdateRequest = {
   roleId?: string;
 };
 
-export type TUserResponse = TMetaResponse<TUser>;
-export type TUserSingleResponse = TMetaResponse<TUser[]>;
+export type TUserResponse = TBaseResponse<TUser>;
+export type TUserSingleResponse = TBaseResponse<TUser[]>;

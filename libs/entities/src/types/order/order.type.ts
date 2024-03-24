@@ -1,6 +1,5 @@
 import { EOrderStatus } from '../../enums/order.enum';
-import { TMetaResponse } from '..';
-import { TBase } from '../common';
+import { TBase, TBaseResponse } from '../common';
 import { TCommonObject } from '../common';
 
 export type TOrder = TBase & {
@@ -41,5 +40,5 @@ export type TOrderUpdateRequest = {
   status?: EOrderStatus;
 };
 
-export type TOrderSingleResponse = TMetaResponse<TOrder>;
-export type TOrderResponse = TMetaResponse<TOrder[]>;
+export type TOrderSingleResponse = TBaseResponse<TOrder>;
+export type TOrderResponse = TBaseResponse<TOrder[]>;

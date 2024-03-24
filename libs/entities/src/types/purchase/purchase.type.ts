@@ -1,6 +1,5 @@
 import { EPurchaseStatus } from '../../enums/purchase.enum';
-import { TMetaResponse } from '..';
-import { TBase } from '../common';
+import { TBase, TBaseResponse } from '../common';
 
 import { TCommonObject } from '../common';
 
@@ -49,5 +48,5 @@ export type TPurchaseUpdateRequest = {
   }>;
 };
 
-export type TPurchaseSingleResponse = TMetaResponse<TPurchase>;
-export type TPurchaseResponse = TMetaResponse<TPurchase[]>;
+export type TPurchaseSingleResponse = TBaseResponse<TPurchase>;
+export type TPurchaseResponse = TBaseResponse<TPurchase[]>;

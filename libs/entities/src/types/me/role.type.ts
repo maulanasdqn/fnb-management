@@ -1,5 +1,4 @@
-import { TMetaResponse } from '..';
-import { TBase } from '../common';
+import { TBase, TBaseResponse } from '../common';
 
 export type TRole = TBase & {
   id: string;
@@ -24,5 +23,5 @@ export type TRoleUpdateRequest = {
   permissions?: Array<string>;
 };
 
-export type TRoleSingleResponse = TMetaResponse<TRole>;
-export type TRoleResponse = TMetaResponse<TRole[]>;
+export type TRoleSingleResponse = TBaseResponse<TRole>;
+export type TRoleResponse = TBaseResponse<TRole[]>;

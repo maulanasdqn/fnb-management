@@ -24,14 +24,24 @@ export const findOneUnitType = async (
 
   if (!res) {
     return {
-      message: 'Unit type tidak ditemukan',
+      data: undefined,
+      meta: {
+        page: undefined,
+        perPage: undefined,
+        totalPage: undefined,
+      },
     };
   }
   return {
-    message: 'success',
+    meta: {
+      page: 1,
+      perPage: 10,
+      totalPage: 1,
+    },
     data: res,
   };
 };
+
 export const findManyUnitType = async (
   request: TQueryParams
 ): Promise<TUnitTypeResponse> => {
@@ -47,7 +57,11 @@ export const findManyUnitType = async (
     .orderBy(asc(unitTypes.name));
 
   return {
-    message: 'success',
+    meta: {
+      page: 1,
+      perPage: 10,
+      totalPage: 1,
+    },
     data: res,
   };
 };
@@ -64,7 +78,11 @@ export const createUnitType = async (
     .then((res) => res.at(0));
 
   return {
-    message: 'success',
+    meta: {
+      page: 1,
+      perPage: 10,
+      totalPage: 1,
+    },
     data: res,
   };
 };
@@ -84,14 +102,24 @@ export const updateUnitType = async (
 
   if (!res) {
     return {
-      message: 'Unit type tidak ditemukan',
+      meta: {
+        page: 1,
+        perPage: 10,
+        totalPage: 1,
+      },
+      data: res,
     };
   }
   return {
-    message: 'success',
+    meta: {
+      page: 1,
+      perPage: 10,
+      totalPage: 1,
+    },
     data: res,
   };
 };
+
 export const deleteUnitType = async (
   request: TQueryParams
 ): Promise<TUnitTypeSingleResponse> => {
@@ -102,7 +130,11 @@ export const deleteUnitType = async (
     .then((res) => res.at(0));
 
   return {
-    message: 'success',
+    meta: {
+      page: 1,
+      perPage: 10,
+      totalPage: 1,
+    },
     data: res,
   };
 };

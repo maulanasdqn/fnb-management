@@ -15,9 +15,6 @@ export const findMany = async (params?: TProductQueryParams) => {
     .where(ilike(products.name, `%${params?.search || ''}%`))
     .orderBy(asc(products.name));
 
-  console.log(data);
-  console.log(params);
-
   return data;
 };
 
@@ -32,6 +29,7 @@ export const create = async () => {
 export const update = async () => {
   return;
 };
+
 export const deleteData = async () => {
   return;
 };

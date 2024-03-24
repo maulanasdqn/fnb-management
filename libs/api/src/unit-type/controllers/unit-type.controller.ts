@@ -10,6 +10,8 @@ import {
   unitTypeCreateSchema,
   unitTypeUpdateSchema,
   queryParamsSchema,
+  dataResponseSchema,
+  unitTypeSchema,
 } from '@fms/entities';
 export const unitTypeController = router({
   create: procedure.input(unitTypeCreateSchema).mutation(async ({ input }) => {
@@ -21,9 +23,12 @@ export const unitTypeController = router({
   delete: procedure.input(queryParamsSchema).query(async ({ input }) => {
     return await deleteUnitType(input);
   }),
-  findMany: procedure.input(queryParamsSchema).query(async ({ input }) => {
-    return await findManyUnitType(input);
-  }),
+  findMany: procedure
+    .output(dataResponseSchema(unitTypeSchema))
+    .input(queryParamsSchema)
+    .query(async ({ input }) => {
+      return await findManyUnitType(input);
+    }),
   findOne: procedure.input(queryParamsSchema).query(async ({ input }) => {
     return await findOneUnitType(input);
   }),

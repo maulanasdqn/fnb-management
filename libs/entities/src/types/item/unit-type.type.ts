@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TMetaResponse } from '../../types';
+import { TBaseResponse } from '../../types';
 import {
   unitTypeCreateSchema,
   unitTypeSchema,
@@ -12,5 +12,5 @@ export type TUnitTypeCreateRequest = z.infer<typeof unitTypeCreateSchema>;
 
 export type TUnitTypeUpdateRequest = z.infer<typeof unitTypeUpdateSchema>;
 
-export type TUnitTypeSingleResponse = TMetaResponse<TUnitType>;
-export type TUnitTypeResponse = TMetaResponse<TUnitType[]>;
+export type TUnitTypeSingleResponse = TBaseResponse<TUnitType | undefined>;
+export type TUnitTypeResponse = TBaseResponse<TUnitType[] | undefined>;

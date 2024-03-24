@@ -1,5 +1,4 @@
-import { TMetaResponse } from '..';
-import { TBase } from '../common';
+import { TBase, TBaseResponse } from '../common';
 
 export type TProductCategory = TBase & {
   name: string;
@@ -19,5 +18,5 @@ export type TProductCategoryUpdateRequest = {
   name?: string;
 };
 
-export type TProductCategorySingleResponse = TMetaResponse<TProductCategory>;
-export type TProductCategoryResponse = TMetaResponse<TProductCategory[]>;
+export type TProductCategorySingleResponse = TBaseResponse<TProductCategory>;
+export type TProductCategoryResponse = TBaseResponse<TProductCategory[]>;

@@ -1,5 +1,4 @@
-import { TMetaResponse } from '..';
-import { TBase } from '../common';
+import { TBase, TBaseResponse } from '../common';
 
 export type TSupplier = TBase & {
   fullname: string;
@@ -25,5 +24,5 @@ export type TSupplierUpdateRequest = {
   phoneNumber?: string;
 };
 
-export type TSupplierSingleResponse = TMetaResponse<TSupplier>;
-export type TSupplierResponse = TMetaResponse<TSupplier[]>;
+export type TSupplierSingleResponse = TBaseResponse<TSupplier>;
+export type TSupplierResponse = TBaseResponse<TSupplier[]>;

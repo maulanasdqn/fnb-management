@@ -9,8 +9,12 @@ import type {
 } from 'react';
 import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import { AxiosError } from 'axios';
-import { z } from 'zod';
-import { queryParamsSchema } from '../../validation-schemas';
+import { ZodTypeAny, z } from 'zod';
+import {
+  dataResponseSchema,
+  metaResponseSchema,
+  queryParamsSchema,
+} from '../../validation-schemas';
 
 export type TQueryParams = z.infer<typeof queryParamsSchema>;
 
@@ -25,7 +29,9 @@ export type TCommonObject = {
   name: string;
 };
 
-export type TMetaResponse<T = null | undefined> = {
+export type TMetaResponse = z.infer<typeof metaResponseSchema>;
+
+export type TMetaResponses<T = null | undefined> = {
   message?: string;
   data?: T;
   meta?: {
@@ -39,6 +45,11 @@ export type TMetaResponse<T = null | undefined> = {
   };
 };
 
+export type TBaseResponse<T = null | undefined> = {
+  data?: T;
+  meta?: TMetaResponse;
+};
+
 export type TPaginationQueryParams = {
   page?: string;
   perPage?: string;
@@ -46,7 +57,7 @@ export type TPaginationQueryParams = {
 };
 
 export type TMetaErrorResponse = AxiosError<
-  Omit<TMetaResponse<null>, 'meta'> & { errors?: Array<{ message: string }> }
+  Omit<TBaseResponse<null>, 'meta'> & { errors?: Array<{ message: string }> }
 >;
 
 export type TSize = 'sm' | 'md' | 'lg';

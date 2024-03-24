@@ -1,5 +1,4 @@
-import { TMetaResponse } from '..';
-import { TBase } from '../common';
+import { TBase, TBaseResponse } from '../common';
 
 export type TPlace = TBase & {
   name: string;
@@ -19,5 +18,5 @@ export type TPlaceUpdateRequest = {
   name?: string;
 };
 
-export type TPlaceSingleResponse = TMetaResponse<TPlace>;
-export type TPlaceResponse = TMetaResponse<TPlace[]>;
+export type TPlaceSingleResponse = TBaseResponse<TPlace>;
+export type TPlaceResponse = TBaseResponse<TPlace[]>;
