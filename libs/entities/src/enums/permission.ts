@@ -9,6 +9,13 @@ export enum PERMISSION_ORDER {
   READ_ALL_ORDER_STATUS = 'read-all-order-status',
 }
 
+export enum PERMISSION_INGREDIENTS {
+  CREATE_INGREDIENT = 'create-ingredient',
+  READ_INGREDIENT = 'read-ingredient',
+  UPDATE_INGREDIENT = 'update-ingredient',
+  DELETE_INGREDIENT = 'delete-ingredient',
+}
+
 export enum PERMISSION_DASHBOARD {
   READ_DASHBOARD = 'read-dashboard',
 }
@@ -40,4 +47,11 @@ export enum PERMISSION_ROLE {
   READ_ROLE = 'read-role',
   UPDATE_ROLE = 'update-role',
   DELETE_ROLE = 'delete-role',
+}
+
+export enum PERMISSION_PRODUCT {
+  CREATE_PRODUCT = 'create-product',
+  READ_PRODUCT = 'read-product',
+  UPDATE_PRODUCT = 'update-product',
+  DELETE_PRODUCT = 'delete-product',
 }

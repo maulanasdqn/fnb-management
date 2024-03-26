@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { clsx } from 'clsx';
 import { permissionChecker } from '@fms/utilities';
 import { userService } from '@fms/web-services';
+import { TUser } from '@fms/entities';
 
 export type TSidebar = {
   name: string;
@@ -12,7 +13,9 @@ export type TSidebar = {
   permissions: Array<string>;
 };
 
-export const Sidebar: FC<{ menu: TSidebar[] }> = (props): ReactElement => {
+export const Sidebar: FC<{ menu: TSidebar[]; userData: TUser }> = (
+  props
+): ReactElement => {
   const { pathname } = useLocation();
 
   const className = (url: string) =>
@@ -29,14 +32,12 @@ export const Sidebar: FC<{ menu: TSidebar[] }> = (props): ReactElement => {
         'min-h-screen h-full bg-white shadow-md w-1/6 flex flex-col p-4'
       }
     >
-      <figure className="hidden md:flex bg-grey-50 p-2 rounded-lg shadow-sm flex-col w-full">
-        <figcaption className="w-full text-1xl text-primary">
-          Serasa Erat Backoffice
+      <figure className="hidden md:flex w-full justify-center items-center bg-grey-50 p-2 rounded-lg shadow-sm flex-col gap-2">
+        <figcaption className="w-full text-1xl text-primary text-center font-bold">
+          Serasa Erat Warehouse
         </figcaption>
-        <div className="flex gap-x-2 mt-2 text-primary-2 items-center">
-          <Icon icon="fa:user" />
-          <span>Jhon Doe - Barista</span>
-        </div>
+        <Icon icon="gg:profile" width={50} className="text-grey-500" />
+        <p className="font-bold">{props.userData.fullname}</p>
       </figure>
 
       <ul className="mt-6 flex flex-col gap-y-3 cursor-pointer w-full">
