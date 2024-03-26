@@ -3,6 +3,7 @@ import { FC, ReactElement, Suspense, useEffect, useRef, useState } from 'react';
 import { trpc } from '@fms/trpc-client';
 import { useDebounce } from '@fms/utilities';
 import { ProductCard } from './modules/product-card';
+import { SelectedMenu } from './modules/selected-menu';
 
 export const MenuPage: FC = (): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -50,6 +51,7 @@ export const MenuPage: FC = (): ReactElement => {
           ))}
         </Suspense>
       </section>
+      <SelectedMenu/>
     </section>
   );
 };
