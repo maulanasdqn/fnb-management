@@ -6,16 +6,20 @@ export function permissionChecker<T>(arr1: T[], arr2: T[]): boolean {
   const [shorter, longer] =
     arr1?.length < arr2?.length ? [arr1, arr2] : [arr2, arr1];
   const set = new Set<T>(shorter);
+
+  if (arr1.length === 0) {
+    return true;
+  }
   return longer?.some((element) => set.has(element));
 }
 
 export const isAuthenticated = tokenService.getAccessToken();
 
 export const logOut = () => {
+  window.location.reload();
   tokenService.removeAccessToken();
   tokenService.removeRefreshToken();
   userService.removeUserData();
-  window.location.reload();
 };
 
 export const pagePermission = (permissions: Array<string>) => {

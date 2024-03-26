@@ -3,7 +3,8 @@ import { FC, ReactElement } from 'react';
 import { Outlet } from 'react-router-dom';
 import {
   PERMISSION_DASHBOARD,
-  PERMISSION_ORDER,
+  PERMISSION_INGREDIENTS,
+  PERMISSION_PRODUCT,
   PERMISSION_PURCHASE,
   PERMISSION_ROLE,
   PERMISSION_USER,
@@ -17,16 +18,19 @@ export const DashboardLayout: FC = (): ReactElement => {
       name: 'Dashboard',
       icon: <Icon icon="fa:desktop" />,
       path: '/dashboard',
-      permissions: [PERMISSION_DASHBOARD.READ_DASHBOARD],
+      permissions: [],
     },
     {
-      name: 'Order',
+      name: 'Ingredient',
       icon: <Icon icon="fa:shopping-cart" />,
-      path: '/dashboard/order',
-      permissions: [
-        PERMISSION_ORDER.READ_ORDER,
-        PERMISSION_ORDER.READ_ALL_ORDER,
-      ],
+      path: '/dashboard/ingredient',
+      permissions: [PERMISSION_INGREDIENTS.READ_INGREDIENT],
+    },
+    {
+      name: 'Product',
+      icon: <Icon icon="material-symbols:fact-check-outline-rounded" />,
+      path: '/dashboard/product',
+      permissions: [PERMISSION_PRODUCT.READ_PRODUCT],
     },
     {
       name: 'Stock Opname',
@@ -35,7 +39,13 @@ export const DashboardLayout: FC = (): ReactElement => {
       permissions: [PERMISSION_PURCHASE.REQUEST_PURCHASE],
     },
     {
-      name: 'User',
+      name: 'Request Purchase',
+      icon: <Icon icon="fa:external-link" />,
+      path: '/dashboard/request-purchase',
+      permissions: [PERMISSION_PURCHASE.REQUEST_PURCHASE],
+    },
+    {
+      name: 'History Transaction',
       icon: <Icon icon="fa:users" />,
       path: '/dashboard/user',
       permissions: [PERMISSION_USER.READ_USER],
@@ -45,12 +55,6 @@ export const DashboardLayout: FC = (): ReactElement => {
       icon: <Icon icon="fa:shield" />,
       path: '/dashboard/role',
       permissions: [PERMISSION_ROLE.READ_ROLE],
-    },
-    {
-      name: 'Request Purchase',
-      icon: <Icon icon="fa:external-link" />,
-      path: '/dashboard/request-purchase',
-      permissions: [PERMISSION_PURCHASE.REQUEST_PURCHASE],
     },
   ];
   return (
