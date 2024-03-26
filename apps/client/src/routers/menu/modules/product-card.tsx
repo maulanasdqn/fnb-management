@@ -2,14 +2,15 @@ import { Button } from '@fms/atoms';
 import { TProductSingleResponse } from '@fms/entities';
 import { currencyFormat } from '@fms/utilities';
 import { FC, ReactElement } from 'react';
+import { Link } from 'react-router-dom';
 
 export const ProductCard: FC<{
-  item: TProductSingleResponse;
+  item?: TProductSingleResponse;
   loading?: boolean;
 }> = ({ item, loading }): ReactElement => {
   return loading ? (
     <div
-      key={item.id}
+      key={item?.id}
       className="flex flex-col max-w-sm bg-white p-3 shadow-md rounded-lg gap-y-3"
     >
       <figure className="flex flex-col gap-y-2 animate-pulse">
@@ -22,23 +23,24 @@ export const ProductCard: FC<{
       </div>
     </div>
   ) : (
-    <div
-      key={item.id}
+    <Link
+      to={`${item?.id}/detail`}
+      key={item?.id}
       className="flex flex-col max-w-sm bg-white p-3 shadow-md rounded-lg gap-y-3"
     >
       <figure className="flex flex-col gap-y-2">
         <img
-          src={item.image || '/no-photo.jpg'}
-          alt={item.name}
+          src={item?.image || '/no-photo.jpg'}
+          alt={item?.name}
           width={200}
           height={200}
           className="object-cover bg-cover w-[200px] h-[200px] rounded-lg border border-grey-100 shadow-sm"
         />
         <figcaption className="text-left font-bold text-base">
-          {item.name}
+          {item?.name}
         </figcaption>
         <h2 className="text-left font-bold text-base">
-          {currencyFormat(item.priceSelling)}
+          {currencyFormat(item?.priceSelling as number)}
         </h2>
       </figure>
       <div>
@@ -49,6 +51,6 @@ export const ProductCard: FC<{
           Pesan
         </Button>
       </div>
-    </div>
+    </Link>
   );
 };

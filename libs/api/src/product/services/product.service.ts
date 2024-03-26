@@ -1,8 +1,14 @@
 import { db, products } from '@fms/drizzle';
-import { TProductQueryParams } from '@fms/entities';
-import { ilike, asc } from 'drizzle-orm';
+import {
+  TProductQueryParams,
+  TProductResponse,
+  TProductSingleResponse,
+} from '@fms/entities';
+import { ilike, asc, eq } from 'drizzle-orm';
 
-export const findMany = async (params?: TProductQueryParams) => {
+export const findMany = async (
+  params?: TProductQueryParams
+): Promise<TProductResponse> => {
   const data = await db
     .select({
       id: products.id,
@@ -18,8 +24,20 @@ export const findMany = async (params?: TProductQueryParams) => {
   return data;
 };
 
-export const findOne = async (id: string) => {
-  return;
+export const findOne = async (id: string): Promise<TProductSingleResponse> => {
+  const data = await db
+    .select({
+      id: products.id,
+      name: products.name,
+      priceSelling: products.priceSelling,
+      image: products.image,
+      description: products.description,
+    })
+    .from(products)
+    .where(eq(products.id, id))
+    .then((data) => data?.at(0));
+
+  return data as TProductSingleResponse;
 };
 
 export const create = async () => {

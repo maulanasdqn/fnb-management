@@ -1,8 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { MenuPage } from './menu';
 import { MenutLayout } from './layout';
-import { MenuDetailModule } from './menu/modules/menu-detail';
-import { CheckoutOrder } from './menu/modules/checkout-order';
+import { lazily } from 'react-lazily';
+
+const { MenuPage, MenuDetailPage, MenuCheckoutPage } = lazily(
+  () => import('./menu')
+);
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -13,12 +16,12 @@ export const router = createBrowserRouter([
         element: <MenuPage />,
       },
       {
-        path: 'detail',
-        element: <MenuDetailModule />,
+        path: ':id/detail',
+        element: <MenuDetailPage />,
       },
       {
-        path: 'checkout',
-        element: <CheckoutOrder />,
+        path: ':id/checkout',
+        element: <MenuCheckoutPage />,
       },
     ],
   },

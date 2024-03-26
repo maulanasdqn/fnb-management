@@ -1,22 +1,32 @@
 import { InputText } from '@fms/atoms';
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { FC, ReactElement, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-export const Navbar = () => {
+export const Navbar: FC = (): ReactElement => {
   const [isBarOpen, setIsBarOpen] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+
+  const { pathname } = useLocation();
+
+  const handleNavigate = () => {
+    navigate('/');
+  };
+
   const navMenu = [
     { name: 'Home', path: '#' },
     { name: 'Coffee', path: '#' },
     { name: 'Non Coffee', path: '#' },
     { name: 'Recomendation', path: '#' },
   ];
+
   return (
     <>
       {isBarOpen && (
         <section className="bg-success-50 min-h-48 w-full z-20 p-10 fixed ">
           <div className="flex w-full justify-between items-center">
-            <h1 className="text-xl font-bold">LOGO</h1>
+            <h1 className="text-xl font-bold">Serasa Erat Kopi</h1>
             <Icon
               icon="fa:close"
               className="text-xl text-error-700"
@@ -39,16 +49,26 @@ export const Navbar = () => {
       )}
       <header className="flex items-center  bg-primary text-white w-full p-5 z-10">
         <div className="flex gap-x-6 w-full items-center">
-          <div>
-            <Icon
-              icon="fa:bars"
-              className="text-xl"
-              onClick={() => setIsBarOpen(!isBarOpen)}
-            />
-          </div>
+          {pathname !== '/' && (
+            <div>
+              <Icon
+                icon="fa:arrow-left"
+                className="text-xl"
+                onClick={handleNavigate}
+              />
+            </div>
+          )}
           <figure>
-            <h1 className="text-2xl">LOGO</h1>
+            <h1 className="text-2xl">Serasa Erat Kopi</h1>
           </figure>
+        </div>
+
+        <div>
+          <Icon
+            icon="fa:bars"
+            className="text-xl"
+            onClick={() => setIsBarOpen(!isBarOpen)}
+          />
         </div>
       </header>
     </>
