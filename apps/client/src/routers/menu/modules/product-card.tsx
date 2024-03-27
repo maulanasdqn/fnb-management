@@ -26,7 +26,7 @@ export const ProductCard: FC<{
     <Link
       to={`${item?.id}/detail`}
       key={item?.id}
-      className="flex flex-col max-w-sm bg-white p-3 shadow-md rounded-lg gap-y-3"
+      className="flex flex-col justify-between max-w-sm bg-white p-3 shadow-md rounded-lg gap-y-3"
     >
       <figure className="flex flex-col gap-y-2">
         <img
@@ -43,14 +43,12 @@ export const ProductCard: FC<{
           {currencyFormat(item?.priceSelling as number)}
         </h2>
       </figure>
-      <div>
-        <Button
-          type="button"
-          className="w-full bg-white border-primary-800 border rounded-2xl text-primary-800 text-lg font-semibold hover:bg-primary-800 hover:text-white"
-        >
-          Pesan
-        </Button>
-      </div>
+      <Button
+        type="button"
+        className="w-full bg-white border-primary-800 border rounded-2xl text-primary-800 text-lg font-semibold hover:bg-primary-800 hover:text-white"
+      >
+        Pesan
+      </Button>
     </Link>
   );
 };

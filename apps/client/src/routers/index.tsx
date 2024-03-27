@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { MenutLayout } from './layout';
+import { MenutLayout } from './menu/layout';
 import { lazily } from 'react-lazily';
+import { Suspense } from 'react';
+import { ProductDetail } from './menu/modules/product-detail';
 
 const { MenuPage, MenuDetailPage, MenuCheckoutPage } = lazily(
   () => import('./menu')
@@ -13,15 +15,27 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <MenuPage />,
+        element: (
+          <Suspense fallback={'Spinner'}>
+            <MenuPage />
+          </Suspense>
+        ),
       },
       {
         path: ':id/detail',
-        element: <MenuDetailPage />,
+        element: (
+          <Suspense fallback={<ProductDetail loading />}>
+            <MenuDetailPage />
+          </Suspense>
+        ),
       },
       {
-        path: ':id/checkout',
-        element: <MenuCheckoutPage />,
+        path: 'checkout',
+        element: (
+          <Suspense>
+            <MenuCheckoutPage />
+          </Suspense>
+        ),
       },
     ],
   },

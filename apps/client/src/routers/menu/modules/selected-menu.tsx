@@ -1,8 +1,12 @@
 import { FC, ReactElement } from 'react';
+import { Link } from 'react-router-dom';
 
 export const SelectedMenu: FC = (): ReactElement => {
   return (
-    <div className="fixed bottom-4 flex items-center justify-start h-auto left-4 right-4 w-auto bg-primary z-10 rounded-xl p-4 shadow-md">
+    <Link
+      to={`checkout`}
+      className="fixed bottom-4 flex items-center justify-start h-auto left-4 right-4 w-auto bg-primary z-10 rounded-xl p-4 shadow-md"
+    >
       <div className="flex flex-col w-full h-full">
         <div className="flex w-full justify-between h-full gap-x-4">
           <div className="flex w-full justify-between">
@@ -16,6 +20,6 @@ export const SelectedMenu: FC = (): ReactElement => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

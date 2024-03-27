@@ -47,7 +47,7 @@ export const Navbar: FC = (): ReactElement => {
           </div>
         </section>
       )}
-      <header className="flex items-center  bg-primary text-white w-full p-5 z-10">
+      <header className="flex items-center  bg-primary text-white w-full p-5 z-10 sticky top-0">
         <div className="flex gap-x-6 w-full items-center">
           {pathname !== '/' && (
             <div>

@@ -2,8 +2,9 @@ import { Icon } from '@iconify/react';
 import { FC, ReactElement, Suspense, useEffect, useRef, useState } from 'react';
 import { trpc } from '@fms/trpc-client';
 import { useDebounce } from '@fms/utilities';
-import { ProductCard } from './modules/product-card';
-import { SelectedMenu } from './modules/selected-menu';
+import { lazily } from 'react-lazily';
+
+const { SelectedMenu, ProductCard } = lazily(() => import('./modules'));
 
 export const MenuPage: FC = (): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -51,7 +52,9 @@ export const MenuPage: FC = (): ReactElement => {
           ))}
         </Suspense>
       </section>
-      <SelectedMenu/>
+      <Suspense fallback={'Spinner'}>
+        <SelectedMenu />
+      </Suspense>
     </section>
   );
 };
