@@ -3,7 +3,7 @@ import { FC, ReactElement, SetStateAction, Suspense, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@fms/atoms';
 import { Link } from 'react-router-dom';
-import { TSelectedMenu } from './modules/selected-menu';
+import { TSelectedMenu } from './modules/custom-order';
 
 export const MenuCheckoutPage: FC<TSelectedMenu> = ({
   totalPrice = 15000,
