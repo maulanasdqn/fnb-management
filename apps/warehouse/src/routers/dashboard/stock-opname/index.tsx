@@ -1,8 +1,9 @@
 import { DataTable } from '@fms/organisms';
+import { ColumnDef } from '@tanstack/react-table';
 import { FC, ReactElement } from 'react';
 
 export const DashboardStockOpname: FC = (): ReactElement => {
-  const columns = [
+  const columns: ColumnDef<any>[] = [
     {
       header: 'Nama bahan',
       accessorKey: 'name',
@@ -16,6 +17,7 @@ export const DashboardStockOpname: FC = (): ReactElement => {
       accessorKey: 'action',
     },
   ];
+
   return (
     <div className="flex flex-col">
       <h1 className="text-3xl font-bold">Stock Opname</h1>

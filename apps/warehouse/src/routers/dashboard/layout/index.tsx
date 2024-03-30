@@ -2,12 +2,11 @@ import { Sidebar, TSidebar } from '@fms/organisms';
 import { FC, ReactElement } from 'react';
 import { Outlet } from 'react-router-dom';
 import {
-  PERMISSION_DASHBOARD,
   PERMISSION_INGREDIENTS,
   PERMISSION_PRODUCT,
   PERMISSION_PURCHASE,
   PERMISSION_ROLE,
-  PERMISSION_USER,
+  PERMISSION_TRANSACTION,
 } from '@fms/entities';
 import { Icon } from '@iconify/react';
 import { userService } from '@fms/web-services';
@@ -47,8 +46,8 @@ export const DashboardLayout: FC = (): ReactElement => {
     {
       name: 'History Transaction',
       icon: <Icon icon="fa:users" />,
-      path: '/dashboard/user',
-      permissions: [PERMISSION_USER.READ_USER],
+      path: '/dashboard/transaction',
+      permissions: [PERMISSION_TRANSACTION.READ_TRANSACTION],
     },
     {
       name: 'Role',
