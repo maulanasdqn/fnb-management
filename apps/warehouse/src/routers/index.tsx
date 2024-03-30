@@ -5,16 +5,15 @@ import { DashboardNotification } from './dashboard/notification';
 import { DashboardLayout } from './dashboard/layout';
 import { isAuthenticated, logOut, pagePermission } from '@fms/utilities';
 import {
-  PERMISSION_DASHBOARD,
   PERMISSION_INGREDIENTS,
   PERMISSION_NOTIFICATION,
   PERMISSION_PRODUCT,
   PERMISSION_PURCHASE,
   PERMISSION_ROLE,
-  PERMISSION_USER,
+  PERMISSION_TRANSACTION,
 } from '@fms/entities';
 import { DashboardRequestPurchase } from './dashboard/request-purchase';
-import { DashboardUser } from './dashboard/user';
+import { DashboardTransaction } from './dashboard/transaction';
 import { DashboardRole } from './dashboard/role';
 import { DashboardStockOpname } from './dashboard/stock-opname';
 import { DashboardIngredient } from './dashboard/ingredient';
@@ -63,9 +62,9 @@ export const router = createBrowserRouter([
           pagePermission([PERMISSION_NOTIFICATION.READ_NOTIFICATION]),
       },
       {
-        path: 'user',
-        element: <DashboardUser />,
-        loader: () => pagePermission([PERMISSION_USER.READ_USER]),
+        path: 'transaction',
+        element: <DashboardTransaction />,
+        loader: () => pagePermission([PERMISSION_TRANSACTION.READ_TRANSACTION]),
       },
       {
         path: 'role',

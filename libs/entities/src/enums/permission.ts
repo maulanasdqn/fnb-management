@@ -42,6 +42,13 @@ export enum PERMISSION_USER {
   DELETE_USER = 'delete-user',
 }
 
+export enum PERMISSION_TRANSACTION {
+  CREATE_TRANSACTION = 'create-transaction',
+  READ_TRANSACTION = 'read-transaction',
+  UPDATE_TRANSACTION = 'update-transaction',
+  DELETE_TRANSACTION = 'delete-transaction',
+}
+
 export enum PERMISSION_ROLE {
   CREATE_ROLE = 'create-role',
   READ_ROLE = 'read-role',
