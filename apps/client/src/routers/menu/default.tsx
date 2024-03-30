@@ -3,10 +3,14 @@ import { FC, ReactElement, Suspense, useEffect, useRef, useState } from 'react';
 import { trpc } from '@fms/trpc-client';
 import { useDebounce } from '@fms/utilities';
 import { lazily } from 'react-lazily';
+import { useRecoilValue } from 'recoil';
+import { carProductSelectorState } from '../stores';
 
 const { SelectedMenu, ProductCard } = lazily(() => import('./modules'));
 
 export const MenuPage: FC = (): ReactElement => {
+  const [showSelectedMenu, setShowSelectedMenu] = useState<boolean>(false);
+  const cartData = useRecoilValue(carProductSelectorState);
   const inputRef = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState<string>('');
   const [debounceValue, setDebounceValue] = useState<string>('');
@@ -14,6 +18,10 @@ export const MenuPage: FC = (): ReactElement => {
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
+    }
+
+    if (cartData.length > 0) {
+      setShowSelectedMenu(!showSelectedMenu);
     }
   }, [inputRef]);
 
@@ -52,9 +60,11 @@ export const MenuPage: FC = (): ReactElement => {
           ))}
         </Suspense>
       </section>
-      <Suspense fallback={'Spinner'}>
-        <SelectedMenu />
-      </Suspense>
+      {showSelectedMenu && (
+        <Suspense fallback={'Spinner'}>
+          <SelectedMenu />
+        </Suspense>
+      )}
     </section>
   );
 };

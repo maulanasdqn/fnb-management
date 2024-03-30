@@ -1,7 +1,16 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { carProductSelectorState } from '../../stores';
+import { currencyFormat } from '@fms/utilities';
 
 export const SelectedMenu: FC = (): ReactElement => {
+  const cartData = useRecoilValue(carProductSelectorState);
+
+  const totalItems = cartData.length;
+  const totalPrice = cartData.reduce((acc, item) => acc + item.totalPrice, 0);
+  const listNameofOrder = cartData.map((item) => item.name).join(', ');
+ 
   return (
     <Link
       to={`checkout`}
@@ -11,12 +20,12 @@ export const SelectedMenu: FC = (): ReactElement => {
         <div className="flex w-full justify-between h-full gap-x-4">
           <div className="flex w-full justify-between">
             <div className="flex flex-col w-fit max-w-1/2">
-              <h1 className="text-xl text-white font-medium">2 Pesanan</h1>
+              <h1 className="text-xl text-white font-medium">{`${totalItems} Item`}</h1>
               <p className="text-lg text-white font-normal truncate w-[250px]">
-                Serasa Erat Kopi Susu, Cokelat Susu, Cokelat Susu
+                {listNameofOrder}
               </p>
             </div>
-            <h1 className="text-xl text-white font-medium">Rp. 200.000</h1>
+            <h1 className="text-xl text-white font-medium">{currencyFormat(totalPrice)}</h1>
           </div>
         </div>
       </div>

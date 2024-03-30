@@ -1,15 +1,29 @@
 import { FC, ReactElement } from 'react';
-import { CustomOrder } from './custom-order';
+
 import { currencyFormat } from '@fms/utilities';
 import { TProductSingleResponse } from '@fms/entities';
+import { CustomOrder } from './custom-order';
+import { ControlledFieldRadio } from '@fms/organisms';
+import { useFieldArray, useForm } from 'react-hook-form';
 
 export const ProductDetail: FC<{
   loading?: boolean;
   data?: TProductSingleResponse;
 }> = ({ loading, data }): ReactElement => {
+  const { control } = useForm({
+    defaultValues: {
+      variants : [ { name: 'large', value: 'large', price: '5000' },
+      { name: 'reguler', value: 'reguler', price: 'gratis' },]
+    }
+  });
+  const { fields : variantField } = useFieldArray({
+    name: `variants`,
+    control,
+  });
+  
   const listVariant = [
-    { name: 'Large', value: 'large', price: '5000' },
-    { name: 'Reguler', value: 'reguler', price: 'Gratis' },
+    { name: 'large', value: 'large', price: '5000' },
+    { name: 'reguler', value: 'reguler', price: 'gratis' },
   ];
 
   const listIceLevel = [
@@ -59,7 +73,8 @@ export const ProductDetail: FC<{
       </div>
     </div>
   ) : (
-    <section className="w-full min-h-screen relative bg-grey-100 overflow-y-auto pb-16 mb-16">
+   <form>
+     <section className="w-full min-h-screen relative bg-grey-100 overflow-y-auto pb-16 mb-16">
       <div className="flex flex-col gap-y-3 p-4 bg-white">
         <figure>
           <img
@@ -88,17 +103,22 @@ export const ProductDetail: FC<{
           </small>
         </div>
         <ul>
-          {listVariant.map((variant, idx) => (
+          {variantField.map((variant, idx) => (
             <li
-              key={idx}
+              key={variant.id}
               className="flex items-center justify-between p-2 border-b border-b-slate"
             >
-              <p className="text-lg">{variant.name}</p>
+              <p>{variant.name}</p>
               <div className="flex gap-x-2">
-                <label htmlFor={variant.value}>{`${
-                  variant.price !== 'Gratis' ? '+ ' : ''
-                }${variant.price}`}</label>
-                <input id={variant.value} type="radio" />
+                <label htmlFor={variant.name} className="capitalize">
+                  {variant.price}
+                </label>
+                <ControlledFieldRadio
+                key={variant.id}
+                  control={control}
+                  name={`variants.${idx}.name` as const}
+                  size="lg"
+                />
               </div>
             </li>
           ))}
@@ -174,7 +194,8 @@ export const ProductDetail: FC<{
           ))}
         </ul>
       </div>
-      <CustomOrder />
+      <CustomOrder data={data as TProductSingleResponse} loading={loading} />
     </section>
+   </form>
   );
 };
