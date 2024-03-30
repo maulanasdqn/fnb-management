@@ -14,7 +14,7 @@ export const Tabs: FC<TabsProps> = ({ tabs }): ReactElement => {
   return (
     <div className=" shadow-lg rounded-md text-grey-400 md:text-md text-xs">
       <div className="flex w-full justify-between">
-        {tabs.map((tab, index) => (
+        {tabs?.map((tab, index) => (
           <button
             key={index}
             className={`${
