@@ -1,29 +1,59 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useState } from 'react';
 
 import { currencyFormat } from '@fms/utilities';
 import { TProductSingleResponse } from '@fms/entities';
 import { CustomOrder } from './custom-order';
-import { ControlledFieldRadio } from '@fms/organisms';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { ControlledFieldRadioGroup } from '@fms/organisms';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { match } from 'ts-pattern';
+import { useLocalStorage } from '@fms/utilities';
+
+const schema = z.object({
+  variant: z.string().min(1, { message: 'Please select a variant' }),
+  iceLevel: z.string(),
+  sugarLevel: z.string(),
+  topping: z.string().optional(),
+});
+
+type TSelectedMenu = z.infer<typeof schema>;
+
+export type TSubmitedData = {
+  variant: TSelectedMenu;
+} & TProductSingleResponse & { quantity: number };
 
 export const ProductDetail: FC<{
   loading?: boolean;
   data?: TProductSingleResponse;
 }> = ({ loading, data }): ReactElement => {
-  const { control } = useForm({
-    defaultValues: {
-      variants : [ { name: 'large', value: 'large', price: '5000' },
-      { name: 'reguler', value: 'reguler', price: 'gratis' },]
-    }
-  });
-  const { fields : variantField } = useFieldArray({
-    name: `variants`,
+  const [qty, setQty] = useState<number>(1);
+
+  const {
     control,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid },
+  } = useForm<TSelectedMenu>({
+    mode: 'all',
+    resolver: zodResolver(schema),
+    defaultValues: {
+      variant: 'reguler',
+      topping: 'no',
+    },
   });
-  
+
+  const toppingType = watch('topping');
+  const variantType = watch('variant');
+
+  const [orderData, setOrderData] = useLocalStorage<TSubmitedData[]>(
+    'order-data',
+    []
+  );
+
   const listVariant = [
-    { name: 'large', value: 'large', price: '5000' },
-    { name: 'reguler', value: 'reguler', price: 'gratis' },
+    { name: 'Reguler', value: 'reguler', price: 'Gratis' },
+    { name: 'Large', value: 'large', price: '5000' },
   ];
 
   const listIceLevel = [
@@ -40,7 +70,12 @@ export const ProductDetail: FC<{
     { name: 'Extra Sugar', value: 'extra' },
   ];
 
-  const topping = [
+  const listTopping = [
+    {
+      name: 'Tidak Pake Topping',
+      value: 'no',
+      price: 'Gratis',
+    },
     { name: 'ice cream mango', value: 'mango', price: '5000' },
     { name: 'ice cream cokelat', value: 'cokelat', price: '5000' },
     { name: 'ice cream vanilla', value: 'vanilla', price: '5000' },
@@ -50,6 +85,87 @@ export const ProductDetail: FC<{
     { name: 'oreo cookie crumb', value: 'oreo', price: '5000' },
     { name: 'ice cream avocado', value: 'avocado', price: '5000' },
   ];
+
+  const getVariantPrice = isNaN(
+    Number(listVariant.find((variant) => variant.value === variantType)?.price)
+  )
+    ? 0
+    : Number(
+        listVariant.find((variant) => variant.value === variantType)?.price
+      );
+
+  const getToppingPrice = isNaN(
+    Number(listTopping.find((topping) => topping.value === toppingType)?.price)
+  )
+    ? 0
+    : Number(
+        listTopping.find((topping) => topping.value === toppingType)?.price
+      );
+
+  const handleMinus = () => {
+    if (qty > 1) {
+      setQty(qty - 1);
+    }
+  };
+
+  const handlePlus = () => {
+    setQty(qty + 1);
+  };
+
+  const priceActual = isNaN(Number(data?.priceSelling))
+    ? 0
+    : Number(data?.priceSelling);
+
+  const price = match({
+    topping: getToppingPrice,
+    variant: getVariantPrice,
+  })
+    .with(
+      {
+        topping: 0,
+        variant: 0,
+      },
+      () => priceActual
+    )
+    .with(
+      { variant: getVariantPrice, topping: getToppingPrice },
+      () => priceActual + getToppingPrice + getVariantPrice
+    )
+    .with(
+      { variant: 0, topping: getToppingPrice },
+      () => priceActual + getToppingPrice
+    )
+    .with(
+      {
+        topping: 0,
+        variant: getVariantPrice,
+      },
+      () => priceActual + getVariantPrice
+    )
+    .with(
+      {
+        variant: getVariantPrice,
+        topping: undefined,
+      },
+      () => priceActual + getVariantPrice
+    )
+    .with(
+      {
+        topping: getToppingPrice,
+        variant: undefined,
+      },
+      () => priceActual + getToppingPrice
+    )
+    .with(
+      {
+        variant: undefined,
+        topping: undefined,
+      },
+      () => priceActual
+    )
+    .with({ variant: 0, topping: undefined }, () => priceActual)
+    .with({ topping: 0, variant: undefined }, () => priceActual)
+    .otherwise(() => priceActual);
 
   return loading ? (
     <div key={data?.id} className="w-full min-h-screen bg-white p-4">
@@ -73,129 +189,131 @@ export const ProductDetail: FC<{
       </div>
     </div>
   ) : (
-   <form>
-     <section className="w-full min-h-screen relative bg-grey-100 overflow-y-auto pb-16 mb-16">
-      <div className="flex flex-col gap-y-3 p-4 bg-white">
-        <figure>
-          <img
-            src={data?.image || '/no-photo.jpg'}
-            alt="noPhoto"
-            width={200}
-            height={200}
-            className="object-cover bg-cover w-full rounded-lg border border-grey-100 shadow-sm"
+    <form
+      onSubmit={handleSubmit((val) => {
+        const currentObj = {
+          ...data,
+          id: data?.id as string,
+          name: data?.name as string,
+          priceSelling: price,
+          quantity: qty,
+          variant: val,
+        };
+
+        if (!orderData) {
+          setOrderData([currentObj]);
+        } else {
+          setOrderData([...orderData, currentObj]);
+        }
+
+        window.location.href = '/';
+      })}
+    >
+      <section className="w-full min-h-screen relative bg-grey-100 overflow-y-auto pb-16 mb-16">
+        <div className="flex flex-col gap-y-3 p-4 bg-white">
+          <figure>
+            <img
+              src={data?.image || '/no-photo.jpg'}
+              alt="noPhoto"
+              width={200}
+              height={200}
+              className="object-cover bg-cover w-full rounded-lg border border-grey-100 shadow-sm"
+            />
+            <figcaption className="text-2xl font-bold mt-3">
+              {data?.name}
+            </figcaption>
+          </figure>
+          <div className="text-grey-900">
+            <p>{data?.description}</p>
+          </div>
+          <div className="font-bold text-xl">
+            <h3>{currencyFormat(data?.priceSelling as number)}</h3>
+          </div>
+        </div>
+        <div className="flex flex-col gap-y-2 mt-2 bg-white p-4">
+          <div className="border-b border-b-slate border-dotted py-2">
+            <h2 className="font-bold text-xl text-grey-950">Variant</h2>
+            <small className="text-primary ">
+              Harus Dipilih . <span className="text-grey-500">Pilih 1</span>
+            </small>
+          </div>
+          <ControlledFieldRadioGroup
+            control={control}
+            name={'variant'}
+            status={errors.variant ? 'error' : 'default'}
+            message={errors.variant?.message}
+            options={listVariant.map((variant) => ({
+              label: variant.name,
+              value: variant.value,
+              additional: isNaN(Number(variant.price))
+                ? variant.price
+                : currencyFormat(Number(variant.price)),
+            }))}
           />
-          <figcaption className="text-2xl font-bold mt-3">
-            {data?.name}
-          </figcaption>
-        </figure>
-        <div className="text-grey-900">
-          <p>{data?.description}</p>
         </div>
-        <div className="font-bold text-xl">
-          <h3>{currencyFormat(data?.priceSelling as number)}</h3>
+        <div className="flex flex-col gap-y-2 mt-2 bg-white p-4">
+          <div className="border-b border-b-slate border-dotted py-2">
+            <h2 className="font-bold text-xl text-grey-950">Ice Level</h2>
+            <small className="text-primary ">
+              Harus Dipilih . <span className="text-grey-500">Pilih 1</span>
+            </small>
+          </div>
+          <ControlledFieldRadioGroup
+            control={control}
+            name={'iceLevel'}
+            options={listIceLevel.map((iceLevel) => ({
+              label: iceLevel.name,
+              value: iceLevel.value,
+            }))}
+          />
         </div>
-      </div>
-      <div className="flex flex-col gap-y-2 mt-2 bg-white p-4">
-        <div className="border-b border-b-slate border-dotted py-2">
-          <h2 className="font-bold text-xl text-grey-950">Variant</h2>
-          <small className="text-primary ">
-            Harus Dipilih . <span className="text-grey-500">Pilih 1</span>
-          </small>
-        </div>
-        <ul>
-          {variantField.map((variant, idx) => (
-            <li
-              key={variant.id}
-              className="flex items-center justify-between p-2 border-b border-b-slate"
-            >
-              <p>{variant.name}</p>
-              <div className="flex gap-x-2">
-                <label htmlFor={variant.name} className="capitalize">
-                  {variant.price}
-                </label>
-                <ControlledFieldRadio
-                key={variant.id}
-                  control={control}
-                  name={`variants.${idx}.name` as const}
-                  size="lg"
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="flex flex-col gap-y-2 mt-2 bg-white p-4">
-        <div className="border-b border-b-slate border-dotted py-2">
-          <h2 className="font-bold text-xl text-grey-950">Ice Level</h2>
-          <small className="text-primary ">
-            Harus Dipilih . <span className="text-grey-500">Pilih 1</span>
-          </small>
-        </div>
-        <ul>
-          {listIceLevel.map((iceLevel, idx) => (
-            <li
-              key={idx}
-              className="flex items-center justify-between p-2 border-b border-b-slate"
-            >
-              <p>{iceLevel.name}</p>
-              <div className="flex gap-x-2">
-                <label htmlFor={iceLevel.value}>Gratis</label>
-                <input id={iceLevel.value} type="radio" />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
 
-      <div className="flex flex-col gap-y-2 mt-2 bg-white p-4">
-        <div className="border-b border-b-slate border-dotted py-2">
-          <h2 className="font-bold text-xl text-grey-950">Sugar Level</h2>
-          <small className="text-primary ">
-            Harus Dipilih . <span className="text-grey-500">Pilih 1</span>
-          </small>
+        <div className="flex flex-col gap-y-2 mt-2 bg-white p-4">
+          <div className="border-b border-b-slate border-dotted py-2">
+            <h2 className="font-bold text-xl text-grey-950">Sugar Level</h2>
+            <small className="text-primary ">
+              Harus Dipilih . <span className="text-grey-500">Pilih 1</span>
+            </small>
+          </div>
+          <ControlledFieldRadioGroup
+            control={control}
+            name={'sugarLevel'}
+            options={sugarLevel.map((sugarLevel) => ({
+              label: sugarLevel.name,
+              value: sugarLevel.value,
+            }))}
+          />
         </div>
-        <ul>
-          {sugarLevel.map((sugar, idx) => (
-            <li
-              key={idx}
-              className="flex items-center justify-between p-2 border-b border-b-slate"
-            >
-              <p>{sugar.name}</p>
-              <div className="flex gap-x-2">
-                <label htmlFor="regular">Gratis</label>
-                <input id="regular" type="radio" />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
 
-      <div className="flex flex-col gap-y-2 mt-2 bg-white p-4">
-        <div className="border-b border-b-slate border-dotted py-2">
-          <h2 className="font-bold text-xl text-grey-950">Pilihan Topping</h2>
-          <small className="text-primary ">
-            Opsional . <span className="text-grey-500">Pilih maks. 3</span>
-          </small>
+        <div className="flex flex-col gap-y-2 mt-2 bg-white p-4">
+          <div className="border-b border-b-slate border-dotted py-2">
+            <h2 className="font-bold text-xl text-grey-950">Pilihan Topping</h2>
+            <small className="text-primary ">
+              Opsional . <span className="text-grey-500">Pilih maks. 3</span>
+            </small>
+          </div>
+
+          <ControlledFieldRadioGroup
+            control={control}
+            name={'topping'}
+            options={listTopping.map((topping) => ({
+              label: topping.name,
+              value: topping.value,
+              additional: isNaN(Number(topping.price))
+                ? topping.price
+                : currencyFormat(Number(topping.price)),
+            }))}
+          />
         </div>
-        <ul>
-          {topping.map((topping, idx) => (
-            <li
-              key={idx}
-              className="flex items-center justify-between p-2 border-b border-b-slate capitalize"
-            >
-              <p>{topping.name}</p>
-              <div className="flex gap-x-2">
-                <label htmlFor={topping.value}>{`${
-                  topping.price !== 'Gratis' ? '+ ' : ''
-                }${topping.price}`}</label>
-                <input id={topping.value} type="radio" />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <CustomOrder data={data as TProductSingleResponse} loading={loading} />
-    </section>
-   </form>
+        <CustomOrder
+          quantity={qty}
+          handleMinus={handleMinus}
+          handlePlus={handlePlus}
+          isValid={isValid}
+          loading={loading}
+          price={price}
+        />
+      </section>
+    </form>
   );
 };

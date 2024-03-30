@@ -134,6 +134,18 @@ export type TControlledSelect<T extends FieldValues> = UseControllerProps<T> &
 export type TControlledInputSpecial<T extends FieldValues> =
   UseControllerProps<T> & TInputSpecial & TInputMolecule;
 
+export type TControlledInputRadioGroup<T extends FieldValues> =
+  UseControllerProps<T> &
+    Omit<
+      TInputSpecial &
+        TInputMolecule & {
+          options: TOption[];
+        },
+      'onChange'
+    > & {
+      onChange?: (value?: string | number | boolean) => void;
+    };
+
 export type TControlledTextArea<T extends FieldValues> = UseControllerProps<T> &
   TTextArea &
   TInputMolecule;
@@ -216,6 +228,6 @@ export type TLineChart = {
   };
 };
 
-export type TOption = { value: string; label: string };
+export type TOption = { value: string; label: string; additional?: string };
 
 export * from './style';

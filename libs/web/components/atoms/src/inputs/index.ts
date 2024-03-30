@@ -1,2 +1,2 @@
 export * from './input-text';
-export * from './radio';
+export * from './input-radio';

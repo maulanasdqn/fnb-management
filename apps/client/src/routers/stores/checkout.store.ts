@@ -9,6 +9,7 @@ export const cartProductState = atom<CartProductItem[]>({
   key: 'cartProductState',
   default: [],
 });
+
 export const carProductSelectorState = selector({
   key: 'carProductSelectorState',
   get: ({ get }) => {
@@ -21,6 +22,7 @@ export const totalQuantityState = atomFamily({
   key: 'totalQuantityState',
   default: 1,
 });
+
 export const totalPriceState = atomFamily({
   key: 'totalPriceState',
   default: (price: number) => price,

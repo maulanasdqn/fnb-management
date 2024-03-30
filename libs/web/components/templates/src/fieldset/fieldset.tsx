@@ -36,7 +36,7 @@ export const Fieldset: FC<TFieldSet> = (props): ReactElement => {
       </section>
     ))
     .with('radio', () => (
-      <section className="flex flex-col gap-y-1">
+      <section className="flex flex-col gap-y-3">
         {props?.label && (
           <Label
             id={props.id}

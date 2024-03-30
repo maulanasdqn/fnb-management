@@ -1,27 +1,23 @@
 import { Icon } from '@iconify/react';
 import { FC, ReactElement, Suspense, useEffect, useRef, useState } from 'react';
 import { trpc } from '@fms/trpc-client';
-import { useDebounce } from '@fms/utilities';
+import { useDebounce, useGetLocalStorage } from '@fms/utilities';
 import { lazily } from 'react-lazily';
-import { useRecoilValue } from 'recoil';
-import { carProductSelectorState } from '../stores';
+import { TSubmitedData } from './modules';
 
 const { SelectedMenu, ProductCard } = lazily(() => import('./modules'));
 
 export const MenuPage: FC = (): ReactElement => {
-  const [showSelectedMenu, setShowSelectedMenu] = useState<boolean>(false);
-  const cartData = useRecoilValue(carProductSelectorState);
+  const [cartData] = useGetLocalStorage('order-data');
   const inputRef = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState<string>('');
   const [debounceValue, setDebounceValue] = useState<string>('');
 
+  console.log(cartData);
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
-    }
-
-    if (cartData.length > 0) {
-      setShowSelectedMenu(!showSelectedMenu);
     }
   }, [inputRef]);
 
@@ -60,9 +56,9 @@ export const MenuPage: FC = (): ReactElement => {
           ))}
         </Suspense>
       </section>
-      {showSelectedMenu && (
+      {(cartData as boolean) && (
         <Suspense fallback={'Spinner'}>
-          <SelectedMenu />
+          <SelectedMenu data={(cartData as TSubmitedData[]) || []} />
         </Suspense>
       )}
     </section>

@@ -1,57 +1,20 @@
 import { Button } from '@fms/atoms';
-import { TProductSingleResponse } from '@fms/entities';
-import { FC, ReactElement, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import {cartProductState, totalPriceState, totalQuantityState } from '../../stores';
-import { useNavigate } from 'react-router-dom';
+import { FC, ReactElement } from 'react';
+import { currencyFormat } from '@fms/utilities';
 
 export type TSelectedMenu = {
-  quantity?: number;
+  quantity: number;
   loading?: boolean;
-  data: TProductSingleResponse;
+  isValid?: boolean;
+  handleMinus: () => void;
+  handlePlus: () => void;
+  price: number;
 };
 
 export const CustomOrder: FC<TSelectedMenu> = ({
   loading,
   ...props
 }): ReactElement => {
-  const navigate = useNavigate();
-  const [quantity, setQuantity] = useRecoilState(totalQuantityState(props.data.id));
-  const [updateTotalPrice, setUpdateTotalPrice] = useRecoilState(
-    totalPriceState(props.data.priceSelling)
-  );
-  const [cartProducts, setCartProducts] = useRecoilState(cartProductState);
-
-
-  const handlerAddQuantity = () => {
-    setQuantity((prev) => prev + 1);
-    setUpdateTotalPrice((prev) => prev + (props.data?.priceSelling ?? 0));
-  };
-
-  const handlerMinusQuantity = () => {
-    setQuantity((prev) => (prev === 1 ? 1 : prev - 1));
-    setUpdateTotalPrice((prev) => prev - (props.data?.priceSelling ?? 0));
-  };
-
-  const doAddToChart = () => {
-    const newCartItem = {
-      id: props.data?.id,
-      name: props.data?.name,
-      quantity,
-      totalPrice: updateTotalPrice,
-    };
-    setCartProducts([...cartProducts, newCartItem]);
-    
-    setTimeout(() => {
-      navigate('/');
-    }, 1000);
-  };
-
-  useEffect(() => {
-    handlerAddQuantity();
-    handlerMinusQuantity();
-  }, []);
-
   return loading ? (
     <div className="text-center text-2xl">loading...</div>
   ) : (
@@ -66,25 +29,26 @@ export const CustomOrder: FC<TSelectedMenu> = ({
                 </h2>
                 <div className="flex items-center gap-x-3 ">
                   <Button
+                    type="button"
                     className={`w-10 h-10 rounded-full text-xl border-2  text-center font-bold flex items-center justify-center border-primary-700 text-primary-700 disabled:border-grey-300 disabled:text-grey-300`}
-                    onClick={handlerMinusQuantity}
-                    disabled={quantity === 1}
+                    onClick={props.handleMinus}
+                    disabled={props.quantity === 1}
                   >
                     -
                   </Button>
-                  <p >{quantity}</p>
+                  <p>{props.quantity}</p>
                   <Button
+                    type="button"
                     className="w-10 h-10 rounded-full text-xl border-2 border-primary-700 text-center text-primary-700 font-bold flex items-center justify-center"
-                    onClick={handlerAddQuantity}
+                    onClick={props.handlePlus}
                   >
                     +
                   </Button>
                 </div>
               </div>
 
-              <Button onClick={doAddToChart}>
-                Tambah Pesanan -{' '}
-                {updateTotalPrice === undefined ? loading : updateTotalPrice}
+              <Button disabled={!props.isValid} type="submit">
+                Tambah Pesanan - {currencyFormat(props.price * props?.quantity)}
               </Button>
             </div>
           </div>
