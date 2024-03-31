@@ -1,6 +1,7 @@
 import { Button } from '@fms/atoms';
 import { FC, ReactElement } from 'react';
 import { currencyFormat } from '@fms/utilities';
+import { useSearchParams } from 'react-router-dom';
 
 export type TSelectedMenu = {
   quantity: number;
@@ -16,6 +17,9 @@ export const CustomOrder: FC<TSelectedMenu> = ({
   loading,
   ...props
 }): ReactElement => {
+  const [getParams] = useSearchParams();
+
+  const isIndexDetailPresent = getParams.get('indexDetail');
   return loading ? (
     <div className="text-center text-2xl">loading...</div>
   ) : (
@@ -49,7 +53,8 @@ export const CustomOrder: FC<TSelectedMenu> = ({
               </div>
 
               <Button disabled={!props.isValid} type="submit">
-                Tambah Pesanan - {currencyFormat(props.price * props?.quantity)}
+                {isIndexDetailPresent ? 'Ubah Pesanan' : 'Tambah Pesanan'} -{' '}
+                {currencyFormat(props.price * props?.quantity)}
               </Button>
             </div>
           </div>

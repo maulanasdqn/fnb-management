@@ -1,6 +1,6 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 
-import { currencyFormat } from '@fms/utilities';
+import { currencyFormat, useGetLocalStorage } from '@fms/utilities';
 import { TProductSingleResponse } from '@fms/entities';
 import { CustomOrder } from './custom-order';
 import { ControlledFieldRadioGroup } from '@fms/organisms';
@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { match } from 'ts-pattern';
 import { useLocalStorage } from '@fms/utilities';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const schema = z.object({
   variant: z
@@ -35,10 +36,17 @@ export const ProductDetail: FC<{
 }> = ({ loading, data }): ReactElement => {
   const [qty, setQty] = useState<number>(1);
 
+  const [cartData] = useGetLocalStorage<TSubmitedData[]>('order-data');
+
+  const [getParams] = useSearchParams();
+
+  const navigate = useNavigate();
+
   const {
     control,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isValid },
   } = useForm<TSelectedMenu>({
     mode: 'all',
@@ -48,6 +56,22 @@ export const ProductDetail: FC<{
       topping: 'no',
     },
   });
+
+  useEffect(() => {
+    if (getParams.get('indexDetail')) {
+      reset({
+        variant:
+          cartData?.[Number(getParams.get('indexDetail'))].variant?.variant,
+        topping:
+          cartData?.[Number(getParams.get('indexDetail'))].variant?.topping,
+        iceLevel:
+          cartData?.[Number(getParams.get('indexDetail'))].variant?.iceLevel,
+        sugarLevel:
+          cartData?.[Number(getParams.get('indexDetail'))].variant?.sugarLevel,
+      });
+      setQty(cartData?.[Number(getParams.get('indexDetail'))].quantity);
+    }
+  }, []);
 
   const toppingType = watch('topping');
   const variantType = watch('variant');
@@ -206,13 +230,24 @@ export const ProductDetail: FC<{
           variant: val,
         };
 
-        if (!orderData) {
-          setOrderData([currentObj]);
+        if (getParams.get('indexDetail')) {
+          const newData = (orderData[Number(getParams.get('indexDetail'))] =
+            currentObj);
+          setOrderData([...orderData, newData]);
         } else {
-          setOrderData([...orderData, currentObj]);
+          if (!orderData) {
+            setOrderData([currentObj]);
+          } else {
+            setOrderData([...orderData, currentObj]);
+          }
         }
 
-        window.location.href = '/';
+        if (getParams.get('indexDetail')) {
+          window.location.reload();
+          navigate(-1);
+        } else {
+          navigate('/', { replace: true });
+        }
       })}
     >
       <section className="w-full min-h-screen relative bg-grey-100 overflow-y-auto pb-16 mb-16">

@@ -1,5 +1,5 @@
 import { Button } from '@fms/atoms';
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TSubmitedData } from './product-detail';
 import { currencyFormat } from '@fms/utilities';
@@ -8,6 +8,7 @@ type TCheckoutCard = {
   index: number;
   quantity: number;
   order: TSubmitedData;
+  updatePrice: (val: number, index: number) => void;
 };
 
 export const CheckoutCard: FC<TCheckoutCard> = (props): ReactElement => {
@@ -22,6 +23,10 @@ export const CheckoutCard: FC<TCheckoutCard> = (props): ReactElement => {
   const handlePlusQuantity = () => {
     setQty(qty + 1);
   };
+
+  useEffect(() => {
+    props.updatePrice(qty, props?.index);
+  }, [qty]);
 
   return (
     <div className="flex justify-between border border-slate rounded-md w-full h-auto p-2 my-4">
@@ -53,7 +58,7 @@ export const CheckoutCard: FC<TCheckoutCard> = (props): ReactElement => {
             </span>
           </p>
         </div>
-        <Link to={`/${props?.order?.id}/detail`}>
+        <Link to={`/${props?.order?.id}/detail?indexDetail=${props?.index}`}>
           <div className="flex w-[100px]  border justify-center items-center text-sm mt-4 text-success-400 font-bold rounded-md border-success-200 ">
             Ubah variant
           </div>
