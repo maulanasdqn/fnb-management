@@ -3,7 +3,9 @@ import { FC, ReactElement, SetStateAction, Suspense, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@fms/atoms';
 import { Link } from 'react-router-dom';
-import { TSelectedMenu } from './modules';
+import { TSelectedMenu, TSubmitedData } from './modules';
+import { useGetLocalStorage } from '@fms/utilities';
+import { CheckoutCard } from './modules/checkout-card';
 
 export const MenuCheckoutPage: FC<TSelectedMenu> = ({
   totalPrice = 15000,
@@ -11,9 +13,11 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = ({
 }): ReactElement => {
   const { control } = useForm();
   const [paymentMethod, setPaymentMethod] = useState('cash');
+
   const [updateQuantity, setUpdateQuantity] = useState<number>(
     (props.quantity = 1)
   );
+
   const [updateTotalPrice, setUpdateTotalPrice] = useState<number>(totalPrice);
 
   const handlerAddQuantity = () => {
@@ -29,6 +33,9 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = ({
   }) => {
     setPaymentMethod(e.target.value);
   };
+
+  const [cartData] = useGetLocalStorage<TSubmitedData[]>('order-data');
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <section className="p-4">
@@ -54,95 +61,18 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = ({
           />
         </div>
         <h1 className="text-2xl font-bold">Detail Pesanan </h1>
-        <div className="flex justify-between border border-slate rounded-md w-full h-auto p-2 my-4">
-          <div className="flex flex-col">
-            <h1 className="font-bold text-lg">Serasa Kopi Susu</h1>
-            <div className="text-xs">
-              <p className="font-bold">
-                Size : <span className="font-normal">Reguler</span>
-              </p>
-              <p className="font-bold">
-                Ice Level : <span className="font-normal">Reguler</span>
-              </p>
-              <p className="font-bold">
-                Sugar level : <span className="font-normal">Reguler</span>
-              </p>
-              <p className="font-bold">
-                Pilihan Toping : <span className="font-normal">Reguler</span>
-              </p>
-            </div>
-            <Link to={'/detail'}>
-              <div className="flex w-[100px]  border justify-center items-center text-sm mt-4 text-success-400 font-bold rounded-md border-success-200 ">
-                Ubah variant
-              </div>
-            </Link>
-          </div>
-          <div className="flex flex-col gap-2">
-            <img src="/asset1.jpg" alt="cofee" width={100} height={100} />
-            <div className="flex items-center gap-x-3 ">
-              <Button
-                className={`w-8 h-8 rounded-full text-xl border-2  text-center font-bold flex items-center justify-center border-primary-700 text-primary-700 disabled:border-grey-300 disabled:text-grey-300`}
-                onClick={handlerMinusQuantity}
-                disabled={updateQuantity === 1}
-              >
-                -
-              </Button>
-              <p>{updateQuantity}</p>
-              <Button
-                className="w-8 h-8 rounded-full text-xl border-2 border-primary-700 text-center text-primary-700 font-bold flex items-center justify-center"
-                onClick={handlerAddQuantity}
-              >
-                +
-              </Button>
-            </div>
-            <p className="text-xs">Harga: Rp.{updateTotalPrice}</p>
-          </div>
-        </div>
-        <div className="flex justify-between border border-slate rounded-md w-full h-auto p-4 my-4">
-          <div className="flex flex-col">
-            <h1 className="font-bold text-lg">Serasa Shake Manggo</h1>
-            <div className="text-xs">
-              <p className="font-bold">
-                Size : <span className="font-normal">Reguler</span>
-              </p>
-              <p className="font-bold">
-                Ice Level : <span className="font-normal">Extra Ice</span>
-              </p>
-              <p className="font-bold">
-                Sugar level : <span className="font-normal">Reguler</span>
-              </p>
-              <p className="font-bold">
-                Pilihan Toping : <span className="font-normal">Reguler</span>
-              </p>
-            </div>
-            <Link to={'/detail'}>
-              <div className="flex border w-[100px] justify-center items-center text-sm mt-4 text-success-400 font-bold rounded-md border-success-200 ">
-                Ubah variant
-              </div>
-            </Link>
-          </div>
-          {/* detail gambar dan jumlah */}
-          <div className="flex flex-col gap-2 ">
-            <img src="/no-photo.jpg" alt="cofee" width={100} height={100} />
-            <div className="flex items-center gap-x-3 ">
-              <Button
-                className={`w-8 h-8 rounded-full text-xl border-2  text-center font-bold flex items-center justify-center border-primary-700 text-primary-700 disabled:border-grey-300 disabled:text-grey-300`}
-                onClick={handlerMinusQuantity}
-                disabled={updateQuantity === 1}
-              >
-                -
-              </Button>
-              <p>{updateQuantity}</p>
-              <Button
-                className="w-8 h-8 rounded-full text-xl border-2 border-primary-700 text-center text-primary-700 font-bold flex items-center justify-center"
-                onClick={handlerAddQuantity}
-              >
-                +
-              </Button>
-            </div>
-            <p className="text-xs">Harga: Rp.{updateTotalPrice}</p>
-          </div>
-        </div>
+
+        {cartData.map((data, index) => {
+          return (
+            <CheckoutCard
+              key={index}
+              order={data}
+              quantity={data.quantity}
+              index={index}
+            />
+          );
+        })}
+
         <h1 className="text-2xl font-bold">Payment Summary </h1>
         <span className="flex flex-col pt-4 pb-[80px]">
           <div className="flex w-full justify-between">

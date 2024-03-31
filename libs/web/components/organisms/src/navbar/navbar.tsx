@@ -16,7 +16,7 @@ export const Navbar: FC<{ menu: TNavbar[] }> = (props): ReactElement => {
   const { pathname } = useLocation();
 
   const handleNavigate = () => {
-    navigate('/');
+    navigate(-1);
   };
 
   return (

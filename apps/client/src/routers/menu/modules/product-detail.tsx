@@ -11,9 +11,15 @@ import { match } from 'ts-pattern';
 import { useLocalStorage } from '@fms/utilities';
 
 const schema = z.object({
-  variant: z.string().min(1, { message: 'Please select a variant' }),
-  iceLevel: z.string(),
-  sugarLevel: z.string(),
+  variant: z
+    .string({ required_error: 'Variant Wajib Diisi' })
+    .min(1, { message: 'Variant Wajib Diisi' }),
+  iceLevel: z.string({ required_error: 'Es Wajib Diisi' }).min(1, {
+    message: 'Es Wajib Diisi',
+  }),
+  sugarLevel: z.string({ required_error: 'Gula Wajib Diisi' }).min(1, {
+    message: 'Gula Wajib Diisi',
+  }),
   topping: z.string().optional(),
 });
 
