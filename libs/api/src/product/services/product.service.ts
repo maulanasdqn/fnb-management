@@ -1,6 +1,8 @@
 import { db, products } from '@fms/drizzle';
 import {
   TProductQueryParams,
+  TProductCreateRequest,
+  TProductUpdateRequest,
   TProductResponse,
   TProductSingleResponse,
 } from '@fms/entities';
@@ -40,14 +42,60 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
   return data as TProductSingleResponse;
 };
 
-export const create = async () => {
-  return;
+export const create = async ({
+  name,
+  priceSelling,
+  productCategoryId,
+  image,
+  price,
+  recipeId,
+  description
+}: TProductCreateRequest): Promise<TProductSingleResponse> => {
+  const data = await db
+    .insert(products)
+    .values({
+      name,
+      price,
+      priceSelling,
+      productCategoryId,
+      image,
+      description,
+      recipeId
+    })
+    .returning();
+  return data[0] as TProductSingleResponse;
 };
 
-export const update = async () => {
-  return;
+export const update = async ({
+  id,
+  name,
+  priceSelling,
+  productCategoryId,
+  image,
+  price,
+  recipeId,
+  description
+}: TProductUpdateRequest) => {
+  const data = await db
+    .update(products)
+    .set({
+      name,
+      price,
+      priceSelling,
+      productCategoryId,
+      image,
+      description,
+      recipeId
+    })
+    .where(eq(products.id, id))
+    .returning();
+  return data[0] as TProductSingleResponse;
 };
 
-export const deleteData = async () => {
-  return;
+export const destroy = async (id: string) => {
+  const data = await db
+    .delete(products)
+    .where(eq(products.id, id))
+    .returning();
+  return data[0] as TProductSingleResponse;
 };

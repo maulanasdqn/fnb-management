@@ -15,3 +15,26 @@ export const productQueryParamSchema = z.object({
   productCategoryId: z.string().optional(),
   ...baseSchema.shape,
 });
+
+export const productCreateRequestSchema = z.object({
+  name: z.string(),
+  price: z.number(),
+  priceSelling: z.number(),
+  productCategoryId: z.string(),
+  image: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  recipeId: z.string(),
+  ...baseSchema.omit({ id: true }).shape,
+});
+
+export const productUpdateRequestSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  price: z.number(),
+  priceSelling: z.number(),
+  productCategoryId: z.string(),
+  image: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  recipeId: z.string(),
+  ...baseSchema.omit({ id: true }).shape,
+});
