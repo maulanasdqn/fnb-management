@@ -12,7 +12,7 @@ export const Button: FC<TButton> = ({
   ...props
 }): ReactElement => {
   const className = clsx(
-    'rounded-lg text-white hover:opacity-80 font-medium transition-all',
+    'rounded-lg hover:opacity-80 font-medium transition-all',
     'disabled:cursor-not-allowed disabled:hover:opacity-80 disabled:bg-grey-200',
     'text-sm px-4 py-2',
     {
@@ -21,12 +21,13 @@ export const Button: FC<TButton> = ({
       'border-none': variantType === 'solid',
     },
     {
-      'bg-primary': variant === 'primary' && variantType === 'solid',
-      'bg-primary-2': variant === 'secondary' && variantType === 'solid',
-      'bg-success': variant === 'success' && variantType === 'solid',
-      'bg-error': variant === 'error' && variantType === 'solid',
-      'bg-warning': variant === 'warning' && variantType === 'solid',
-      'bg-info': variant === 'info' && variantType === 'solid',
+      'bg-primary text-white': variant === 'primary' && variantType === 'solid',
+      'bg-primary-2 text-white':
+        variant === 'secondary' && variantType === 'solid',
+      'bg-success text-white': variant === 'success' && variantType === 'solid',
+      'bg-error  text-white': variant === 'error' && variantType === 'solid',
+      'bg-warning text-white': variant === 'warning' && variantType === 'solid',
+      'bg-info  text-white': variant === 'info' && variantType === 'solid',
     },
     {
       'border-bg-primary text-primary':

@@ -231,9 +231,10 @@ export const ProductDetail: FC<{
         };
 
         if (getParams.get('indexDetail')) {
-          const newData = (orderData[Number(getParams.get('indexDetail'))] =
-            currentObj);
-          setOrderData([...orderData, newData]);
+          const index = Number(getParams.get('indexDetail'));
+          const updatedData = [...orderData]; 
+          updatedData[index] = currentObj; 
+          setOrderData(updatedData); 
         } else {
           if (!orderData) {
             setOrderData([currentObj]);
