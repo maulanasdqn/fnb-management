@@ -6,7 +6,6 @@ import { places } from '../place/place.schema';
 import { payments } from '../payment/payment.schema';
 
 export const orders = pgTable('orders', {
-  id: uuid('id').defaultRandom().primaryKey(),
   customerId: text('customer_id').notNull(),
   placeId: uuid('place_id')
     .notNull()

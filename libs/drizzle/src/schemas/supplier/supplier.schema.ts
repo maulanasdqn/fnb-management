@@ -2,9 +2,9 @@ import { pgTable, text, uuid, integer } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base';
 import { relations } from 'drizzle-orm';
 import { purchases } from '../purchase/purchase.schema';
+import { items } from '../item';
 
 export const suppliers = pgTable('suppliers', {
-  id: uuid('id').defaultRandom().primaryKey(),
   fullname: text('fullname').notNull(),
   address: integer('address').notNull(),
   phoneNumber: integer('phone_number').notNull(),
@@ -12,5 +12,6 @@ export const suppliers = pgTable('suppliers', {
 });
 
 export const supplierRelations = relations(suppliers, ({ many }) => ({
-  purchase: many(purchases),
+  purchases: many(purchases),
+  items: many(items),
 }));

@@ -4,7 +4,6 @@ import { baseSchema } from '../base';
 import { roles } from './role.schema';
 
 export const users = pgTable('users', {
-  id: uuid('id').defaultRandom().primaryKey(),
   fullname: text('fullname').notNull(),
   username: text('username').unique().notNull(),
   avatar: text('avatar'),

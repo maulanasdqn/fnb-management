@@ -4,7 +4,6 @@ import { relations } from 'drizzle-orm';
 import { items } from './item.schema';
 
 export const itemLogs = pgTable('item_logs', {
-  id: uuid('id').defaultRandom().primaryKey(),
   qtyBefore: text('qty_before').notNull(),
   qtyCurrent: text('qty_current').notNull(),
   qtyAfter: text('qty_after').notNull(),
