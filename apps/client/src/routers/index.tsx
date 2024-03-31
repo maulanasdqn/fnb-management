@@ -33,7 +33,16 @@ export const router = createBrowserRouter([
         path: 'checkout',
         element: (
           <Suspense>
-            <MenuCheckoutPage />
+            <MenuCheckoutPage
+              quantity={0}
+              handleMinus={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+              handlePlus={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+              price={0}
+            />
           </Suspense>
         ),
       },

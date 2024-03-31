@@ -11,7 +11,7 @@ export const SuccessOrder: FC = (): ReactElement => {
           <p>Pesanan : Serasa erat Kopi, Serasa ...</p>
         </div>
         <div className="flex items-center">
-          <p className="text-success-400 font-bold">Pesanan Sudah Selesai</p>
+          <p className="text-primary font-bold">Pesanan Sudah Selesai</p>
         </div>
       </div>
     </section>

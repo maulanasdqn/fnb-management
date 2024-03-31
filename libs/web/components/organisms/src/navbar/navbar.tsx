@@ -3,7 +3,12 @@ import { Icon } from '@iconify/react';
 import { FC, ReactElement, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-export const Navbar: FC = (): ReactElement => {
+export type TNavbar = {
+  name: string;
+  path: string;
+};
+
+export const Navbar: FC<{ menu: TNavbar[] }> = (props): ReactElement => {
   const [isBarOpen, setIsBarOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -14,28 +19,21 @@ export const Navbar: FC = (): ReactElement => {
     navigate('/');
   };
 
-  const navMenu = [
-    { name: 'Home', path: '#' },
-    { name: 'Coffee', path: '#' },
-    { name: 'Non Coffee', path: '#' },
-    { name: 'Recomendation', path: '#' },
-  ];
-
   return (
     <>
       {isBarOpen && (
-        <section className="bg-success-50 min-h-48 w-full z-20 p-10 fixed ">
+        <section className="bg-success-50 min-h-40 w-full z-20 p-10 fixed ">
           <div className="flex w-full justify-between items-center">
-            <h1 className="text-xl font-bold">Serasa Erat Kopi</h1>
+            <h1 className="md:text-xl text-md font-bold">Serasa Erat Kopi</h1>
             <Icon
               icon="fa:close"
-              className="text-xl text-error-700"
+              className="md:text-xl text-md text-error-700"
               onClick={() => setIsBarOpen(!isBarOpen)}
             />
           </div>
-          <div className="mt-10">
-            <ul className="flex flex-col gap-y-4 text-xl font-semibold text-primary-700">
-              {navMenu.map((menu, key) => (
+          <div className="mt-8">
+            <ul className="flex flex-col gap-y-4 md:text-xl text-md font-semibold text-primary-700">
+              {props.menu.map((menu, key) => (
                 <li key={key}>
                   <Link to={menu.path}>{menu.name}</Link>
                 </li>

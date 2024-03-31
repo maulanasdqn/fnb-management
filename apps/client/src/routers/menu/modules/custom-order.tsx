@@ -6,6 +6,7 @@ export type TSelectedMenu = {
   quantity: number;
   loading?: boolean;
   isValid?: boolean;
+  totalPrice?: number;
   handleMinus: () => void;
   handlePlus: () => void;
   price: number;
