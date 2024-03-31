@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { TBaseResponse } from '../../types';
 import {
   unitTypeCreateSchema,
-  unitTypeSchema,
   unitTypeUpdateSchema,
+  unitTypeSchema,
 } from '../../validation-schemas';
 
 export type TUnitType = z.infer<typeof unitTypeSchema>;

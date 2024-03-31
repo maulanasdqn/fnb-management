@@ -6,6 +6,7 @@ import {
   TUnitTypeSingleResponse,
   TUnitTypeUpdateRequest,
 } from '@fms/entities';
+import { TRPCError } from '@trpc/server';
 import { asc, eq, ilike } from 'drizzle-orm';
 
 export const findOneUnitType = async (
@@ -23,21 +24,13 @@ export const findOneUnitType = async (
     .then((res) => res.at(0));
 
   if (!res) {
-    return {
-      data: undefined,
-      meta: {
-        page: undefined,
-        perPage: undefined,
-        totalPage: undefined,
-      },
-    };
+    throw new TRPCError({
+      message: 'Unit type tidak ditemukan',
+      code: 'BAD_REQUEST',
+    });
   }
   return {
-    meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
-    },
+    message: 'Berhasil mengambil data',
     data: res,
   };
 };
@@ -57,12 +50,13 @@ export const findManyUnitType = async (
     .orderBy(asc(unitTypes.name));
 
   return {
+    message: 'Berhasil mengambil data',
+    data: res,
     meta: {
       page: 1,
       perPage: 10,
       totalPage: 1,
     },
-    data: res,
   };
 };
 
@@ -76,13 +70,14 @@ export const createUnitType = async (
     })
     .returning()
     .then((res) => res.at(0));
-
+  if (!res) {
+    throw new TRPCError({
+      message: 'Gagal menambahkan unit type',
+      code: 'BAD_REQUEST',
+    });
+  }
   return {
-    meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
-    },
+    message: 'Unit type berhasil dibuat',
     data: res,
   };
 };
@@ -96,26 +91,18 @@ export const updateUnitType = async (
       name: request.name,
       updatedAt: new Date(),
     })
-    .where(eq(unitTypes.id, request.id))
+    .where(eq(unitTypes.id, request.id as string))
     .returning()
     .then((res) => res.at(0));
 
   if (!res) {
-    return {
-      meta: {
-        page: 1,
-        perPage: 10,
-        totalPage: 1,
-      },
-      data: res,
-    };
+    throw new TRPCError({
+      message: 'Gagal update unit type',
+      code: 'BAD_REQUEST',
+    });
   }
   return {
-    meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
-    },
+    message: 'Unit type berhasil diupdate',
     data: res,
   };
 };
@@ -128,13 +115,14 @@ export const deleteUnitType = async (
     .where(eq(unitTypes.id, request?.id as string))
     .returning()
     .then((res) => res.at(0));
-
+  if (!res) {
+    throw new TRPCError({
+      message: 'Gagal delete unit type',
+      code: 'BAD_REQUEST',
+    });
+  }
   return {
-    meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
-    },
+    message: 'Unit type berhasil dihapus',
     data: res,
   };
 };

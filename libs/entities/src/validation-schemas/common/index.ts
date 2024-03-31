@@ -4,6 +4,8 @@ export const baseSchema = z.object({
   id: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
+  createdBy: z.string().optional().nullable(),
+  updatedBy: z.string().optional().nullable(),
 });
 
 export const queryParamsSchema = z
@@ -17,6 +19,9 @@ export const metaResponseSchema = z.object({
   page: z.number().optional(),
   perPage: z.number().optional(),
   totalPage: z.number().optional(),
+  total: z.number().optional(),
+  prev: z.number().optional().nullable(),
+  next: z.number().optional().nullable(),
 });
 
 export const dataResponseSchema = <T extends ZodTypeAny>(data: T) =>
@@ -24,4 +29,10 @@ export const dataResponseSchema = <T extends ZodTypeAny>(data: T) =>
     message: z.string().optional(),
     data: z.array(data).optional(),
     meta: metaResponseSchema.optional(),
+  });
+
+export const dataSingleResponseSchema = <T extends ZodTypeAny>(data: T) =>
+  z.object({
+    message: z.string().optional(),
+    data: z.object({ ...(data as object) }).optional(),
   });

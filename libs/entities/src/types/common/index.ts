@@ -9,9 +9,8 @@ import type {
 } from 'react';
 import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import { AxiosError } from 'axios';
-import { ZodTypeAny, z } from 'zod';
+import { z } from 'zod';
 import {
-  dataResponseSchema,
   metaResponseSchema,
   queryParamsSchema,
 } from '../../validation-schemas';
@@ -29,8 +28,6 @@ export type TCommonObject = {
   name: string;
 };
 
-export type TMetaResponse = z.infer<typeof metaResponseSchema>;
-
 export type TMetaResponses<T = null | undefined> = {
   message?: string;
   data?: T;
@@ -45,7 +42,9 @@ export type TMetaResponses<T = null | undefined> = {
   };
 };
 
+export type TMetaResponse = z.infer<typeof metaResponseSchema>;
 export type TBaseResponse<T = null | undefined> = {
+  message?: string;
   data?: T;
   meta?: TMetaResponse;
 };
