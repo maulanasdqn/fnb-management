@@ -11,6 +11,7 @@ import {
 } from '@fms/entities';
 import { DashboardRequestPurchase } from './dashboard/request-purchase';
 import { DashboardStockOpname } from './dashboard/stock-opname';
+import { DetailOrder } from './dashboard/order/detail-order';
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
         path: '',
         element: <Dashboard />,
         loader: () => pagePermission([PERMISSION_DASHBOARD.READ_DASHBOARD]),
+      },
+      {
+        path: 'detail',
+        element: <DetailOrder />,
       },
       {
         path: 'stock-opname',

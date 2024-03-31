@@ -1,5 +1,6 @@
 import { Button } from '@fms/atoms';
 import { FC, ReactElement } from 'react';
+import { Link } from 'react-router-dom';
 
 export const NewOrder: FC = (): ReactElement => {
   return (
@@ -11,7 +12,9 @@ export const NewOrder: FC = (): ReactElement => {
           <p>Pesanan : Serasa erat Kopi, Serasa ...</p>
         </div>
         <div className="flex  items-center">
-          <Button size="sm">Lihat detail</Button>
+          <Link to="/dashboard/detail">
+            <Button size="sm">Lihat detail</Button>
+          </Link>
         </div>
       </div>
       <div className="flex md:flex-row flex-col gap-y-2 md:justify-between w-full shadow-lg md:h-[100px] h-auto rounded-md bg-white md:p-4 p-2">
@@ -21,7 +24,9 @@ export const NewOrder: FC = (): ReactElement => {
           <p>Pesanan : Serasa erat Kopi, Serasa ...</p>
         </div>
         <div className="flex  items-center">
-          <Button size="sm">Lihat detail</Button>
+          <Link to="/dashboard/detail">
+            <Button size="sm">Lihat detail</Button>
+          </Link>
         </div>
       </div>
     </section>

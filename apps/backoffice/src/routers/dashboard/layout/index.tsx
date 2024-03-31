@@ -3,11 +3,17 @@ import { FC, ReactElement } from 'react';
 import { Outlet } from 'react-router-dom';
 
 export const DashboardLayout: FC = (): ReactElement => {
+  const navMenu = [
+    { name: 'Home', path: '#' },
+    { name: 'Stock Opname', path: '/stock-opnmae' },
+    { name: 'Request Purchase', path: '/req-purchase' },
+    { name: 'Logout', path: '/auth/login' },
+  ];
   return (
     <div className="max-w-auto relative">
-      <Navbar />
+      <Navbar menu={navMenu} />
       <div className="md:p-8 p-4">
-        <Outlet />'
+        <Outlet />
       </div>
     </div>
   );
