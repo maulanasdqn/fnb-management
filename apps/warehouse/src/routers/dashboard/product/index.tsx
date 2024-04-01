@@ -1,10 +1,16 @@
-import { Button } from '@fms/atoms';
 import { TProduct } from '@fms/entities';
 import { DataTable } from '@fms/organisms';
+import { trpc } from '@fms/trpc-client';
+import { Icon } from '@iconify/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { FC, ReactElement } from 'react';
+import { Link } from 'react-router-dom';
 
 export const DashboardProduct: FC = (): ReactElement => {
+  const { data, isLoading } = trpc.product.findMany.useQuery({
+    search: undefined,
+  });
+
   const columns: ColumnDef<TProduct>[] = [
     {
       header: 'No',
@@ -39,11 +45,11 @@ export const DashboardProduct: FC = (): ReactElement => {
     {
       header: 'Aksi',
       accessorKey: 'action',
-      cell(props) {
+      cell({row}) {
         return (
-          <>
-            <Button>Edit</Button>
-          </>
+          <Link to={`/dashboard/product/${row.original.id}/edit`}>
+            <Icon icon="fa:edit" />
+          </Link>
         );
       },
     },
@@ -73,7 +79,7 @@ export const DashboardProduct: FC = (): ReactElement => {
   return (
     <div className="flex flex-col gap-4">
       <h1>Ini tabel Produk</h1>
-      <DataTable data={dataDummy} columns={columns} />
+      <DataTable data={data || []} columns={columns} />
     </div>
   );
 };

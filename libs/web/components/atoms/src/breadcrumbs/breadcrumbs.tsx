@@ -8,11 +8,14 @@ export const Breadcrumbs: FC<{
   }>;
 }> = ({ items }): ReactElement => {
   return (
-    <div className="flex gap-x-2">
+    <div className="flex gap-x-2 text-sm">
       {items.map((item) => (
-        <Link className="text-grey" to={item.path} key={item.path}>
-          {item.name}
-        </Link>
+        <>
+          <Link className="text-primary-700 hover:text-primary-600 hover:underline" to={item.path} key={item.path}>
+            {item.name}
+          </Link>
+          <span className="text-grey-400">/</span>
+        </>
       ))}
     </div>
   );

@@ -18,6 +18,7 @@ import { DashboardRole } from './dashboard/role';
 import { DashboardStockOpname } from './dashboard/stock-opname';
 import { DashboardIngredient } from './dashboard/ingredient';
 import { DashboardProduct } from './dashboard/product';
+import { DashboardProductEdit } from './dashboard/product/edit';
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +54,11 @@ export const router = createBrowserRouter([
       {
         path: 'product',
         element: <DashboardProduct />,
+        loader: () => pagePermission([PERMISSION_PRODUCT.READ_PRODUCT]),
+      },
+      {
+        path: 'product/:id/edit',
+        element: <DashboardProductEdit />,
         loader: () => pagePermission([PERMISSION_PRODUCT.READ_PRODUCT]),
       },
       {
