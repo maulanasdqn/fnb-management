@@ -21,21 +21,23 @@ export const DashboardProductEdit: FC = (): ReactElement => {
   console.log(data)
 
   return (
-    <div className="flex flex-col gap-2">
-      <h1 className="text-3xl font-bold">Edit Product</h1>
-      <div className="flex flex-col gap-5 bg-white p-5 rounded-md shadow-md">
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-3xl font-bold">Edit Product</h1>
         <Breadcrumbs items={
-          [
-            {
-              name: 'Dashboard',
-              path: '/dashboard'
-            },
-            {
-              name: 'Product',
-              path: '/dashboard/product'
-            }
-          ]
+            [
+              {
+                name: 'Dashboard',
+                path: '/dashboard'
+              },
+              {
+                name: 'Product',
+                path: '/dashboard/product'
+              }
+            ]
         }/>
+      </div>
+      <div className="flex flex-col gap-5 bg-white p-5 rounded-md shadow-md">
         <div className="flex flex-row gap-7">
           <div className="flex flex-col justify-center items-center gap-3">
             <div className="w-fit h-fit border rounded-md overflow-hidden border-grey-200">
