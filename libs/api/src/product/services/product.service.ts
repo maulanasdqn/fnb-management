@@ -1,15 +1,15 @@
 import { db, products } from '@fms/drizzle';
 import {
-  TProductQueryParams,
   TProductCreateRequest,
   TProductUpdateRequest,
   TProductResponse,
   TProductSingleResponse,
+  TQueryParams,
 } from '@fms/entities';
 import { ilike, asc, eq } from 'drizzle-orm';
 
 export const findMany = async (
-  params?: TProductQueryParams
+  params?: TQueryParams
 ): Promise<TProductResponse> => {
   const data = await db
     .select({
@@ -23,7 +23,14 @@ export const findMany = async (
     .where(ilike(products.name, `%${params?.search || ''}%`))
     .orderBy(asc(products.name));
 
-  return data;
+  return {
+    meta: {
+      page: 1,
+      perPage: 10,
+      totalPage: 1,
+    },
+    data: data,
+  };
 };
 
 export const findOne = async (id: string): Promise<TProductSingleResponse> => {
@@ -34,12 +41,16 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
       priceSelling: products.priceSelling,
       image: products.image,
       description: products.description,
+      createdAt: products.createdAt,
+      updatedAt: products.updatedAt
     })
     .from(products)
     .where(eq(products.id, id))
     .then((data) => data?.at(0));
-
-  return data as TProductSingleResponse;
+  return {
+    message: "Success",
+    data: data
+  };
 };
 
 export const create = async ({
@@ -63,7 +74,10 @@ export const create = async ({
       recipeId
     })
     .returning();
-  return data[0] as TProductSingleResponse;
+  return {
+    message: "Create Product Success",
+    data: data[0]
+  };
 };
 
 export const update = async ({
@@ -89,7 +103,10 @@ export const update = async ({
     })
     .where(eq(products.id, id))
     .returning();
-  return data[0] as TProductSingleResponse;
+  return {
+    message: "Update Product Success",
+    data: data[0]
+  };
 };
 
 export const destroy = async (id: string) => {
@@ -97,5 +114,8 @@ export const destroy = async (id: string) => {
     .delete(products)
     .where(eq(products.id, id))
     .returning();
-  return data[0] as TProductSingleResponse;
+  return {
+    message: "Delete Product Success",
+    data: data[0]
+  };
 };

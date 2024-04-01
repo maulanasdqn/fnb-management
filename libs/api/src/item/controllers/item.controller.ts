@@ -4,13 +4,14 @@ import {
   itemResponseSchema,
   itemQueryParamSchema,
   itemCreateRequestSchema,
-  itemUpdateRequestSchema
+  itemUpdateRequestSchema,
+  queryParamsSchema,
 } from '@fms/entities';
 
 export const itemController = router({
   findMany: procedure
     .output(itemResponseSchema.array())
-    .input(itemQueryParamSchema)
+    .input(queryParamsSchema)
     .query(async ({ input }) => {
       return await findMany(input);
     }),
@@ -26,6 +27,7 @@ export const itemController = router({
     .output(itemResponseSchema)
     .input(itemCreateRequestSchema)
     .mutation(async ({ input }) => {
+      console.log("controller", input)
       return await create(input);
     }),
 

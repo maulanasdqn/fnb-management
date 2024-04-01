@@ -42,7 +42,6 @@ export const findOne = async (id: string): Promise<TItemSingleResponse> => {
     .from(items)
     .where(eq(items.id, id))
     .then((data) => data?.at(0));
-
   return data as TItemSingleResponse;
 };
 
@@ -65,6 +64,7 @@ export const create = async ({
       ingredientAmount,
     })
     .returning();
+  console.log("service", data)
 
   return data[0] as TItemSingleResponse;
 };
