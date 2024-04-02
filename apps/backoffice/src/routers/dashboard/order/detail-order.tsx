@@ -16,7 +16,14 @@ export const DetailOrder: FC = ({ ...props }): ReactElement => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <section>
-        <h1 className="text-2xl font-bold">Detail Pesanan </h1>
+        <h1 className="text-2xl font-bold pb-2">Detail Pesanan </h1>
+        <p>
+          Nama : <span>Maulana</span>
+        </p>
+        <p>
+          No. Meja : <span>125</span>
+        </p>
+        {/* Array Pesanan */}
         <div className="flex justify-between border border-slate rounded-md w-full h-auto p-2 my-4">
           <div className="flex flex-col">
             <h1 className="font-bold text-lg">Serasa Kopi Susu</h1>
@@ -34,7 +41,7 @@ export const DetailOrder: FC = ({ ...props }): ReactElement => {
                 Pilihan Toping : <span className="font-normal">Reguler</span>
               </p>
             </div>
-            <Link to={'/detail'}>
+            <Link to={'/dashboard/recipe'}>
               <div className="flex w-[100px]  border justify-center items-center text-sm mt-4 text-success-400 font-bold rounded-md border-success-200 ">
                 Lihat resep
               </div>
@@ -45,6 +52,7 @@ export const DetailOrder: FC = ({ ...props }): ReactElement => {
             <div className="flex items-center gap-x-3 "></div>
           </div>
         </div>
+        {/* Array Pesanan */}
         <div className="flex justify-between border border-slate rounded-md w-full h-auto p-4 my-4">
           <div className="flex flex-col">
             <h1 className="font-bold text-lg">Serasa Shake Manggo</h1>
@@ -62,7 +70,7 @@ export const DetailOrder: FC = ({ ...props }): ReactElement => {
                 Pilihan Toping : <span className="font-normal">Reguler</span>
               </p>
             </div>
-            <Link to={'/detail'}>
+            <Link to={'/dashboard/recipe'}>
               <div className="flex border w-[100px] justify-center items-center text-sm mt-4 text-success-400 font-bold rounded-md border-success-200 ">
                 Lihat resep
               </div>
@@ -73,6 +81,7 @@ export const DetailOrder: FC = ({ ...props }): ReactElement => {
             <img src="/no-photo.jpg" alt="cofee" width={100} height={100} />
           </div>
         </div>
+        {/* Array Pesanan */}
         <div className="flex justify-between border border-slate rounded-md w-full h-auto p-4 my-4">
           <div className="flex flex-col">
             <h1 className="font-bold text-lg">Serasa Shake Manggo</h1>
@@ -90,7 +99,7 @@ export const DetailOrder: FC = ({ ...props }): ReactElement => {
                 Pilihan Toping : <span className="font-normal">Reguler</span>
               </p>
             </div>
-            <Link to={'/detail'}>
+            <Link to={'/dashboard/recipe'}>
               <div className="flex border w-[100px] justify-center items-center text-sm mt-4 text-success-400 font-bold rounded-md border-success-200 ">
                 Lihat resep
               </div>

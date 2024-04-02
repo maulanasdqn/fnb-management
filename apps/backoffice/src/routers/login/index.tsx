@@ -34,7 +34,7 @@ export const LoginPage: FC = (): ReactElement => {
             },
           });
         }}
-        className="bg-white shadow-sm rounded-lg p-6 md:w-1/3 w-1/2 h-1/2 flex-col justify-start flex"
+        className="bg-white shadow-sm rounded-lg p-6  md:w-1/2 h-1/2 flex-col justify-start flex"
       >
         <h1 className="text-black text-3xl font-medium">Login Backoffice</h1>
         <section className="flex flex-col gap-y-4 justify-center h-full">

@@ -1,17 +1,17 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
-import { LoginPage } from './login';
-import { Dashboard } from './dashboard/default';
 import { DashboardLayout } from './dashboard/layout';
 import { isAuthenticated, logOut, pagePermission } from '@fms/utilities';
-import {
-  PERMISSION_DASHBOARD,
-  PERMISSION_NOTIFICATION,
-  PERMISSION_ORDER,
-  PERMISSION_PURCHASE,
-} from '@fms/entities';
+import { lazily } from 'react-lazily';
+import { Suspense } from 'react';
+import { PERMISSION_DASHBOARD, PERMISSION_PURCHASE } from '@fms/entities';
 import { DashboardRequestPurchase } from './dashboard/request-purchase';
 import { DashboardStockOpname } from './dashboard/stock-opname';
 import { DetailOrder } from './dashboard/order/detail-order';
+import { Spinner } from '@fms/atoms';
+import { RecipeOrder } from './dashboard/order/recipe-order';
+
+const { LoginPage } = lazily(() => import('./login'));
+const { Dashboard } = lazily(() => import('./dashboard/default'));
 
 export const router = createBrowserRouter([
   {
@@ -37,21 +37,45 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Dashboard />,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <Dashboard />
+          </Suspense>
+        ),
         loader: () => pagePermission([PERMISSION_DASHBOARD.READ_DASHBOARD]),
       },
       {
         path: 'detail',
-        element: <DetailOrder />,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <DetailOrder />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'recipe',
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <RecipeOrder />
+          </Suspense>
+        ),
       },
       {
         path: 'stock-opname',
-        element: <DashboardStockOpname />,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <DashboardStockOpname />
+          </Suspense>
+        ),
         loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
       },
       {
         path: 'request-purchase',
-        element: <DashboardRequestPurchase />,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <DashboardRequestPurchase />
+          </Suspense>
+        ),
         loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
       },
     ],
