@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { FC, ReactElement } from 'react';
 import { Link } from 'react-router-dom';
+import { Breadcrumbs } from '@fms/atoms';
 
 export const DashboardProduct: FC = (): ReactElement => {
   const { data, isLoading } = trpc.product.findMany.useQuery({
@@ -78,8 +79,24 @@ export const DashboardProduct: FC = (): ReactElement => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1>Ini tabel Produk</h1>
-      <DataTable data={data || []} columns={columns} />
+       <div className="flex flex-col gap-1">
+        <h1 className="text-3xl font-bold">Products</h1>
+        <Breadcrumbs items={
+            [
+              {
+                name: 'Dashboard',
+                path: '/dashboard'
+              },
+              {
+                name: 'Product',
+                path: '/dashboard/product'
+              }
+            ]
+        }/>
+      </div>
+      <div className="flex flex-col gap-5 bg-white p-5 rounded-md shadow-md">
+        <DataTable data={data || []} columns={columns} />
+      </div>
     </div>
   );
 };

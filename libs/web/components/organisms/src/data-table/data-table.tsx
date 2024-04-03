@@ -20,10 +20,11 @@ export const DataTable = <T extends Record<string, unknown>>(
     onSortingChange: setSorting,
   });
   return (
-    <section className="shadow-md bg-white h-fit overflow-y-hidden border border-grey-50 p-4 rounded-lg w-full gap-y-4 flex flex-col overflow-x-auto">
+    <section className="rounded-md overflow-x-auto h-fit overflow-y-hidden w-full gap-y-4 flex flex-col">
       <div className="flex md:flex-row flex-col md:gap-x-3 gap-y-4 md:items-center sticky z-10 w-full">
-        <div className="w-fit">
+        <div className="w-4/12">
           <InputText
+            className="w-full"
             size="sm"
             placeholder="Cari data..."
             onChange={props.handleSearch}
@@ -45,17 +46,17 @@ export const DataTable = <T extends Record<string, unknown>>(
           </div>
         )}
       </div>
-      <div className="overflow-x-auto min-w-max w-full h-fit flex p-1 bg-white shadow-md rounded-lg relative">
+      <div className="text-sm min-w-max w-full h-fit flex shadow-md rounded-lg relative">
         <table
           {...props}
           className="p-2 w-full table-auto border-collapse border-grey-100 rounded-lg"
         >
-          <thead className="bg-success-400 p-2 w-auto h-auto">
+          <thead className="bg-primary-700 p-2 w-auto h-auto rounded-t-md overflow-hidden">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
+                {headerGroup.headers.map((header, idx) => (
                   <th
-                    className="text-white py-2 px-4 text-left select-none"
+                    className={`text-white py-3 px-4 text-left select-none ${idx === 0 ? 'rounded-tl-md' : ''} ${idx === headerGroup.headers.length - 1 ? 'rounded-tr-md' : ''}`}
                     key={header.id}
                   >
                     <div
@@ -93,11 +94,11 @@ export const DataTable = <T extends Record<string, unknown>>(
               </tr>
             ))}
           </thead>
-          <tbody className="divide-y">
+          <tbody className="">
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="even:bg-grey-100 odd:bg-grey-50">
                 {row.getVisibleCells().map((cell, index) => (
-                  <td key={index} className="p-4 text-grey-600 font-medium">
+                  <td key={index} className="px-4 py-2 text-grey-600 font-medium">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
