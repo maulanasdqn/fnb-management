@@ -48,6 +48,6 @@ export const update = async () => {
   return;
 };
 
-export const deleteData = async () => {
-  return;
+export const deleteData = async (id :string) => {
+  await db.delete(products).where(eq(products.id, id));
 };

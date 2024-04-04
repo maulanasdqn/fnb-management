@@ -2,9 +2,25 @@ import { Button } from '@fms/atoms';
 import { TProduct } from '@fms/entities';
 import { DataTable } from '@fms/organisms';
 import { ColumnDef } from '@tanstack/react-table';
-import { FC, ReactElement } from 'react';
-
+import { FC, ReactElement, Suspense, useState } from 'react';
+import { trpc } from '@fms/trpc-client';
+import { useDebounce } from '@fms/utilities';
+import { Link } from 'react-router-dom';
 export const DashboardProduct: FC = (): ReactElement => {
+  const [debounceValue, setDebounceValue] = useState<string>('');
+  const [search, setSearch] = useState<string>('');
+
+  useDebounce(() => {
+    setDebounceValue(search);
+  }, 500);
+
+  const { data, refetch } = trpc.product.findMany.useQuery({
+    search: debounceValue || undefined,
+  });
+  console.log(data);
+
+  const { mutate } = trpc.product.delete.useMutation()
+
   const columns: ColumnDef<TProduct>[] = [
     {
       header: 'No',
@@ -39,41 +55,41 @@ export const DashboardProduct: FC = (): ReactElement => {
     {
       header: 'Aksi',
       accessorKey: 'action',
-      cell(props) {
+      cell({ row}) {
         return (
-          <>
-            <Button>Edit</Button>
-          </>
+          <div className="flex gap-x-3 items-center">
+            <Link to={`${row.original.id}/edit`} key={row.original.id}>
+              <Button variant={'warning'} title="Edit">
+                Edit
+              </Button>
+            </Link>
+            <Button variant={'error'} title="Delete" onClick={()=> {
+              mutate({ id: row.original.id}, {
+                onSuccess: () => {
+                  refetch()
+                }
+              })
+          }}>
+              Delete
+            </Button>
+          </div>
         );
       },
     },
   ];
 
-  const dataDummy: TProduct[] = [
-    {
-      id: '1',
-      image: '/asset1.jpg',
-      name: 'Serasa Erat Kopi',
-      priceSelling: 5000,
-      createdAt: null,
-      updatedAt: null,
-      description: ' Susu , Kopi dan Gula Aren',
-    },
-    {
-      id: '2',
-      image: '',
-      name: 'Serasa Shake Manggo',
-      priceSelling: 5000,
-      createdAt: null,
-      updatedAt: null,
-      description: ' Susu , Kopi dan Gula Aren',
-    },
-  ];
-
   return (
-    <div className="flex flex-col gap-4">
-      <h1>Ini tabel Produk</h1>
-      <DataTable data={dataDummy} columns={columns} />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl font-bold">Products</h1>
+        <DataTable
+          data={data || []}
+          columns={columns}
+          handleSearch={(e) => setSearch(e.target.value)}
+          createLink='create'
+          createLabel='+ Add Produk'
+        />
+      </div>
+    </Suspense>
   );
 };

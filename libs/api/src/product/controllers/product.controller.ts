@@ -1,5 +1,5 @@
 import { router, procedure } from '@fms/trpc-server';
-import { findMany, findOne } from '../services/product.service';
+import { deleteData, findMany, findOne } from '../services/product.service';
 import { productResponseSchema, productQueryParamSchema } from '@fms/entities';
 
 export const productController = router({
@@ -15,5 +15,11 @@ export const productController = router({
     .input(productQueryParamSchema.pick({ id: true }))
     .query(async ({ input }) => {
       return await findOne(input.id as string);
+    }),
+
+  delete: procedure
+    .input(productQueryParamSchema.pick({ id: true }))
+    .mutation(async ({ input }) => {
+      return await deleteData(input.id as string);
     }),
 });
