@@ -11,25 +11,10 @@ import {
 import { ilike, asc, eq } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 
-interface rawRecipes {
-  id: string | null;
-  name: string | null;
-  variants: string[] | null;
-  recipeAmount: string | null;
-  recipeDetailsId: string | null;
-  itemId: string | null;
-  itemName: string | null;
-  itemPrice: number | null;
-  itemAmount: string | null;
-  itemAmountTypeId: string | null;
-  itemIngredientUnit: string | null;
-  itemIngredientAmount: string | null;
-}
-
 export const findMany = async (
   params?: TRecipeQueryParams
 ): Promise<TRecipeResponse> => {
-  const data: Array<rawRecipes> = await db
+  const data = await db
     .select({
       id: recipes.id,
       name: recipes.name,
@@ -84,7 +69,7 @@ export const findMany = async (
 };
 
 export const findOne = async (id: string): Promise<TRecipeSingleResponse> => {
-  const data: Array<rawRecipes> = await db
+  const data = await db
     .select({
       id: recipes.id,
       name: recipes.name,
