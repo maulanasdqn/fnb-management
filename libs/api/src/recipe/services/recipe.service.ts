@@ -1,23 +1,41 @@
-import { db, recipes, recipeDetails, items } from '@fms/drizzle';
+import { db, recipes, recipeDetails as RD, items } from '@fms/drizzle';
 import {
+  TRecipe,
+  TRecipeDetail,
   TRecipeQueryParams,
   TRecipeCreateRequest,
   TRecipeUpdateRequest,
   TRecipeResponse,
   TRecipeSingleResponse,
 } from '@fms/entities';
-import { ilike, asc, eq, desc } from 'drizzle-orm';
+import { ilike, asc, eq } from 'drizzle-orm';
+import { TRPCError } from '@trpc/server';
+
+interface rawRecipes {
+  id: string | null;
+  name: string | null;
+  variants: string[] | null;
+  recipeAmount: string | null;
+  recipeDetailsId: string | null;
+  itemId: string | null;
+  itemName: string | null;
+  itemPrice: number | null;
+  itemAmount: string | null;
+  itemAmountTypeId: string | null;
+  itemIngredientUnit: string | null;
+  itemIngredientAmount: string | null;
+}
 
 export const findMany = async (
   params?: TRecipeQueryParams
 ): Promise<TRecipeResponse> => {
-  const data = await db
+  const data: Array<rawRecipes> = await db
     .select({
       id: recipes.id,
       name: recipes.name,
       variants: recipes.variants,
-      recipeAmount: recipeDetails.amount,
-      recipeDetailsId: recipeDetails.id,
+      recipeAmount: RD.amount,
+      recipeDetailsId: RD.id,
       itemId: items.id,
       itemName: items.name,
       itemPrice: items.price,
@@ -27,175 +45,249 @@ export const findMany = async (
       itemIngredientAmount: items.ingredientAmount,
     })
     .from(recipes)
-    .fullJoin(recipeDetails, eq(recipes.id, recipeDetails.recipeId))
-    .fullJoin(items, eq(items.id, recipeDetails.itemId))
+    .fullJoin(RD, eq(recipes.id, RD.recipeId))
+    .fullJoin(items, eq(items.id, RD.itemId))
     .where(ilike(recipes.name, `%${params?.search || ''}%`))
     .orderBy(asc(recipes.name));
-  const response = data.map((recipe) => {
-    return {
-      id: recipe.id,
-      name: recipe.name,
-      variants: recipe.variants,
-      recipeDetails: data.filter((detail) => {
-        if (detail.id === recipe.id) {
-          return {
-            amount: detail.recipeAmount,
-            item: data.filter((item) => {
-              if (item.recipeDetailsId === detail.recipeDetailsId) {
-                return {
-                  id: item.itemId,
-                  name: item.itemName,
-                  price: item.itemPrice,
-                  amount: item.itemAmount,
-                  amountTypeId: item.itemAmountTypeId,
-                  ingredientUnit: item.itemIngredientUnit,
-                  ingredientAmount: item.itemIngredientAmount,
-                };
-              }
-            }),
-          };
-        }
-      }),
-    };
-  });
-  console.log(response);
 
-  return [] as TRecipeResponse;
+  const response: TRecipe[] = data.reduce((acc, recipe) => {
+    if (!recipe.id || acc.map(d => d.id).includes(recipe.id)) {
+      return acc
+    }
+
+    const recipeDetails: TRecipeDetail[] = data.filter(d => d.id === recipe.id)
+      .map((d) => ({
+        id: d.recipeDetailsId as string,
+        amount: parseInt(d.recipeAmount as string),
+        item: {
+          id: d.itemId as string,
+          name: d.itemName as string,
+          price: d.itemPrice as number,
+          itemAmount: d.itemAmount as string,
+          ingredientAmount: d.itemIngredientUnit as string,
+          itemAmountTypeId: d.itemAmountTypeId as string,
+          ingredientUnit: d.itemIngredientUnit as string,
+        },
+      }));
+
+    acc.push({
+      id: recipe.id,
+      name: recipe.name as string,
+      variants: recipe.variants as string[],
+      recipeDetails: recipeDetails as TRecipeDetail[],
+    })
+    return acc
+  }, [] as TRecipe[])
+
+
+  return response as TRecipeResponse;
 };
 
-// export const findOne = async (id: string): Promise<TRecipeSingleResponse> => {
-//   const data = await db
-//     .select({
-//       id: recipes.id,
-//       name: recipes.name,
-//       price: recipes.price,
-//       recipeAmount: recipes.recipeAmount,
-//       recipeAmountTypeId: recipes.recipeAmountTypeId,
-//       ingredientUnit: recipes.ingredientUnit,
-//       ingredientAmount: recipes.ingredientAmount,
-//     })
-//     .from(recipes)
-//     .where(eq(recipes.id, id))
-//     .then((data) => data?.at(0));
-//   return data as TRecipeSingleResponse;
-// };
-//
-// export const create = async ({
-//   name,
-//   price,
-//   recipeAmount,
-//   recipeAmountTypeId,
-//   ingredientUnit,
-//   quantity,
-//   ingredientAmount,
-// }: TRecipeCreateRequest): Promise<TRecipeSingleResponse> => {
-//
-//   const returnData: TRecipeSingleResponse = await db.transaction(
-//     async (tx) => {
-//       const data = await tx
-//         .insert(recipes)
-//         .values({
-//           name,
-//           price,
-//           recipeAmount,
-//           recipeAmountTypeId,
-//           ingredientUnit,
-//           ingredientAmount,
-//         })
-//         .returning();
-//
-//       if (!data[0].id) {
-//         return data[0] as TRecipeSingleResponse;
-//       }
-//
-//       await tx
-//         .insert(recipeLogs)
-//         .values({
-//           recipeId: data[0].id,
-//           qtyBefore: '0',
-//           qtyCurrent: quantity ? quantity.toString() : '0',
-//           qtyAfter: quantity ? quantity.toString() : '0',
-//         })
-//         .returning();
-//
-//       return data[0] as TRecipeSingleResponse;
-//     }
-//   )
-//   return returnData as TRecipeSingleResponse;
-// };
-//
-// export const update = async ({
-//   id,
-//   name,
-//   price,
-//   quantity,
-//   recipeAmount,
-//   recipeAmountTypeId,
-//   ingredientUnit,
-//   ingredientAmount,
-// }: TRecipeUpdateRequest) => {
-//   const returnData: TRecipeSingleResponse = await db.transaction(
-//     async (tx) => {
-//       const data = await tx
-//         .update(recipes)
-//         .set({
-//           name,
-//           price,
-//           recipeAmount,
-//           recipeAmountTypeId,
-//           ingredientUnit,
-//           ingredientAmount,
-//         })
-//         .where(eq(recipes.id, id))
-//         .returning();
-//
-//       if (!data[0].id) {
-//         return data[0] as TRecipeSingleResponse;
-//       }
-//
-//       let qtyBefore = 0
-//       let qtyAfter = quantity
-//
-//       const logs = await tx
-//         .select({
-//           qtyAfter: recipeLogs.qtyAfter,
-//         })
-//         .from(recipeLogs)
-//         .where(eq(recipeLogs.recipeId, id))
-//         .orderBy(desc(
-//           recipeLogs.createdAt
-//         ));
-//
-//       if (logs.length > 0) {
-//         qtyBefore = Number(logs[0].qtyAfter);
-//         qtyAfter = quantity
-//           ? Number(logs[0].qtyAfter) + Number(quantity)
-//           : Number(logs[0].qtyAfter);
-//       }
-//
-//       if (quantity !== qtyBefore) {
-//         await tx
-//           .insert(recipeLogs)
-//           .values({
-//             recipeId: data[0].id,
-//             qtyBefore: qtyBefore.toString(),
-//             qtyCurrent: quantity ? quantity.toString() : '0',
-//             qtyAfter: qtyAfter.toString(),
-//           })
-//           .returning();
-//
-//       }
-//
-//       return data[0] as TRecipeSingleResponse;
-//     }
-//   )
-//   return returnData as TRecipeSingleResponse;
-// };
-//
-// export const destroy = async (id: string) => {
-//   const data = await db
-//     .delete(recipes)
-//     .where(eq(recipes.id, id))
-//     .returning();
-//   return data[0] as TRecipeSingleResponse;
-// };
+export const findOne = async (id: string): Promise<TRecipeSingleResponse> => {
+  const data: Array<rawRecipes> = await db
+    .select({
+      id: recipes.id,
+      name: recipes.name,
+      variants: recipes.variants,
+      recipeAmount: RD.amount,
+      recipeDetailsId: RD.id,
+      itemId: items.id,
+      itemName: items.name,
+      itemPrice: items.price,
+      itemAmount: items.itemAmount,
+      itemAmountTypeId: items.itemAmountTypeId,
+      itemIngredientUnit: items.ingredientUnit,
+      itemIngredientAmount: items.ingredientAmount,
+    })
+    .from(recipes)
+    .fullJoin(RD, eq(recipes.id, RD.recipeId))
+    .fullJoin(items, eq(items.id, RD.itemId))
+    .where(eq(recipes.id, id))
+    .orderBy(asc(recipes.name));
+
+  const response: TRecipe[] = data.reduce((acc, recipe) => {
+    if (!recipe.id || acc.map(d => d.id).includes(recipe.id)) {
+      return acc
+    }
+
+    const recipeDetails: TRecipeDetail[] = data.filter(d => d.id === recipe.id)
+      .map((d) => ({
+        id: d.recipeDetailsId as string,
+        amount: parseInt(d.recipeAmount as string),
+        item: {
+          id: d.itemId as string,
+          name: d.itemName as string,
+          price: d.itemPrice as number,
+          itemAmount: d.itemAmount as string,
+          ingredientAmount: d.itemIngredientUnit as string,
+          itemAmountTypeId: d.itemAmountTypeId as string,
+          ingredientUnit: d.itemIngredientUnit as string,
+        },
+      }));
+
+    acc.push({
+      id: recipe.id,
+      name: recipe.name as string,
+      variants: recipe.variants as string[],
+      recipeDetails: recipeDetails as TRecipeDetail[],
+    })
+    return acc
+  }, [] as TRecipe[])
+
+  return response[0] as TRecipeSingleResponse;
+};
+
+export const create = async ({
+  name,
+  variants,
+  recipeDetails
+}: TRecipeCreateRequest): Promise<TRecipeSingleResponse> => {
+
+  const returnData: TRecipeSingleResponse = await db.transaction(
+    async (tx) => {
+      let responseData = {} as TRecipeSingleResponse
+      const data = await tx
+        .insert(recipes)
+        .values({
+          name,
+          variants,
+        })
+        .returning();
+      responseData = {
+        ...data[0],
+        variants: data[0].variants ?? [],
+        recipeDetails: []
+      }
+
+      if (!data[0].id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create recipe',
+        });
+      }
+
+      recipeDetails.forEach(async (d) => {
+        const item = await tx.select().from(items)
+          .where(eq(items.id, d.itemId))
+
+        if (!item) {
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Failed to find item',
+          });
+        }
+
+        const detail = await tx
+          .insert(RD)
+          .values({
+            itemId: d.itemId,
+            amount: d.amount.toString(),
+            recipeId: data[0].id
+          })
+          .returning();
+
+        responseData.recipeDetails.push({
+          id: detail[0].id,
+          amount: parseInt(detail[0].amount),
+          item: {
+            id: item[0].id,
+            name: item[0].name,
+            price: item[0].price,
+            itemAmount: item[0].itemAmount,
+            ingredientAmount: item[0].ingredientAmount,
+            itemAmountTypeId: item[0].itemAmountTypeId,
+            ingredientUnit: item[0].ingredientUnit,
+          },
+        })
+      })
+
+
+      return responseData as TRecipeSingleResponse;
+    }
+  )
+  return returnData as TRecipeSingleResponse;
+};
+
+export const update = async ({
+  id,
+  name,
+  variants,
+  recipeDetails
+}: TRecipeUpdateRequest) => {
+  const returnData: TRecipeSingleResponse = await db.transaction(
+    async (tx) => {
+      let responseData = {} as TRecipeSingleResponse
+      const data = await tx
+        .update(recipes)
+        .set({
+          name,
+          variants,
+        })
+        .where(eq(recipes.id, id))
+        .returning();
+
+      if (!data[0].id) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create recipe',
+        });
+      }
+
+      responseData = {
+        ...data[0],
+        variants: data[0].variants ?? [],
+        recipeDetails: []
+      }
+
+      await tx
+        .delete(RD)
+        .where(eq(RD.recipeId, id));
+
+      recipeDetails.forEach(async (d) => {
+        const item = await tx.select().from(items)
+          .where(eq(items.id, d.itemId))
+
+        if (!item) {
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Failed to find item',
+          });
+        }
+
+        const detail = await tx
+          .insert(RD)
+          .values({
+            itemId: d.itemId,
+            amount: d.amount.toString(),
+            recipeId: id
+          })
+          .returning();
+
+        returnData.recipeDetails.push({
+          id: detail[0].id,
+          amount: parseInt(detail[0].amount),
+          item: {
+            id: item[0].id,
+            name: item[0].name,
+            price: item[0].price,
+            itemAmount: item[0].itemAmount,
+            ingredientAmount: item[0].ingredientAmount,
+            itemAmountTypeId: item[0].itemAmountTypeId,
+            ingredientUnit: item[0].ingredientUnit,
+          },
+        })
+      })
+
+      return responseData as TRecipeSingleResponse;
+    }
+  )
+  return returnData as TRecipeSingleResponse;
+};
+
+export const destroy = async (id: string) => {
+  const data = await db
+    .delete(recipes)
+    .where(eq(recipes.id, id))
+    .returning();
+  return data[0] as TRecipeSingleResponse;
+};

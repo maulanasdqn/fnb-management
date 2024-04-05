@@ -4,7 +4,7 @@ import { itemResponseSchema } from '../item';
 
 export const recipeDetailResponseSchema = z.object({
   id: z.string(),
-  item: itemResponseSchema.array(),
+  item: itemResponseSchema,
   amount: z.number(),
   ...baseSchema.omit({ id: true }).shape,
 });

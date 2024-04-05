@@ -7,7 +7,7 @@ export const itemResponseSchema = z.object({
   price: z.number(),
   itemAmountTypeId: z.string(),
   itemAmount: z.string().nullable(),
-  ingredientUnit: z.enum(['ml', 'g']).nullable(),
+  ingredientUnit: z.string().nullable(),
   ingredientAmount: z.string().nullable(),
   ...baseSchema.omit({ id: true }).shape,
 });
