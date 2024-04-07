@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
         loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
       },
       {
-        path: 'request-purchase',
+        path: 'req-purchase',
         element: <DashboardRequestPurchase />,
         loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
       },
