@@ -42,14 +42,14 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
       image: products.image,
       description: products.description,
       createdAt: products.createdAt,
-      updatedAt: products.updatedAt
+      updatedAt: products.updatedAt,
     })
     .from(products)
     .where(eq(products.id, id))
     .then((data) => data?.at(0));
   return {
-    message: "Success",
-    data: data
+    message: 'Success',
+    data: data,
   };
 };
 
@@ -60,7 +60,7 @@ export const create = async ({
   image,
   price,
   recipeId,
-  description
+  description,
 }: TProductCreateRequest): Promise<TProductSingleResponse> => {
   const data = await db
     .insert(products)
@@ -71,12 +71,12 @@ export const create = async ({
       productCategoryId,
       image,
       description,
-      recipeId
+      recipeId,
     })
     .returning();
   return {
-    message: "Create Product Success",
-    data: data[0]
+    message: 'Create Product Success',
+    data: data[0],
   };
 };
 
@@ -88,7 +88,7 @@ export const update = async ({
   image,
   price,
   recipeId,
-  description
+  description,
 }: TProductUpdateRequest) => {
   const data = await db
     .update(products)
@@ -99,23 +99,20 @@ export const update = async ({
       productCategoryId,
       image,
       description,
-      recipeId
+      recipeId,
     })
     .where(eq(products.id, id))
     .returning();
   return {
-    message: "Update Product Success",
-    data: data[0]
+    message: 'Update Product Success',
+    data: data[0],
   };
 };
 
 export const destroy = async (id: string) => {
-  const data = await db
-    .delete(products)
-    .where(eq(products.id, id))
-    .returning();
+  const data = await db.delete(products).where(eq(products.id, id)).returning();
   return {
-    message: "Delete Product Success",
-    data: data[0]
+    message: 'Delete Product Success',
+    data: data[0],
   };
 };

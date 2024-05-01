@@ -6,7 +6,7 @@ export const DashboardLayout: FC = (): ReactElement => {
   const navMenu = [
     { name: 'Home', path: '#' },
     { name: 'Stock Opname', path: '/stock-opnmae' },
-    { name: 'Request Purchase', path: '/req-purchase' },
+    { name: 'Request Purchase', path: 'req-purchase' },
     { name: 'Logout', path: '/auth/login' },
   ];
   return (

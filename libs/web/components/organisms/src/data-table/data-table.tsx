@@ -50,7 +50,7 @@ export const DataTable = <T extends Record<string, unknown>>(
           {...props}
           className="p-2 w-full table-auto border-collapse border-grey-100 rounded-lg"
         >
-          <thead className="bg-success-400 p-2 w-auto h-auto">
+          <thead className="bg-success-600 p-2 w-auto h-auto">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -93,7 +93,7 @@ export const DataTable = <T extends Record<string, unknown>>(
               </tr>
             ))}
           </thead>
-          <tbody className="divide-y">
+          <tbody >
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="even:bg-grey-100 odd:bg-grey-50">
                 {row.getVisibleCells().map((cell, index) => (
