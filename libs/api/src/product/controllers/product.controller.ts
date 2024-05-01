@@ -55,6 +55,6 @@ export const productController = router({
   delete: procedure
     .input(productQueryParamSchema.pick({ id: true }))
     .mutation(async ({ input }) => {
-      return await deleteData(input.id as string);
+      return await destroy(input.id as string);
     }),
 });
