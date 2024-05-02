@@ -17,6 +17,9 @@ export const metaResponseSchema = z.object({
   page: z.number().optional(),
   perPage: z.number().optional(),
   totalPage: z.number().optional(),
+  total: z.number().optional(),
+  prev: z.number().optional().nullable(),
+  next: z.number().optional().nullable(),
 });
 
 export const dataResponseSchema = <T extends ZodTypeAny>(data: T) =>
@@ -24,4 +27,10 @@ export const dataResponseSchema = <T extends ZodTypeAny>(data: T) =>
     message: z.string().optional(),
     data: z.array(data).optional(),
     meta: metaResponseSchema.optional(),
+  });
+
+export const dataSingleResponseSchema = <T extends ZodTypeAny>(data: T) =>
+  z.object({
+    message: z.string().optional(),
+    data: z.object({ ...(data as object) }).optional(),
   });

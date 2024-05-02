@@ -9,9 +9,8 @@ import type {
 } from 'react';
 import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import { AxiosError } from 'axios';
-import { ZodTypeAny, z } from 'zod';
+import { ZodType, z } from 'zod';
 import {
-  dataResponseSchema,
   metaResponseSchema,
   queryParamsSchema,
 } from '../../validation-schemas';
@@ -48,6 +47,7 @@ export type TMetaResponses<T = null | undefined> = {
 export type TBaseResponse<T = null | undefined> = {
   data?: T;
   meta?: TMetaResponse;
+  message?: string;
 };
 
 export type TPaginationQueryParams = {
@@ -136,15 +136,15 @@ export type TControlledInputSpecial<T extends FieldValues> =
 
 export type TControlledInputRadioGroup<T extends FieldValues> =
   UseControllerProps<T> &
-    Omit<
-      TInputSpecial &
-        TInputMolecule & {
-          options: TOption[];
-        },
-      'onChange'
-    > & {
-      onChange?: (value?: string | number | boolean) => void;
-    };
+  Omit<
+    TInputSpecial &
+    TInputMolecule & {
+      options: TOption[];
+    },
+    'onChange'
+  > & {
+    onChange?: (value?: string | number | boolean) => void;
+  };
 
 export type TControlledTextArea<T extends FieldValues> = UseControllerProps<T> &
   TTextArea &
@@ -200,18 +200,18 @@ export type TPieChart = {
 };
 export type TLineChart = {
   chartType:
-    | 'januari'
-    | 'februari'
-    | 'maret'
-    | 'april'
-    | 'mei'
-    | 'juni'
-    | 'juli'
-    | 'agustus'
-    | 'september'
-    | 'oktober'
-    | 'november'
-    | 'desember';
+  | 'januari'
+  | 'februari'
+  | 'maret'
+  | 'april'
+  | 'mei'
+  | 'juni'
+  | 'juli'
+  | 'agustus'
+  | 'september'
+  | 'oktober'
+  | 'november'
+  | 'desember';
   title: string;
   data?: {
     labels: string[];
