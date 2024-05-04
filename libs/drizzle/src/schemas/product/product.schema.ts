@@ -6,7 +6,6 @@ import { recipes } from '../recipe/recipe.schema';
 import { orderDetails } from '../order/order-detail.index';
 
 export const products = pgTable('products', {
-  id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   productCategoryId: uuid('product_category_id')
     .notNull()

@@ -4,6 +4,8 @@ export const baseSchema = z.object({
   id: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
+  deletedAt: z.coerce.date().optional().nullable(),
+  isDeleted: z.boolean().optional().nullable(),
 });
 
 export const queryParamsSchema = z

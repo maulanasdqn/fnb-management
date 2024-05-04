@@ -7,7 +7,6 @@ import { itemLogs } from './item-log.schema';
 export const ingredientUnitEnum = pgEnum('ingredient_unit', ['ml', 'g']);
 
 export const items = pgTable('items', {
-  id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   price: integer('price').notNull(),
   itemAmount: text('item_amount'),
