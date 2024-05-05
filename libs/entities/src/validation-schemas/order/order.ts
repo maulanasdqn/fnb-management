@@ -2,10 +2,9 @@ import { z } from 'zod';
 
 export const orderCreateRequestSchema = z.object({
   customerName: z.string(),
-  customerPhoneNumber: z.string(),
+  customerPhoneNumber: z.string().optional(),
   placeId: z.string().optional(),
-  amounTotal: z.number(),
-  paymentId: z.string(),
+  paymentId: z.string().optional(),
   products: z
     .object({
       id: z.string(),

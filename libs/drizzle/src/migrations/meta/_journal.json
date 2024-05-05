@@ -43,6 +43,13 @@
       "when": 1714864734854,
       "tag": "0005_damp_true_believers",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1714922769451,
+      "tag": "0006_brief_leech",
+      "breakpoints": true
     }
   ]
 }

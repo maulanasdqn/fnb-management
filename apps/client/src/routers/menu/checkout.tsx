@@ -5,6 +5,7 @@ import { TSelectedMenu, TSubmitedData } from './modules';
 import { currencyFormat, useLocalStorage } from '@fms/utilities';
 import { CheckoutCard } from './modules/checkout-card';
 import { useSearchParams } from 'react-router-dom';
+import { trpc } from '@fms/trpc-client';
 
 export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
   const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -15,7 +16,7 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
     'order-data',
     []
   );
-
+ const {mutate}= trpc.order.create.useMutation(); 
   const getTotalPrice = (cartData: TSubmitedData[]) =>
     cartData.reduce((acc, item) => acc + item.quantity * (item.priceSelling ?? 0), 0);
 
@@ -41,12 +42,17 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
   });
 
   const handleOrder = handleSubmit((data) => {
-    console.log({
-      name: data.name,
-      tableId: data.tableId,
-      paymentMethod,
-      orders: cartData,
+    const newState = cartData.map((item) => {
+      return {
+       id:item.id,
+       amount : item.quantity,
+      };
+    });  
+    mutate({
+        products: [...newState],
+      customerName: data.name,
     });
+  
   });
   const tableNumber = [
     { label: '1', value: '1' },
