@@ -1,5 +1,4 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
-
 import { currencyFormat, useGetLocalStorage } from '@fms/utilities';
 import { TProductSingleResponse } from '@fms/entities';
 import { CustomOrder } from './custom-order';
@@ -28,12 +27,12 @@ type TSelectedMenu = z.infer<typeof schema>;
 
 export type TSubmitedData = {
   variant: TSelectedMenu;
-} & TProductSingleResponse & { quantity: number };
+} & TProductSingleResponse['data'] & { quantity: number };
 
 export const ProductDetail: FC<{
   loading?: boolean;
-  data?: TProductSingleResponse;
-}> = ({ loading, data }): ReactElement => {
+  
+}&TProductSingleResponse> = ({ loading, data }): ReactElement => {
   const [qty, setQty] = useState<number>(1);
 
   const [cartData] = useGetLocalStorage<TSubmitedData[]>('order-data');
@@ -197,6 +196,7 @@ export const ProductDetail: FC<{
     .with({ topping: 0, variant: undefined }, () => priceActual)
     .otherwise(() => priceActual);
 
+    console.log(data)
   return loading ? (
     <div key={data?.id} className="w-full min-h-screen bg-white p-4">
       <div className="flex flex-col gap-y-2">

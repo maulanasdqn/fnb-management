@@ -6,6 +6,10 @@ import { TSubmitedData } from './product-detail';
 export const SelectedMenu: FC<{ data: TSubmitedData[] }> = (
   props
 ): ReactElement => {
+
+
+console.log( props?.data?.map((item) => item.priceSelling));
+
   return props.data.length ? (
     <Link
       to={`checkout`}
@@ -19,12 +23,12 @@ export const SelectedMenu: FC<{ data: TSubmitedData[] }> = (
                 props?.data?.reduce((a, b) => a + b.quantity, 0) || 0
               } Item`}</h1>
               <p className="text-lg text-white font-normal truncate w-[250px]">
-                {props.data.map((item) => item.name).join(', ')}
+                {props?.data?.map((item) => item.name).join(', ')}
               </p>
             </div>
             <h1 className="text-xl text-white font-medium">
               {currencyFormat(
-                props.data.reduce((a, b) => a + b.priceSelling, 0)
+                props?.data?.reduce((a, b) => a + (b.priceSelling ?? 0) * b.quantity, 0)
               )}
             </h1>
           </div>

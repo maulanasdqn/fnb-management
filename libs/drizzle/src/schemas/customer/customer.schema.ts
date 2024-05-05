@@ -5,7 +5,7 @@ import { orders } from '../order/order.schema';
 
 export const customers = pgTable('customers', {
   name: text('name').notNull(),
-  phoneNumber: text('phone_number').notNull(),
+  phoneNumber: text('phone_number'),
   ...baseSchema,
 });
 

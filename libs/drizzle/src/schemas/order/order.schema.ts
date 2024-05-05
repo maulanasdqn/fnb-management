@@ -8,15 +8,13 @@ import { users } from '../me';
 
 export const orders = pgTable('orders', {
   customerId: text('customer_id').notNull(),
-  placeId: uuid('place_id')
-    .notNull()
-    .references(() => places.id),
+  placeId: uuid('place_id').references(() => places.id),
   amountTotal: integer('amount_total').notNull(),
   paymentId: uuid('payment_id')
     .notNull()
     .references(() => payments.id),
   invoiceNumber: text('invoice_number').notNull(),
-  status: text('status').notNull(),
+  status: text('status'),
   servedBy: uuid('served_by').references(() => users.id),
   ...baseSchema,
 });

@@ -1,6 +1,8 @@
+import { z } from 'zod';
 import { EOrderStatus } from '../../enums/order.enum';
 import { TBase, TBaseResponse } from '../common';
 import { TCommonObject } from '../common';
+import { orderCreateRequestSchema } from '../../validation-schemas/order/order';
 
 export type TOrder = TBase & {
   customer: TCommonObject;
@@ -21,19 +23,7 @@ export type TOrderQueryParams = {
   id?: string;
 };
 
-export type TOrderCreateRequest = {
-  customerId: string;
-  placeId: string;
-  paymentId: string;
-  amountTotal: number;
-  invoiceNumber: number;
-  orderDetails: Array<{
-    productId: string;
-    qty: number;
-    price: number;
-    amount: number;
-  }>;
-};
+export type TOrderCreateRequest = z.infer<typeof orderCreateRequestSchema>;
 
 export type TOrderUpdateRequest = {
   id?: string;
