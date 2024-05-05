@@ -19,6 +19,7 @@ export const DataTable = <T extends Record<string, unknown>>(
     },
     onSortingChange: setSorting,
   });
+
   return (
     <section className="shadow-md bg-white h-fit overflow-y-hidden border border-grey-50 p-4 rounded-lg w-full gap-y-4 flex flex-col overflow-x-auto">
       <div className="flex md:flex-row flex-col md:gap-x-3 gap-y-4 md:items-center sticky z-10 w-full">
@@ -67,9 +68,9 @@ export const DataTable = <T extends Record<string, unknown>>(
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
 
                       {{
                         asc: (

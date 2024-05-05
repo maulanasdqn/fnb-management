@@ -1,11 +1,18 @@
 import { router, procedure } from '@fms/trpc-server';
-import { findMany, findOne, create, update, destroy } from '../services/recipe.service';
+import {
+  findMany,
+  findOne,
+  create,
+  update,
+  destroy,
+} from '../services/recipe.service';
 import {
   recipeResponseSchema,
   recipeQueryParamSchema,
   recipeCreateRequestSchema,
   recipeUpdateRequestSchema,
   queryParamsSchema,
+  dataSingleResponseSchema,
 } from '@fms/entities';
 
 export const recipeController = router({
@@ -13,7 +20,7 @@ export const recipeController = router({
     .output(recipeResponseSchema.array())
     .input(queryParamsSchema)
     .query(async ({ input }) => {
-      console.log('test')
+      console.log('test');
       return await findMany(input);
     }),
 
@@ -39,7 +46,7 @@ export const recipeController = router({
     }),
 
   destroy: procedure
-    .output(recipeResponseSchema)
+    .output(dataSingleResponseSchema(recipeResponseSchema))
     .input(recipeQueryParamSchema.pick({ id: true }))
     .mutation(async ({ input }) => {
       return await destroy(input.id as string);

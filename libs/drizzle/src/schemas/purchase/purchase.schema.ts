@@ -7,7 +7,6 @@ import { purchaseDetails } from './purchase-detail.schema';
 export const purchaseEnum = pgEnum('purchaseEnum', ['received', 'ordered']);
 
 export const purchases = pgTable('purchases', {
-  id: uuid('id').defaultRandom().primaryKey(),
   amountTotal: text('amount_total').notNull(),
   invoiceNumber: text('invoice_number').notNull(),
   supplierId: uuid('supplier_id')

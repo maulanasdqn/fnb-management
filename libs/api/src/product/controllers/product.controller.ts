@@ -45,14 +45,8 @@ export const productController = router({
       return await update(input);
     }),
 
-  destroy: procedure
-    .output(dataSingleResponseSchema(productResponseSchema))
-    .input(productQueryParamSchema.pick({ id: true }))
-    .mutation(async ({ input }) => {
-      return await destroy(input.id as string);
-    }),
-
   delete: procedure
+    .output(dataSingleResponseSchema(productResponseSchema))
     .input(productQueryParamSchema.pick({ id: true }))
     .mutation(async ({ input }) => {
       return await destroy(input.id as string);

@@ -5,7 +5,6 @@ import { recipes } from './recipe.schema';
 import { items } from '../item/item.schema';
 
 export const recipeDetails = pgTable('recipe_details', {
-  id: uuid('id').defaultRandom().primaryKey(),
   recipeId: uuid('recipe_id')
     .notNull()
     .references(() => recipes.id),
