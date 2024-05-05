@@ -31,16 +31,16 @@ export const itemRelations = relations(items, ({ one, many }) => ({
   createdBy: one(users, {
     fields: [items.createdBy],
     references: [users.id],
-    relationName: 'item_created_by',
+    relationName: 'created_by',
   }),
   updatedBy: one(users, {
     fields: [items.updatedBy],
     references: [users.id],
-    relationName: 'item_updated_by',
+    relationName: 'updated_by',
   }),
   deletedBy: one(users, {
     fields: [items.deletedBy],
     references: [users.id],
-    relationName: 'item_deleted_by',
+    relationName: 'deleted_by',
   }),
 }));

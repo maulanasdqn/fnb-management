@@ -18,16 +18,16 @@ export const recipeRelations = relations(recipes, ({ many, one }) => ({
   createdBy: one(users, {
     fields: [recipes.createdBy],
     references: [users.id],
-    relationName: 'recipe_created_by',
+    relationName: 'created_by',
   }),
   updatedBy: one(users, {
     fields: [recipes.updatedBy],
     references: [users.id],
-    relationName: 'recipe_updated_by',
+    relationName: 'updated_by',
   }),
   deletedBy: one(users, {
     fields: [recipes.deletedBy],
     references: [users.id],
-    relationName: 'recipe_deleted_by',
+    relationName: 'deleted_by',
   }),
 }));
