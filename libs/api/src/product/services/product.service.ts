@@ -60,6 +60,7 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
       description: products.description,
       createdAt: products.createdAt,
       updatedAt: products.updatedAt,
+      deletedAt: products.deletedAt,
     })
     .from(products)
     .where(eq(products.id, id))

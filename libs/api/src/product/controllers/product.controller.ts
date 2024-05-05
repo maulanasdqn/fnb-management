@@ -25,7 +25,6 @@ export const productController = router({
     }),
 
   findOne: procedure
-    .output(dataSingleResponseSchema(productResponseSchema))
     .input(productQueryParamSchema.pick({ id: true }))
     .query(async ({ input }) => {
       return await findOne(input?.id as string);
