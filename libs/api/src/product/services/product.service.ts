@@ -51,7 +51,7 @@ export const findMany = async (
 };
 
 export const findOne = async (id: string): Promise<TProductSingleResponse> => {
-  await db
+  const data = await db
     .select({
       id: products.id,
       name: products.name,
@@ -66,6 +66,7 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
     .then((data) => data?.at(0));
   return {
     message: 'Success',
+    data,
   };
 };
 
