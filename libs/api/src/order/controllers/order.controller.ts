@@ -1,10 +1,11 @@
 import { router, procedure } from '@fms/trpc-server';
-import { z } from 'zod';
+import { create } from '../services/order.service';
+import { orderCreateRequestSchema } from '@fms/entities';
 
 export const orderController = router({
   create: procedure
-    .input(z.object({ name: z.string() }))
-    .mutation(({ input }) => {
-      return input;
+    .input(orderCreateRequestSchema)
+    .mutation(async ({ input }) => {
+      return await create(input);
     }),
 });
