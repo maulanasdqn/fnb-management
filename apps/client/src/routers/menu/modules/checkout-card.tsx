@@ -89,7 +89,7 @@ export const CheckoutCard: FC<TCheckoutCard> = (props): ReactElement => {
           </Button>
         </div>
         <p className="text-xs">
-          Harga: {currencyFormat(props?.order?.priceSelling * qty)}
+          Harga: {currencyFormat(props?.order?.priceSelling as number * qty)}
         </p>
       </div>
     </div>

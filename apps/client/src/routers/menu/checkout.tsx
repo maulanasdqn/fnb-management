@@ -1,4 +1,4 @@
-import { ControlledFieldText } from '@fms/organisms';
+import { ControlledFieldSelect, ControlledFieldText } from '@fms/organisms';
 import { FC, ReactElement, Suspense, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TSelectedMenu, TSubmitedData } from './modules';
@@ -16,11 +16,9 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
     []
   );
 
-  const getTotalPrice = (cartData: TSubmitedData[]) => {
-    return cartData.reduce((acc, item) => {
-      return acc + item.priceSelling * item.quantity;
-    }, 0);
-  };
+  const getTotalPrice = (cartData: TSubmitedData[]) =>
+    cartData.reduce((acc, item) => acc + item.quantity * (item.priceSelling ?? 0), 0);
+
 
   const tax = getTotalPrice(cartData) * 0.1;
 
@@ -50,7 +48,18 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
       orders: cartData,
     });
   });
-
+  const tableNumber = [
+    { label: '1', value: '1' },
+    { label: '2', value: '2' },
+    { label: '3', value: '3' },
+    { label: '4', value: '4' },
+    { label: '5', value: '5' },
+    { label: '6', value: '6' },
+    { label: '7', value: '7' },
+    { label: '8', value: '8' },
+    { label: '9', value: '9' },
+    { label: '10', value: '10' },
+  ];
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <form onSubmit={handleOrder}>
@@ -66,14 +75,14 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
               label="Nama"
               placeholder="Masukan Nama Pemesan"
             />
-            <ControlledFieldText
+            <ControlledFieldSelect
               required
               control={control}
               size="md"
               name="tableId"
-              type="table_id"
               label="Nomor Meja"
-              placeholder="Masukan Nomor Meja"
+              placeholder="Nomer Meja"
+              options={tableNumber}
             />
           </div>
           <h1 className="text-2xl font-bold">Detail Pesanan </h1>
@@ -84,7 +93,7 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
                 updatePrice={handleUpdatePrice}
                 key={index}
                 order={data}
-                quantity={data.quantity}
+                quantity={data?.quantity}
                 index={index}
               />
             );

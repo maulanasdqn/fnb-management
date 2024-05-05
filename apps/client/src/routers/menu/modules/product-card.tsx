@@ -3,11 +3,20 @@ import { TProductSingleResponse } from '@fms/entities';
 import { currencyFormat } from '@fms/utilities';
 import { FC, ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-
+type TProductData = {
+  id?: string;
+  name?: string;
+  priceSelling?: number;
+  createdAt?: Date | null | undefined;
+  updatedAt?: Date | null | undefined;
+  image?: string | null | undefined;
+  description?: string | null | undefined;
+};
 export const ProductCard: FC<{
-  item?: TProductSingleResponse;
+  item?: TProductData;
   loading?: boolean;
 }> = ({ item, loading }): ReactElement => {
+ 
   return loading ? (
     <div
       key={item?.id}
@@ -37,7 +46,7 @@ export const ProductCard: FC<{
           className="object-cover bg-cover w-[200px] h-[200px] rounded-lg border border-grey-100 shadow-sm"
         />
         <figcaption className="text-left font-bold text-base">
-          {item?.name}
+          {item?.name as string}
         </figcaption>
         <h2 className="text-left font-bold text-base">
           {currencyFormat(item?.priceSelling as number)}

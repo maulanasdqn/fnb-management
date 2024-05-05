@@ -5,7 +5,6 @@ export const baseSchema = z.object({
   createdAt: z.coerce.date().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
   deletedAt: z.coerce.date().optional().nullable(),
-  isDeleted: z.boolean().optional().nullable(),
 });
 
 export const metaResponseSchema = z.object({

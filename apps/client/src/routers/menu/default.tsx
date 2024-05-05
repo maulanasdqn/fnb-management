@@ -13,8 +13,6 @@ export const MenuPage: FC = (): ReactElement => {
   const [search, setSearch] = useState<string>('');
   const [debounceValue, setDebounceValue] = useState<string>('');
 
-  console.log(cartData);
-
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -24,15 +22,17 @@ export const MenuPage: FC = (): ReactElement => {
   useDebounce(() => {
     setDebounceValue(search);
   }, 500);
-
+  
   const { data, isLoading } = trpc.product.findMany.useQuery({
-    search: debounceValue || undefined,
+    search: debounceValue,
   });
 
   return (
     <section className="w-full min-h-screen relative bg-grey-50">
-      <div className="flex items-center justify-center w-full h-56 bg-primary-800 p-2">
-        <h1 className="text-2xl font-bold text-white">Serasa Erat Kopi</h1>
+      <div className="w-full h-56 bg-[url(/bg-heading.jpg)] bg-cover bg-no-repeat bg-center object-cover backdrop-blur-lg p-2 bg-blend-overlay bg-grey">
+        <div className="flex items-center justify-center backdrop-blur-[2px] w-full h-56 ">
+          <h1 className="text-2xl font-bold text-white">Serasa Erat Kopi</h1>
+        </div>
       </div>
 
       <div className="flex sticky items-center text-lg px-4 justify-center w-9/12 h-auto py-4 shadow-md rounded-lg -mt-8 bg-white mx-auto mb-3">
@@ -50,8 +50,8 @@ export const MenuPage: FC = (): ReactElement => {
       </div>
 
       <section className="grid grid-cols-2 w-full px-3 gap-4 mt-4">
-        <Suspense fallback={<ProductCard loading />}>
-          {data?.map((item) => (
+        <Suspense fallback={<div>Loading...</div>}>
+          {data?.data?.map((item) => (
             <ProductCard loading={isLoading} key={item.id} item={item} />
           ))}
         </Suspense>
