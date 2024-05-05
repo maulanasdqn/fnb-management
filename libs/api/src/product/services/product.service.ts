@@ -11,6 +11,10 @@ import { ilike, asc, eq } from 'drizzle-orm';
 export const findMany = async (
   params?: TQueryParams
 ): Promise<TProductResponse> => {
+  const page = params?.page || 1;
+  const perPage = params?.perPage || 10;
+  const offset = (page - 1) * perPage;
+
   const data = await db
     .select({
       id: products.id,
@@ -21,20 +25,33 @@ export const findMany = async (
     })
     .from(products)
     .where(ilike(products.name, `%${params?.search || ''}%`))
+    .limit(perPage)
+    .offset(params?.search ? 0 : offset)
     .orderBy(asc(products.name));
+
+  const count = await db
+    .select({ id: products.id })
+    .from(products)
+    .then((res) => res.length);
+
+  const totalPage = Math.ceil(count / perPage);
+  const nextPage = page < totalPage ? Number(page) + 1 : null;
+  const prevPage = page > 1 ? Number(page - 1) : null;
 
   return {
     meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
+      page,
+      nextPage,
+      prevPage,
+      perPage,
+      totalPage,
     },
-    data: data,
+    data,
   };
 };
 
 export const findOne = async (id: string): Promise<TProductSingleResponse> => {
-  const data = await db
+  await db
     .select({
       id: products.id,
       name: products.name,
@@ -49,7 +66,6 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
     .then((data) => data?.at(0));
   return {
     message: 'Success',
-    data: data,
   };
 };
 
@@ -62,7 +78,7 @@ export const create = async ({
   recipeId,
   description,
 }: TProductCreateRequest): Promise<TProductSingleResponse> => {
-  const data = await db
+  await db
     .insert(products)
     .values({
       name,
@@ -76,7 +92,6 @@ export const create = async ({
     .returning();
   return {
     message: 'Create Product Success',
-    data: data[0],
   };
 };
 
@@ -90,7 +105,7 @@ export const update = async ({
   recipeId,
   description,
 }: TProductUpdateRequest) => {
-  const data = await db
+  await db
     .update(products)
     .set({
       name,
@@ -105,14 +120,12 @@ export const update = async ({
     .returning();
   return {
     message: 'Update Product Success',
-    data: data[0],
   };
 };
 
 export const destroy = async (id: string) => {
-  const data = await db.delete(products).where(eq(products.id, id)).returning();
+  await db.delete(products).where(eq(products.id, id)).returning();
   return {
     message: 'Delete Product Success',
-    data: data[0],
   };
 };

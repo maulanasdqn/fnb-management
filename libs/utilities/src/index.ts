@@ -92,3 +92,7 @@ export const useGetLocalStorage = <T>(key: string) => {
   const [value, setValue] = useLocalStorage<T>(key, {} as T);
   return [value, setValue] as const;
 };
+
+export const calculateTotalPages = (total: number, limit: number): number => {
+  return Math.ceil(total / limit);
+};

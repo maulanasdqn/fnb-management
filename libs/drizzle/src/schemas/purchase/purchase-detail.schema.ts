@@ -5,7 +5,6 @@ import { purchases } from './purchase.schema';
 import { items } from '../item/item.schema';
 
 export const purchaseDetails = pgTable('purchase_details', {
-  id: uuid('id').defaultRandom().primaryKey(),
   purchaseId: uuid('purchase_id')
     .notNull()
     .references(() => purchases.id),
