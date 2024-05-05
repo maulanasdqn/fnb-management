@@ -2,9 +2,6 @@ import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { baseSchema } from '../base';
 import { roles } from './role.schema';
-import { items } from '../item/item.schema';
-import { products } from '../product';
-import { recipes } from '../recipe';
 
 export const users = pgTable('users', {
   fullname: text('fullname').notNull(),
@@ -28,16 +25,16 @@ export const userRelations = relations(users, ({ one, many }) => ({
   createdBy: one(users, {
     fields: [users.createdBy],
     references: [users.id],
-    relationName: 'user_created_by',
+    relationName: 'created_by',
   }),
   updatedBy: one(users, {
     fields: [users.updatedBy],
     references: [users.id],
-    relationName: 'user_updated_by',
+    relationName: 'updated_by',
   }),
   deletedBy: one(users, {
     fields: [users.deletedBy],
     references: [users.id],
-    relationName: 'user_deleted_by',
+    relationName: 'deleted_by',
   }),
 }));

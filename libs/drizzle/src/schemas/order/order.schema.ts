@@ -4,6 +4,7 @@ import { baseSchema } from '../base';
 import { customers } from '../customer/customer.schema';
 import { places } from '../place/place.schema';
 import { payments } from '../payment/payment.schema';
+import { users } from '../me';
 
 export const orders = pgTable('orders', {
   customerId: text('customer_id').notNull(),
@@ -16,6 +17,7 @@ export const orders = pgTable('orders', {
     .references(() => payments.id),
   invoiceNumber: text('invoice_number').notNull(),
   status: text('status').notNull(),
+  servedBy: uuid('served_by').references(() => users.id),
   ...baseSchema,
 });
 
@@ -33,5 +35,10 @@ export const orderRelations = relations(orders, ({ one }) => ({
   payment: one(payments, {
     fields: [orders.paymentId],
     references: [payments.id],
+  }),
+  servedBy: one(users, {
+    fields: [orders.servedBy],
+    references: [users.id],
+    relationName: 'reserved_by',
   }),
 }));
