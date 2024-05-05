@@ -1,5 +1,11 @@
 import { router, procedure } from '@fms/trpc-server';
-import { findMany, findOne, create, update, destroy } from '../services/item.service';
+import {
+  findMany,
+  findOne,
+  create,
+  update,
+  destroy,
+} from '../services/item.service';
 import {
   itemResponseSchema,
   itemQueryParamSchema,
@@ -27,7 +33,7 @@ export const itemController = router({
     .output(itemResponseSchema)
     .input(itemCreateRequestSchema)
     .mutation(async ({ input }) => {
-      console.log("controller", input)
+      console.log('controller', input);
       return await create(input);
     }),
 

@@ -30,20 +30,6 @@ export type TCommonObject = {
 
 export type TMetaResponse = z.infer<typeof metaResponseSchema>;
 
-export type TMetaResponses<T = null | undefined> = {
-  message?: string;
-  data?: T;
-  meta?: {
-    total?: number;
-    totalPage?: number;
-    lastPage?: number;
-    currentPage?: number;
-    perPage?: number;
-    prev?: null | number;
-    next?: null | number;
-  };
-};
-
 export type TBaseResponse<T = null | undefined> = {
   data?: T;
   meta?: TMetaResponse;
@@ -136,15 +122,15 @@ export type TControlledInputSpecial<T extends FieldValues> =
 
 export type TControlledInputRadioGroup<T extends FieldValues> =
   UseControllerProps<T> &
-  Omit<
-    TInputSpecial &
-    TInputMolecule & {
-      options: TOption[];
-    },
-    'onChange'
-  > & {
-    onChange?: (value?: string | number | boolean) => void;
-  };
+    Omit<
+      TInputSpecial &
+        TInputMolecule & {
+          options: TOption[];
+        },
+      'onChange'
+    > & {
+      onChange?: (value?: string | number | boolean) => void;
+    };
 
 export type TControlledTextArea<T extends FieldValues> = UseControllerProps<T> &
   TTextArea &
@@ -200,18 +186,18 @@ export type TPieChart = {
 };
 export type TLineChart = {
   chartType:
-  | 'januari'
-  | 'februari'
-  | 'maret'
-  | 'april'
-  | 'mei'
-  | 'juni'
-  | 'juli'
-  | 'agustus'
-  | 'september'
-  | 'oktober'
-  | 'november'
-  | 'desember';
+    | 'januari'
+    | 'februari'
+    | 'maret'
+    | 'april'
+    | 'mei'
+    | 'juni'
+    | 'juli'
+    | 'agustus'
+    | 'september'
+    | 'oktober'
+    | 'november'
+    | 'desember';
   title: string;
   data?: {
     labels: string[];

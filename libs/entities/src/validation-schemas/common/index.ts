@@ -8,21 +8,22 @@ export const baseSchema = z.object({
   isDeleted: z.boolean().optional().nullable(),
 });
 
-export const queryParamsSchema = z
-  .object({
-    id: z.string().optional(),
-    search: z.string().optional(),
-  })
-  .optional();
-
 export const metaResponseSchema = z.object({
   page: z.number().optional(),
   perPage: z.number().optional(),
   totalPage: z.number().optional(),
   total: z.number().optional(),
-  prev: z.number().optional().nullable(),
-  next: z.number().optional().nullable(),
+  prevPage: z.number().optional().nullable(),
+  nextPage: z.number().optional().nullable(),
 });
+
+export const queryParamsSchema = z
+  .object({
+    id: z.string().optional(),
+    search: z.string().optional(),
+  })
+  .extend(metaResponseSchema.pick({ page: true, perPage: true }).shape)
+  .optional();
 
 export const dataResponseSchema = <T extends ZodTypeAny>(data: T) =>
   z.object({
