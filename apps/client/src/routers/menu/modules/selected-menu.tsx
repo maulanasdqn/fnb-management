@@ -8,8 +8,6 @@ export const SelectedMenu: FC<{ data: TSubmitedData[] }> = (
 ): ReactElement => {
 
 
-console.log( props?.data?.map((item) => item.priceSelling));
-
   return props.data.length ? (
     <Link
       to={`checkout`}

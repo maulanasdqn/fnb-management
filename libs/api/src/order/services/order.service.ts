@@ -29,7 +29,7 @@ export const create = async (request: TOrderCreateRequest) => {
         customerId: customer[0].id,
         placeId: request?.placeId,
         amountTotal: 10000,
-        paymentId: request.paymentId,
+        paymentId: request?.paymentId,
         invoiceNumber: 'INV',
       })
       .returning();
