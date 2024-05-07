@@ -11,7 +11,6 @@ export const orders = pgTable('orders', {
   placeId: uuid('place_id').references(() => places.id),
   amountTotal: integer('amount_total').notNull(),
   paymentId: uuid('payment_id')
-    .notNull()
     .references(() => payments.id),
   invoiceNumber: text('invoice_number').notNull(),
   status: text('status'),
