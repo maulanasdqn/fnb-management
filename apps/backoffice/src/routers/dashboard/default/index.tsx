@@ -11,6 +11,8 @@ export type Tab = {
 };
 
 export const Dashboard: FC = (): ReactElement => {
+
+
   const item: Tab[] = [
     { title: 'Pesanan Masuk', content: <NewOrder /> },
     { title: 'Sedang Diproses', content: <ProcessOrder /> },

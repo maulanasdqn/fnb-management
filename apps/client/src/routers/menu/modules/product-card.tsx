@@ -3,17 +3,9 @@ import { TProductSingleResponse } from '@fms/entities';
 import { currencyFormat } from '@fms/utilities';
 import { FC, ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-type TProductData = {
-  id?: string;
-  name?: string;
-  priceSelling?: number;
-  createdAt?: Date | null | undefined;
-  updatedAt?: Date | null | undefined;
-  image?: string | null | undefined;
-  description?: string | null | undefined;
-};
+
 export const ProductCard: FC<{
-  item?: TProductData;
+  item?: TProductSingleResponse['data'];
   loading?: boolean;
 }> = ({ item, loading }): ReactElement => {
  
@@ -32,32 +24,26 @@ export const ProductCard: FC<{
       </div>
     </div>
   ) : (
-    <Link
-      to={`${item?.id}/detail`}
-      key={item?.id}
-      className="flex flex-col justify-between max-w-sm bg-white p-3 shadow-md rounded-lg gap-y-3"
+    <Link to={`${item?.id}/detail`} className="flex flex-col h-full shadow-md rounded">
+    <img
+      src={item?.image || '/no-photo.jpg'}
+      alt={item?.name}
+      className="w-full h-48 object-cover rounded-lg mb-4"
+    />
+    <div className="flex flex-col flex-grow">
+      <h3 className="text-gray-900 font-semibold text-lg mb-2">
+        {item?.name}
+      </h3>
+      <p className="text-gray-900 font-bold text-lg">
+        {currencyFormat(item?.priceSelling as number)}
+      </p>
+    </div>
+    <Button
+      type="button"
+      className="mt-2 bg-primary-800 text-white rounded-lg py-2"
     >
-      <figure className="flex flex-col gap-y-2">
-        <img
-          src={item?.image || '/no-photo.jpg'}
-          alt={item?.name}
-          width={200}
-          height={200}
-          className="object-cover bg-cover w-[200px] h-[200px] rounded-lg border border-grey-100 shadow-sm"
-        />
-        <figcaption className="text-left font-bold text-base">
-          {item?.name as string}
-        </figcaption>
-        <h2 className="text-left font-bold text-base">
-          {currencyFormat(item?.priceSelling as number)}
-        </h2>
-      </figure>
-      <Button
-        type="button"
-        className="w-full bg-white border-primary-800 border rounded-2xl text-primary-800 text-lg font-semibold hover:bg-primary-800 hover:text-white"
-      >
-        Pesan
-      </Button>
-    </Link>
+      Pesan
+    </Button>
+  </Link>
   );
 };

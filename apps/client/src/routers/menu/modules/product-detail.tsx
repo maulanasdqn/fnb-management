@@ -196,7 +196,6 @@ export const ProductDetail: FC<{
     .with({ topping: 0, variant: undefined }, () => priceActual)
     .otherwise(() => priceActual);
 
-    console.log(data)
   return loading ? (
     <div key={data?.id} className="w-full min-h-screen bg-white p-4">
       <div className="flex flex-col gap-y-2">

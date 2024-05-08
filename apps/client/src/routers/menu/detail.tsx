@@ -9,7 +9,7 @@ const { ProductDetail } = lazily(() => import('./modules'));
 export const MenuDetailPage: FC = (): ReactElement => {
   const { id } = useParams() as { id: string };
   const { data, isLoading } = trpc.product.findOne.useQuery({ id });
-  console.log(data);
+
   return (
     <Suspense fallback={<ProductDetail loading={isLoading} />}>
       <ProductDetail data={data?.data as TProductSingleResponse['data']} loading={isLoading} />

@@ -48,10 +48,7 @@ export const DashboardProduct: FC = (): ReactElement => {
       header: 'Harga',
       accessorKey: 'priceSelling',
     },
-    {
-      header: 'Deskripsi',
-      accessorKey: 'description',
-    },
+  
     {
       header: 'Aksi',
       accessorKey: 'action',
@@ -83,7 +80,7 @@ export const DashboardProduct: FC = (): ReactElement => {
       <div className="flex flex-col gap-4">
         <h1 className="text-2xl font-bold">Products</h1>
         <DataTable
-          data={data || []}
+          data={data?.data || []}
           columns={columns}
           handleSearch={(e) => setSearch(e.target.value)}
           createLink='create'
