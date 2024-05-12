@@ -4,12 +4,12 @@ import { useForm } from 'react-hook-form';
 import { TSelectedMenu, TSubmitedData } from './modules';
 import { currencyFormat, useLocalStorage } from '@fms/utilities';
 import { CheckoutCard } from './modules/checkout-card';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { trpc } from '@fms/trpc-client';
 
 export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
   const [paymentMethod, setPaymentMethod] = useState('cash');
-
+  const navigate = useNavigate();
   const [getParams] = useSearchParams();
 
   const [cartData, setCartData] = useLocalStorage<TSubmitedData[]>(
@@ -51,6 +51,8 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
     mutate({
         products: [...newState],
       customerName: data.name,
+    },{
+      onSettled: () => navigate('success'),
     });
   
   });

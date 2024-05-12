@@ -1,12 +1,13 @@
 import { db, orders, customers, orderDetails } from '@fms/drizzle';
-import { TOrderCreateRequest } from '@fms/entities';
+import { TOrderCreateRequest, TOrderResponse, TOrderSingleResponse } from '@fms/entities';
+import { dummyData } from './store';
 
-const findOne = async (id: string) => {
-  return;
+export const findOne = async (id: string):Promise<TOrderSingleResponse ['data']> => {
+  const res = dummyData?.find((item) => item.id === id);
+  return res;
 };
-const findMany = async () => {
-  return;
-};
+
+export const findMany = ():Promise<TOrderResponse['data']> =>  Promise.resolve(dummyData);
 
 export const create = async (request: TOrderCreateRequest) => {
   const products: {
