@@ -3,6 +3,7 @@ import { MenutLayout } from './menu/layout';
 import { lazily } from 'react-lazily';
 import { Suspense } from 'react';
 import { ProductDetail } from './menu/modules/product-detail';
+import { CheckoutSuccessPage } from './menu';
 
 const { MenuPage, MenuDetailPage, MenuCheckoutPage } = lazily(
   () => import('./menu')
@@ -46,6 +47,14 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: 'checkout/success',
+        element: (
+          <Suspense fallback={'spinner'}>
+            <CheckoutSuccessPage />
+          </Suspense>  
+      )
+      }
     ],
   },
 
