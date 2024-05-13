@@ -52,7 +52,10 @@ export const MenuCheckoutPage: FC<TSelectedMenu> = (): ReactElement => {
         products: [...newState],
       customerName: data.name,
     },{
-      onSettled: () => navigate('success'),
+      onSettled: () => {
+        navigate('success')
+        localStorage.clear();
+      },
     });
   
   });
