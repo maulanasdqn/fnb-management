@@ -23,13 +23,15 @@ export const DataTable = <T extends Record<string, unknown>>(
   return (
     <section className="shadow-md bg-white h-fit overflow-y-hidden border border-grey-50 p-4 rounded-lg w-full gap-y-4 flex flex-col overflow-x-auto">
       <div className="flex md:flex-row flex-col md:gap-x-3 gap-y-4 md:items-center sticky z-10 w-full">
-        <div className="w-fit">
-          <InputText
-            size="sm"
-            placeholder="Cari data..."
-            onChange={props.handleSearch}
-          />
-        </div>
+        {props.searchBox && (
+           <div className="w-fit">
+           <InputText
+             size="sm"
+             placeholder="Cari data..."
+             onChange={props.handleSearch}
+           />
+         </div>
+        )} 
         {props.createLink && (
           <div>
             <Button href={props.createLink} variant="primary" size="sm">
@@ -46,10 +48,10 @@ export const DataTable = <T extends Record<string, unknown>>(
           </div>
         )}
       </div>
-      <div className="overflow-x-auto min-w-max w-full h-fit flex p-1 bg-white shadow-md rounded-lg relative">
+      <div className="overflow-x-auto min-w-max w-full h-fit flex  bg-white shadow-md rounded-lg relative">
         <table
           {...props}
-          className="p-2 w-full table-auto border-collapse border-grey-100 rounded-lg"
+          className="p-2 w-full table-auto border-collapse border-grey-100 rounded-lg text-sm"
         >
           <thead className="bg-success-600 p-2 w-auto h-auto">
             {table.getHeaderGroups().map((headerGroup) => (

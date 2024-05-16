@@ -85,6 +85,7 @@ export const DashboardProduct: FC = (): ReactElement => {
           handleSearch={(e) => setSearch(e.target.value)}
           createLink='create'
           createLabel='+ Add Produk'
+          searchBox
         />
       </div>
     </Suspense>
