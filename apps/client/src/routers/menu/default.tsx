@@ -50,14 +50,14 @@ export const MenuPage: FC = (): ReactElement => {
       </div>
 
       <section className="grid grid-cols-2 w-full px-3 gap-4 mt-4">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<ProductCard loading={isLoading} />}>
           {data?.data?.map((item) => (
             <ProductCard loading={isLoading} key={item.id} item={item} />
           ))}
         </Suspense>
       </section>
       {(cartData as boolean) && (
-        <Suspense fallback={'Spinner'}>
+        <Suspense fallback={<div>Loading...</div>}>
           <SelectedMenu data={(cartData as TSubmitedData[]) || []} />
         </Suspense>
       )}

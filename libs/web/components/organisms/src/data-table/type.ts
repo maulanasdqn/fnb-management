@@ -21,4 +21,5 @@ export type TTable<T extends Record<string, unknown>> = DetailedHTMLProps<
   data: Array<T>;
   columns: ColumnDef<T>[];
   createAction?: MouseEventHandler<HTMLButtonElement>;
+  searchBox ?: boolean;
 };

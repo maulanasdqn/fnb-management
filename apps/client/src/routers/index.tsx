@@ -4,6 +4,7 @@ import { lazily } from 'react-lazily';
 import { Suspense } from 'react';
 import { ProductDetail } from './menu/modules/product-detail';
 import { CheckoutSuccessPage } from './menu';
+import { Spinner } from '@fms/atoms';
 
 const { MenuPage, MenuDetailPage, MenuCheckoutPage } = lazily(
   () => import('./menu')
@@ -17,7 +18,7 @@ export const router = createBrowserRouter([
       {
         path: '',
         element: (
-          <Suspense fallback={'Spinner'}>
+          <Suspense fallback={<Spinner/>}>
             <MenuPage />
           </Suspense>
         ),

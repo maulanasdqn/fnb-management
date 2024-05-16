@@ -96,3 +96,9 @@ export const useGetLocalStorage = <T>(key: string) => {
 export const calculateTotalPages = (total: number, limit: number): number => {
   return Math.ceil(total / limit);
 };
+
+export const formatedDate = (date: Date) => {
+  return new Intl.DateTimeFormat('id-ID', {
+    dateStyle: 'full',
+  }).format(date);
+}
