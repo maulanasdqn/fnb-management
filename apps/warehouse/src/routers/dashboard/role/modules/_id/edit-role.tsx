@@ -15,9 +15,17 @@ export const EditRole: FC = (): ReactElement => {
   ];
   const { control } = useForm();
   const dataRoles = [
-    { id: 1, name: 'Warehouse', permission: 'read' },
-    { id: 2, name: 'Back Office', permission: 'read' },
-    { id: 3, name: 'Client', permission: 'read' },
+    {
+      id: 1,
+      name: 'Warehouse',
+      permissions: ['Aksi', 'Lihat', 'Tambah', 'Ubah'],
+    },
+    {
+      id: 2,
+      name: 'Back Office',
+      permission: ['Aksi', 'Lihat', 'Tambah', 'Ubah'],
+    },
+    { id: 3, name: 'Client', permissions: ['Aksi', 'Lihat', 'Tambah', 'Ubah'] },
   ];
   const columns: ColumnDef<TRole>[] = [
     {
@@ -29,34 +37,17 @@ export const EditRole: FC = (): ReactElement => {
       header: 'Jenis Permission',
       accessorKey: 'permission',
       cell({ row }) {
-        return (
-          <form className="flex gap-x-1">
-            <ControlledFieldCheckbox
-              name="permission"
-              control={control}
-              label="Aksi"
-              size="sm"
-            />
-            <ControlledFieldCheckbox
-              name="permission"
-              control={control}
-              label="Lihat"
-              size="sm"
-            />
-            <ControlledFieldCheckbox
-              name="permission"
-              control={control}
-              label="Tambah"
-              size="sm"
-            />
-            <ControlledFieldCheckbox
-              name="permission"
-              control={control}
-              label="Ubah"
-              size="sm"
-            />
-          </form>
-        );
+        const { permissions } = row.original;
+        const permissionControls = permissions?.map((item, idx) => (
+          <ControlledFieldCheckbox
+            key={idx}
+            name={`permission-${idx}`}
+            control={control}
+            label={item}
+            size="sm"
+          />
+        ));
+        return <form className="flex gap-x-1">{permissionControls}</form>;
       },
     },
   ];
@@ -80,7 +71,7 @@ export const EditRole: FC = (): ReactElement => {
           />
         </div>
 
-        <div className='flex flex-col gap-y-2'>
+        <div className="flex flex-col gap-y-2">
           <h3>Role Permissions :</h3>
           <DataTable data={dataRoles as []} columns={columns} />
         </div>
