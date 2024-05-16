@@ -4,6 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "api:db:seed": "ts-node libs/drizzle/src/seed.ts",
     "api:dev": "nx serve api",
     "api:e2e": "nx e2e api-e2e",
     "api:build": "nx build backoffice",
