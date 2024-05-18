@@ -22,6 +22,8 @@ const {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require('../../../entities/src/index');
 
+import { config } from 'dotenv';
+config();
 const dbUrl = process.env['DATABASE_URL'] as string;
 const dbQueryClient = new Pool({
   connectionString: dbUrl,
