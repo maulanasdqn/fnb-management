@@ -6,7 +6,6 @@ import { permissions } from './permission.schema';
 
 export const roles = pgTable('roles', {
   name: text('name').notNull(),
-  permissions: text('permissions').array(),
   ...baseSchema,
 });
 

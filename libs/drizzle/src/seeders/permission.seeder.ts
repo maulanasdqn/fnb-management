@@ -1,6 +1,5 @@
-import { Pool } from 'pg';
 import * as schema from '../schemas';
-import { drizzle } from 'drizzle-orm/node-postgres';
+
 const {
   PERMISSION_CUSTOMER,
   PERMISSION_DASHBOARD_TRANSACTION,
@@ -22,16 +21,10 @@ const {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require('../../../entities/src/index');
 
-const dbUrl = process.env['DATABASE_URL'] as string;
-const dbQueryClient = new Pool({
-  connectionString: dbUrl,
-});
+import { config } from 'dotenv';
+config();
 
-const db = drizzle(dbQueryClient, {
-  schema,
-});
-
-export const seedPermission = async () => {
+export const seedPermission = async (db: any) => {
   const permissionExist = await db
     .select({ id: schema.permissions.id })
     .from(schema.permissions);
