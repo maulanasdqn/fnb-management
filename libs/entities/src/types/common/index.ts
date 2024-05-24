@@ -9,7 +9,7 @@ import type {
 } from 'react';
 import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import { AxiosError } from 'axios';
-import { ZodType, z } from 'zod';
+import { z } from 'zod';
 import {
   metaResponseSchema,
   queryParamsSchema,
@@ -31,6 +31,12 @@ export type TCommonObject = {
 export type TMetaResponse = z.infer<typeof metaResponseSchema>;
 
 export type TBaseResponse<T = null | undefined> = {
+  data?: T;
+  meta?: TMetaResponse;
+  message?: string;
+};
+
+export type TResponse<T = null | undefined> = {
   data?: T;
   meta?: TMetaResponse;
   message?: string;
