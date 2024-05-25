@@ -36,3 +36,10 @@ export const dataSingleResponseSchema = <T extends ZodTypeAny>(data: T) =>
     message: z.string().optional(),
     data: z.object({ ...(data as object) }).optional(),
   });
+
+export const responseSchema = <T extends ZodTypeAny>(data: T) =>
+  z.object({
+    message: z.string().optional(),
+    data: z.array(data).optional(),
+    meta: metaResponseSchema.optional(),
+  });
