@@ -1,4 +1,5 @@
 import { seedPermission } from './seeders/permission.seeder';
+import { seedSuperAdmin } from './seeders/user.seeder';
 import { Pool } from 'pg';
 import * as schema from './schemas';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -13,7 +14,8 @@ const db = drizzle(dbQueryClient, {
 
 async function main() {
   try {
-    await seedPermission(db);
+    // await seedPermission(db);
+    await seedSuperAdmin(db);
   } catch (error) {
     console.error(error);
   }
