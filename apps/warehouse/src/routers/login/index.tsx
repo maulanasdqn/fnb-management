@@ -3,68 +3,35 @@ import { Button } from '@fms/atoms';
 import { ControlledFieldText } from '@fms/organisms';
 import { useForm } from 'react-hook-form';
 import { tokenService, userService } from '@fms/web-services';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginRequestSchema } from '@fms/entities';
+import { z } from 'zod';
+import { trpc } from '@fms/trpc-client';
 
 export const LoginPage: FC = (): ReactElement => {
-  const { control, handleSubmit } = useForm<{
-    email: string;
-    password: string;
-  }>({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
+  const { control, handleSubmit } = useForm<z.infer<typeof loginRequestSchema>>(
+    {
+      resolver: zodResolver(loginRequestSchema),
+      defaultValues: {
+        userName: '',
+        password: '',
+      },
+    }
+  );
+
+  const { mutate } = trpc.auth.login.useMutation();
 
   const onSubmit = handleSubmit((data) => {
-    if (data?.email === 'admin@admin.com') {
-      tokenService.setAccessToken(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjQ4MjU5MjYyfQ.3k5fVXKqy6Hj8Z7t2J8n0j5h4nVxQf6e6p9cBwZUfGw'
-      );
-      tokenService.setRefreshToken(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjQ4MjU5MjYyfQ.3k5fVXKqy6Hj8Z7t2J8n0j5h4nVxQf6e6p9cBwZUfGw'
-      );
-      userService.setUserData({
-        id: '1',
-        fullname: 'Jhon Doe',
-        email: 'jL6kN@example.com',
-        role: {
-          id: '1',
-          name: 'Barista',
-          permissions: [
-            'read-order',
-            'read-all-order',
-            'read-ingredient',
-            'read-product',
-            'read-transaction',
-            'read-dashboard',
-            'request-purchase',
-            'read-role',
-          ],
-        },
-      });
-    }
-
-    if (data?.email === 'staff@mail.com') {
-      tokenService.setAccessToken(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjQ4MjU5MjYyfQ.3k5fVXKqy6Hj8Z7t2J8n0j5h4nVxQf6e6p9cBwZUfGw'
-      );
-      tokenService.setRefreshToken(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNjQ4MjU5MjYyfQ.3k5fVXKqy6Hj8Z7t2J8n0j5h4nVxQf6e6p9cBwZUfGw'
-      );
-      userService.setUserData({
-        id: '1',
-        fullname: 'Jhon Doe',
-        email: 'jL6kN@example.com',
-        role: {
-          id: '1',
-          name: 'Barista',
-          permissions: ['read-ingredient', 'read-product'],
-        },
-      });
-    }
-    window.location.reload();
+    mutate(data, {
+      onSuccess: (resp) => {
+        if (resp) {
+          tokenService.setAccessToken(resp?.token?.accessToken);
+          tokenService.setRefreshToken(resp?.token?.refreshToken);
+          userService.setUserData(resp?.user);
+        }
+      },
+    });
   });
-
   return (
     <div className="bg-grey-100 flex items-center justify-center w-full h-screen text-white">
       <form
@@ -77,10 +44,10 @@ export const LoginPage: FC = (): ReactElement => {
             required
             control={control}
             size="md"
-            name="email"
-            type="email"
-            label="Email"
-            placeholder="Email"
+            name="userName"
+            type="text"
+            label="Username"
+            placeholder="Username"
           />
           <ControlledFieldText
             required

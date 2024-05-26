@@ -3,12 +3,7 @@ import { LoginPage } from './login';
 import { Dashboard } from './dashboard/default';
 import { DashboardLayout } from './dashboard/layout';
 import { isAuthenticated, logOut, pagePermission } from '@fms/utilities';
-import {
-  PERMISSION_DASHBOARD,
-  PERMISSION_NOTIFICATION,
-  PERMISSION_ORDER,
-  PERMISSION_PURCHASE,
-} from '@fms/entities';
+import { PERMISSION_DASHBOARD, PERMISSION_PURCHASE } from '@fms/entities';
 import { DashboardRequestPurchase } from './dashboard/request-purchase';
 import { DashboardStockOpname } from './dashboard/stock-opname';
 import { DetailOrder } from './dashboard/order/detail-order';
