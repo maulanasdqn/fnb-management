@@ -1,7 +1,6 @@
 import { db, users } from '@fms/drizzle';
-import { loginRequestSchema, TRole, TUser } from '@fms/entities';
+import { loginRequestSchema, TUser } from '@fms/entities';
 import { TRPCError } from '@trpc/server';
-import { error } from 'console';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import {
@@ -29,13 +28,13 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
     });
 
     if (!user) {
-      throw error('User tidak ditemukan');
+      throw Error('User tidak ditemukan');
     }
 
     const isPasswordSame = comparePassword(user.password, request.password);
 
     if (!isPasswordSame) {
-      throw error('Password tidak valid');
+      throw Error('Password tidak valid');
     }
     const dataUser: TUser = {
       id: user.id,
