@@ -4,5 +4,6 @@
   "sourceRoot": "libs/web/components/templates/src",
   "projectType": "library",
   "tags": [],
+  "// targets": "to see all targets run: nx show project templates --web",
   "targets": {}
 }

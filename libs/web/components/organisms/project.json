@@ -4,5 +4,6 @@
   "sourceRoot": "libs/web/components/organisms/src",
   "projectType": "library",
   "tags": [],
+  "// targets": "to see all targets run: nx show project organisms --web",
   "targets": {}
 }

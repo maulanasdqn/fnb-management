@@ -1,25 +1,22 @@
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, PaginationState, Updater } from '@tanstack/react-table';
 import {
   ChangeEventHandler,
-  DetailedHTMLProps,
-  HTMLAttributes,
   MouseEventHandler,
 } from 'react';
-
-export type TTable<T extends Record<string, unknown>> = DetailedHTMLProps<
-  HTMLAttributes<HTMLTableElement>,
-  HTMLTableElement
-> & {
+export type TDataTable<T extends Record<string, unknown>> = {
+  data: T[];
   meta?: {
-    page: number;
-    pageSize: number;
     total: number;
+    perPage: number;
+    page: number;
+    prev: boolean;
+    next: boolean;
   };
+  columns: ColumnDef<T>[];
   handleSearch?: ChangeEventHandler<HTMLInputElement>;
+  setPagination?: (updater: Updater<PaginationState>) => void;
   createLink?: string;
   createLabel?: string;
-  data: Array<T>;
-  columns: ColumnDef<T>[];
   createAction?: MouseEventHandler<HTMLButtonElement>;
-  searchBox ?: boolean;
+  searchBox?: boolean;
 };
