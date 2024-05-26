@@ -44,12 +44,10 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
         name: user.role.name,
         createdAt: user.role.createdAt,
         updatedAt: user.role.updatedAt,
-        permissions: user.role.rolesToPermissions.flatMap((rtp) => {
-          return rtp.permission.map((permission) => ({
-            id: permission.id,
-            name: permission.name,
-          }));
-        }),
+        permissions: user.role.rolesToPermissions.map((rtp) => ({
+          id: rtp.permission.id,
+          name: rtp.permission.name,
+        })),
       },
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
