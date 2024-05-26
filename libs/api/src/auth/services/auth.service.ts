@@ -4,12 +4,12 @@ import { TRPCError } from '@trpc/server';
 import { error } from 'console';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   comparePassword,
   generateAccessToken,
   generateRefreshToken,
-} from '@fms/utilities';
+} from '../../common';
+// eslint-disable-next-line @nx/enforce-module-boundaries
 
 export const login = async (request: z.infer<typeof loginRequestSchema>) => {
   try {
