@@ -19,8 +19,8 @@ export type TQueryParams = z.infer<typeof queryParamsSchema>;
 
 export type TBase = {
   id: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
 };
 
 export type TCommonObject = {

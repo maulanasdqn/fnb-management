@@ -23,7 +23,12 @@ export const logOut = () => {
   userService.removeUserData();
 };
 
-export const pagePermission = (permissions: Array<string>) => {
+export const pagePermission = (
+  permissions: Array<{
+    id: string;
+    name: string;
+  }>
+) => {
   if (!isAuthenticated) {
     return redirect('/auth/login');
   }
@@ -115,10 +120,10 @@ export const comparePassword = async (
   return await argon2.verify(hash, password);
 };
 
-export const generateAccessToken = async (payload: {
+export const generateAccessToken = (payload: {
   id: string;
   fullname: string;
-}): Promise<string> => {
+}): string => {
   const accessToken = jwt.sign(
     payload,
     process.env['ACCESS_SECRET'] as string,
@@ -130,11 +135,11 @@ export const generateAccessToken = async (payload: {
   return accessToken;
 };
 
-export const generateRefreshToken = async (payload: {
+export const generateRefreshToken = (payload: {
   id: string;
   fullname: string;
-}): Promise<string> => {
-  const refreshToken = await jwt.sign(
+}): string => {
+  const refreshToken = jwt.sign(
     payload,
     process.env['REFRESH_SECRET'] as string,
     { expiresIn: '7d' }

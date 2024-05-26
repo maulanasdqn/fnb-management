@@ -4,7 +4,7 @@ import { TRole } from './role.type';
 
 export type TUser = TBase & {
   fullname: string;
-  email: string;
+  email?: string;
   password?: string;
   role: TRole;
 };
