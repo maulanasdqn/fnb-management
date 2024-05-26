@@ -1,37 +1,46 @@
-import { ReactElement, useState } from 'react';
-import { SortingState, flexRender, useReactTable } from '@tanstack/react-table';
-import { getCoreRowModel, getSortedRowModel } from '@tanstack/react-table';
-import { Button, InputText } from '@fms/atoms';
+import {
+  SortingState,
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { ReactElement, useMemo, useState } from 'react';
 import { Icon } from '@iconify/react';
-import { TTable } from './type';
+import { Button, Pagination } from '@fms/atoms';
+import { TDataTable } from './type';
 
 export const DataTable = <T extends Record<string, unknown>>(
-  props: TTable<T>
+  props: TDataTable<T>
 ): ReactElement => {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const memoizeColumns = useMemo(() => props.columns, [props.columns]);
+  const memoizeData = useMemo(() => props.data, [props.data]);
+
   const table = useReactTable({
-    data: props.data,
-    columns: props.columns,
+    data: memoizeData,
+    columns: memoizeColumns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
     },
     onSortingChange: setSorting,
+    onPaginationChange: () => {
+      console.log('pagination');
+    },
+    manualSorting: false,
+    manualPagination: true,
   });
 
   return (
-    <section className="shadow-md bg-white h-fit overflow-y-hidden border border-grey-50 p-4 rounded-lg w-full gap-y-4 flex flex-col overflow-x-auto">
-      <div className="flex md:flex-row flex-col md:gap-x-3 gap-y-4 md:items-center sticky z-10 w-full">
-        {props.searchBox && (
-           <div className="w-fit">
-           <InputText
-             size="sm"
-             placeholder="Cari data..."
-             onChange={props.handleSearch}
-           />
-         </div>
-        )} 
+    <div className="w-full h-full bg-white p-4 mt-10 rounded-lg">
+      <div className="flex items-center gap-x-4">
+        <input
+          className="w-fit my-2 p-2 border-grey-100 border text-grey-400 text-sm focus:outline-none focus:ring-0 focus-visible:ring-0 bg-white placeholder-grey-400 rounded-lg"
+          placeholder="Search"
+          type="search"
+        />
         {props.createLink && (
           <div>
             <Button href={props.createLink} variant="primary" size="sm">
@@ -48,45 +57,40 @@ export const DataTable = <T extends Record<string, unknown>>(
           </div>
         )}
       </div>
-      <div className="overflow-x-auto min-w-max w-full h-fit flex  bg-white shadow-md rounded-lg relative">
-        <table
-          {...props}
-          className="p-2 w-full table-auto border-collapse border-grey-100 rounded-lg text-sm"
-        >
-          <thead className="bg-success-600 p-2 w-auto h-auto">
+
+      <div className="relative flex flex-col w-full h-full overflow-scroll text-grey-700 bg-white shadow-md bg-clip-border rounded-xl">
+        <table className="w-full text-left table-auto min-w-max">
+          <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
-                    className="text-white py-2 px-4 text-left select-none"
                     key={header.id}
+                    style={{ width: `${header.getSize()}px` }}
+                    className="p-4 bg-primary-500 text-white"
                   >
                     <div
                       {...{
-                        className: 'flex items-center',
+                        className: 'flex items-center gap-x-1',
                         onClick: header.column.getToggleSortingHandler(),
                       }}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-
+                      {header.isPlaceholder ? null : (
+                        <p className="block font-sans text-sm antialiased font-semibold leading-none">
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </p>
+                      )}
                       {{
                         asc: (
-                          <Icon
-                            icon="bx:chevron-up"
-                            width="1.5em"
-                            style={{ marginLeft: '2px' }}
-                          />
+                          <Icon className="text-white" icon="lucide:sort-asc" />
                         ),
                         desc: (
                           <Icon
-                            icon="bx:chevron-down"
-                            width="1.5em"
-                            style={{ marginLeft: '2px' }}
+                            className="text-white"
+                            icon="lucide:sort-desc"
                           />
                         ),
                       }[header.column.getIsSorted() as string] ?? null}
@@ -96,20 +100,26 @@ export const DataTable = <T extends Record<string, unknown>>(
               </tr>
             ))}
           </thead>
-          <tbody >
+
+          <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="even:bg-grey-100 odd:bg-grey-50">
-                {row.getVisibleCells().map((cell, index) => (
-                  <td key={index} className="p-4 text-grey-600 font-medium">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              <tr key={row.id} className="hover:bg-gray-50">
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="p-4 border-b border-grey-100">
+                    <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-grey-900">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </p>
                   </td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
+        <Pagination />
       </div>
-      {/* {props.meta && props?.data?.length > 0 && <Pagination {...props} />} */}
-    </section>
+    </div>
   );
 };

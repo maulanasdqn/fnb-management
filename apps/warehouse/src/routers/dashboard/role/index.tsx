@@ -1,6 +1,7 @@
 import { Button } from '@fms/atoms';
 import { TRole } from '@fms/entities';
 import { DataTable } from '@fms/organisms';
+import { trpc } from '@fms/trpc-client';
 import { formatedDate, useDebounce } from '@fms/utilities';
 import { ColumnDef } from '@tanstack/react-table';
 import { FC, ReactElement, useState } from 'react';
@@ -9,7 +10,9 @@ import { Link } from 'react-router-dom';
 export const DashboardRole: FC = (): ReactElement => {
   const [debounceValue, setDebounceValue] = useState<string>('');
   const [search, setSearch] = useState<string>('');
-
+  // const {data} = trpc.role.findMany.useQuery({
+  //   search: debounceValue || undefined
+  // })
 
   const data: TRole[] = [
     { id: '1', name: 'super admin', permissions: ['edit', 'create', 'delete','read'], createdAt: new Date() },
@@ -36,6 +39,11 @@ export const DashboardRole: FC = (): ReactElement => {
     },
 
     {
+      header: 'Permissions',
+      accessorKey: 'permissions',
+    },
+
+    {
       header: 'Action',
       accessorKey: 'action',
       cell({ row }) {
@@ -54,6 +62,7 @@ export const DashboardRole: FC = (): ReactElement => {
       },
     },
   ];
+  console.log(data);
   return (
     <section className="flex flex-col gap-y-4">
       <div className="flex flex-col gap-y-2 w-full">
@@ -62,12 +71,11 @@ export const DashboardRole: FC = (): ReactElement => {
       </div>
       <div className="w-full bg-white rounded-md p-4 shadow-md h-auto">
         <DataTable
-          data={data}
+          data={data || []}
           columns={columns}
           handleSearch={(e) => setSearch(e.target.value)}
           createLink="create"
           createLabel="+ Add Role"
-          searchBox
         />
       </div>
     </section>

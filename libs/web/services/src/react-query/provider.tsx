@@ -3,12 +3,13 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { trpc } from '@fms/trpc-client';
 import { httpBatchLink } from '@trpc/client';
 import superjson from 'superjson';
+import { tokenService } from '../local-storage';
 
 export const ReactQueryProvider: FC<PropsWithChildren> = ({
   children,
 }): ReactElement => {
   const queryClient = new QueryClient();
-
+  const token = tokenService.getAccessToken();
   const trpcClient = trpc.createClient({
     links: [
       httpBatchLink({
@@ -17,7 +18,7 @@ export const ReactQueryProvider: FC<PropsWithChildren> = ({
         headers() {
           return {
             cookie: document.cookie,
-            authorization: document.cookie,
+            authorization: token ? `Bearer ${token}` : undefined,
           };
         },
       }),

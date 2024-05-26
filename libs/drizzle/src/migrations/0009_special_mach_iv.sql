@@ -1,1 +1,0 @@
-ALTER TABLE "permissions" ADD COLUMN "parent" text NOT NULL;

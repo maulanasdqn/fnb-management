@@ -4,5 +4,6 @@
   "sourceRoot": "libs/web/components/atoms/src",
   "projectType": "library",
   "tags": [],
+  "// targets": "to see all targets run: nx show project atoms --web",
   "targets": {}
 }

@@ -4,5 +4,6 @@
   "sourceRoot": "libs/web/modules/src",
   "projectType": "library",
   "tags": [],
+  "// targets": "to see all targets run: nx show project web-modules --web",
   "targets": {}
 }
