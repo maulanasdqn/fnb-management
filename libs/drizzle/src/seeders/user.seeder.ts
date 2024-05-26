@@ -10,7 +10,6 @@ export const encryptPassword = async (password: string): Promise<string> => {
 };
 
 export const seedSuperAdmin = async (db: any) => {
-  console.log('test');
   const permissions = await db
     .select({ id: schema.permissions.id })
     .from(schema.permissions);
