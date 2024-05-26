@@ -1,7 +1,8 @@
 import { redirect } from 'react-router-dom';
 import { tokenService, userService } from '@fms/web-services';
 import { useEffect, useState } from 'react';
-
+import * as argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
 export function permissionChecker<T>(arr1: T[], arr2: T[]): boolean {
   const [shorter, longer] =
     arr1?.length < arr2?.length ? [arr1, arr2] : [arr2, arr1];
@@ -101,4 +102,43 @@ export const formatedDate = (date: Date) => {
   return new Intl.DateTimeFormat('id-ID', {
     dateStyle: 'full',
   }).format(date);
-}
+};
+
+export const encryptPassword = async (password: string): Promise<string> => {
+  return await argon2.hash(password);
+};
+
+export const comparePassword = async (
+  password: string,
+  hash: string
+): Promise<boolean> => {
+  return await argon2.verify(hash, password);
+};
+
+export const generateAccessToken = async (payload: {
+  id: string;
+  fullname: string;
+}): Promise<string> => {
+  const accessToken = jwt.sign(
+    payload,
+    process.env['ACCESS_SECRET'] as string,
+    {
+      expiresIn: '15m',
+    }
+  );
+
+  return accessToken;
+};
+
+export const generateRefreshToken = async (payload: {
+  id: string;
+  fullname: string;
+}): Promise<string> => {
+  const refreshToken = await jwt.sign(
+    payload,
+    process.env['REFRESH_SECRET'] as string,
+    { expiresIn: '7d' }
+  );
+
+  return refreshToken;
+};

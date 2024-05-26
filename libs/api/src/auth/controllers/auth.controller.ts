@@ -1,10 +1,12 @@
+import { loginRequestSchema, logoutRequestSchema } from '@fms/entities';
 import { router, procedure } from '@fms/trpc-server';
-import { z } from 'zod';
+import { login } from '../services/auth.service';
 
 export const authController = router({
-  hello: procedure
-    .input(z.object({ name: z.string() }))
-    .mutation(({ input }) => {
-      return input;
-    }),
+  login: procedure.input(loginRequestSchema).mutation(async ({ input }) => {
+    return await login(input);
+  }),
+  logout: procedure.input(logoutRequestSchema).mutation(({ input }) => {
+    return input;
+  }),
 });
