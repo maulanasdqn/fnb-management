@@ -25,6 +25,7 @@ export const LoginPage: FC = (): ReactElement => {
     mutate(data, {
       onSuccess: (resp) => {
         if (resp) {
+          console.log(resp);
           tokenService.setAccessToken(resp?.token?.accessToken);
           tokenService.setRefreshToken(resp?.token?.refreshToken);
           userService.setUserData(resp?.user);

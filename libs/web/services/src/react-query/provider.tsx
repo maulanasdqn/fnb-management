@@ -18,7 +18,7 @@ export const ReactQueryProvider: FC<PropsWithChildren> = ({
         headers() {
           return {
             cookie: document.cookie,
-            authorization: token ? `Bearer ${token}` : undefined,
+            Authorization: token ? `Bearer ${token}` : undefined,
           };
         },
       }),

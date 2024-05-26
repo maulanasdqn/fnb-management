@@ -23,10 +23,11 @@ export const findMany = async (
     id: role.id,
     name: role.name,
     permissions: role.rolesToPermissions.flatMap((rtp) => {
-      return rtp.permission.map((permission) => ({
-        id: permission.id,
-        name: permission.name,
-      }));
+      return {
+        id: rtp.permission.id,
+        name : rtp.permission.name
+      } 
+      
     }),
   }));
 

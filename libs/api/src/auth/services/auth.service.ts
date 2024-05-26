@@ -13,7 +13,7 @@ import {
 export const login = async (request: z.infer<typeof loginRequestSchema>) => {
   try {
     const user = await db.query.users.findFirst({
-      where: eq(users.username, request.userName),
+      where: (users, { eq }) => eq(users.username, request.userName),
       with: {
         role: {
           with: {
@@ -26,7 +26,6 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
         },
       },
     });
-
     if (!user) {
       throw Error('User tidak ditemukan');
     }
@@ -45,10 +44,10 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
         createdAt: user.role.createdAt,
         updatedAt: user.role.updatedAt,
         permissions: user.role.rolesToPermissions.flatMap((rtp) => {
-          return rtp.permission.map((permission) => ({
-            id: permission.id,
-            name: permission.name,
-          }));
+          return {
+            id: rtp.permission.id,
+            name: rtp.permission.name,
+          };
         }),
       },
       createdAt: user.createdAt,
