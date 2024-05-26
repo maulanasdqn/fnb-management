@@ -31,8 +31,14 @@ export const rolesToPermissions = pgTable(
 
 export const rolesToPermissionsRelations = relations(
   rolesToPermissions,
-  ({ many }) => ({
-    role: many(roles),
-    permission: many(permissions),
+  ({ one }) => ({
+    role: one(roles, {
+      fields: [rolesToPermissions.roleId],
+      references: [roles.id],
+    }),
+    permission: one(permissions, {
+      fields: [rolesToPermissions.permissionId],
+      references: [permissions.id],
+    }),
   })
 );
