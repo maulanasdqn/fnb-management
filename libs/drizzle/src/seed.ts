@@ -14,7 +14,7 @@ const db = drizzle(dbQueryClient, {
 
 async function main() {
   try {
-    // await seedPermission(db);
+    await seedPermission(db);
     await seedSuperAdmin(db);
   } catch (error) {
     console.error(error);
