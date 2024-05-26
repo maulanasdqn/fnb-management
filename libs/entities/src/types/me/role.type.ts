@@ -3,7 +3,10 @@ import { TBase, TBaseResponse } from '../common';
 export type TRole = TBase & {
   id: string;
   name: string;
-  permissions: Array<string>;
+  permissions: Array<{
+    id: string;
+    name: string;
+  }>;
 };
 
 export type TRoleQueryParams = {
