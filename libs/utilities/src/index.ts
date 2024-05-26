@@ -115,20 +115,30 @@ export const comparePassword = async (
   return await argon2.verify(hash, password);
 };
 
-export const generateAccessToken = async (payload: any): Promise<string> => {
-  const accessToken = await jwt.signAsync(payload, {
-    secret: process.env['ACCESS_SECRET'],
-    expiresIn: '15m',
-  });
+export const generateAccessToken = async (payload: {
+  id: string;
+  fullname: string;
+}): Promise<string> => {
+  const accessToken = jwt.sign(
+    payload,
+    process.env['ACCESS_SECRET'] as string,
+    {
+      expiresIn: '15m',
+    }
+  );
 
   return accessToken;
 };
 
-export const generateRefreshToken = async (payload: any): Promise<string> => {
-  const refreshToken = await jwt.signAsync(payload, {
-    secret: process.env['REFRESH_SECRET'],
-    expiresIn: '7d',
-  });
+export const generateRefreshToken = async (payload: {
+  id: string;
+  fullname: string;
+}): Promise<string> => {
+  const refreshToken = await jwt.sign(
+    payload,
+    process.env['REFRESH_SECRET'] as string,
+    { expiresIn: '7d' }
+  );
 
   return refreshToken;
 };
