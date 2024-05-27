@@ -12,27 +12,29 @@ import {
 
 export const login = async (request: z.infer<typeof loginRequestSchema>) => {
   try {
-    const user = await db.query.users
-      .findFirst({
-        where: eq(users.username, request.userName),
-        with: {
-          role: {
-            with: {
-              rolesToPermissions: {
-                with: {
-                  permission: true,
-                },
+    const user = await db.query.users.findFirst({
+      where: eq(users.username, request.userName),
+      with: {
+        role: {
+          with: {
+            rolesToPermissions: {
+              with: {
+                permission: true,
               },
             },
           },
         },
-      });
+      },
+    });
 
     if (!user) {
       throw Error('User tidak ditemukan');
     }
 
-    const isPasswordSame = await comparePassword(user.password, request.password);
+    const isPasswordSame = await comparePassword(
+      user.password,
+      request.password
+    );
 
     if (!isPasswordSame) {
       throw Error('Password tidak valid');
@@ -47,7 +49,7 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
         updatedAt: user.role.updatedAt,
         permissions: user.role.rolesToPermissions.map((rtp) => ({
           id: rtp.permission.id,
-          name: rtp.permission.name,
+          name: rtp.permission.key,
         })),
       },
       createdAt: user.createdAt,
