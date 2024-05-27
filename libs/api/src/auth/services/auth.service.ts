@@ -12,20 +12,22 @@ import {
 
 export const login = async (request: z.infer<typeof loginRequestSchema>) => {
   try {
-    const user = await db.query.users.findFirst({
-      where: eq(users.username, request.userName),
-      with: {
-        role: {
-          with: {
-            rolesToPermissions: {
-              with: {
-                permission: true,
+    const user = await db.query.users
+      .findMany({
+        where: eq(users.username, request.userName),
+        with: {
+          role: {
+            with: {
+              rolesToPermissions: {
+                with: {
+                  permission: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      })
+      .then((res) => res?.at(0));
 
     if (!user) {
       throw Error('User tidak ditemukan');
