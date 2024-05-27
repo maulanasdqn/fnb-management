@@ -13,7 +13,8 @@ export function permissionChecker<T>(arr1: T[], arr2: T[]): boolean {
   return longer?.some((element) => set.has(element));
 }
 
-export const isAuthenticated = tokenService.getAccessToken();
+
+export const isAuthenticated = !!tokenService.getAccessToken();
 
 export const logOut = () => {
   window.location.reload();

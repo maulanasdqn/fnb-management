@@ -9,17 +9,19 @@ export const ReactQueryProvider: FC<PropsWithChildren> = ({
   children,
 }): ReactElement => {
   const queryClient = new QueryClient();
-  const token = tokenService.getAccessToken();
   const trpcClient = trpc.createClient({
     links: [
       httpBatchLink({
         transformer: superjson,
         url: import.meta.env?.['VITE_TRPC_URL'] || 'http://localhost:3000/trpc',
         headers() {
+          const token = tokenService.getAccessToken();
+          console.log(token);
           return {
-            cookie: document.cookie,
+            cookie : document.cookie,
             Authorization: token ? `Bearer ${token}` : undefined,
-          };
+          }
+          
         },
       }),
     ],
