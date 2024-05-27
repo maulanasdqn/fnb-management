@@ -13,7 +13,7 @@ import {
 export const login = async (request: z.infer<typeof loginRequestSchema>) => {
   try {
     const user = await db.query.users
-      .findMany({
+      .findFirst({
         where: eq(users.username, request.userName),
         with: {
           role: {
@@ -26,14 +26,12 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
             },
           },
         },
-      })
-      .then((res) => res?.at(0));
-
+      });
     if (!user) {
       throw Error('User tidak ditemukan');
     }
 
-    const isPasswordSame = comparePassword(user.password, request.password);
+    const isPasswordSame = await comparePassword(user.password, request.password);
 
     if (!isPasswordSame) {
       throw Error('Password tidak valid');

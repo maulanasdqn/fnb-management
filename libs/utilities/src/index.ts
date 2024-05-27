@@ -23,10 +23,7 @@ export const logOut = () => {
 };
 
 export const pagePermission = (
-  permissions: Array<{
-    id: string;
-    name: string;
-  }>
+  permissions: Array<string>
 ) => {
   if (!isAuthenticated) {
     return redirect('/auth/login');
@@ -35,7 +32,7 @@ export const pagePermission = (
   if (
     !permissionChecker(
       permissions,
-      userService?.getUserData()?.role?.permissions
+      userService?.getUserData()?.role?.permissions?.map(val => val.name)
     )
   ) {
     return redirect('/permission-denied');

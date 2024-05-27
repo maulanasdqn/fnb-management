@@ -17,6 +17,8 @@ export const Sidebar: FC<{ menu: TSidebar[]; userData: TUser }> = (
   props
 ): ReactElement => {
   const { pathname } = useLocation();
+  const permissionData = userService.getUserData()?.role?.permissions?.map(val => val.name)
+  console.log(permissionData);
 
   const className = (url: string) =>
     clsx(
@@ -45,7 +47,7 @@ export const Sidebar: FC<{ menu: TSidebar[]; userData: TUser }> = (
           <Fragment key={key}>
             {permissionChecker(
               menu.permissions,
-              userService.getUserData()?.role?.permissions
+              userService.getUserData()?.role?.permissions?.map(val => val.name)
             ) && (
               <Link to={menu.path}>
                 <li className={className(menu.path)}>
