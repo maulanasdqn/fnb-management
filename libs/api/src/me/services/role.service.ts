@@ -18,7 +18,7 @@ export const findMany = async (
       },
     },
   });
-
+  
   const mappingData = data.map((role) => ({
     id: role.id,
     name: role.name,

@@ -27,6 +27,7 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
           },
         },
       });
+
     if (!user) {
       throw Error('User tidak ditemukan');
     }
