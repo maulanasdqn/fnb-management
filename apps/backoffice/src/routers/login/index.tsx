@@ -2,28 +2,37 @@ import { FC, ReactElement } from 'react';
 import { Button } from '@fms/atoms';
 import { ControlledFieldText } from '@fms/organisms';
 import { useForm } from 'react-hook-form';
-import { tokenService, userService } from '@fms/web-services';
+import {
+  tokenService,
+  useIsAuthenticated,
+  userService,
+} from '@fms/web-services';
 import { trpc } from '@fms/trpc-client';
 import { loginRequestSchema } from '@fms/entities';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 export const LoginPage: FC = (): ReactElement => {
-  const { control, handleSubmit } = useForm<z.infer<typeof loginRequestSchema>>(
-    {
-      resolver: zodResolver(loginRequestSchema),
-      defaultValues: {
-        userName: '',
-        password: '',
-      },
-    }
-  );
+  const [isAuthenticated, setIsAuthenticated] = useIsAuthenticated();
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<z.infer<typeof loginRequestSchema>>({
+    resolver: zodResolver(loginRequestSchema),
+    mode: 'all',
+    defaultValues: {
+      userName: '',
+      password: '',
+    },
+  });
 
-  const { mutate } = trpc.auth.login.useMutation();
+  const { mutate, isPending } = trpc.auth.login.useMutation();
 
   const onSubmit = handleSubmit((data) => {
     mutate(data, {
       onSuccess: (resp) => {
+        setIsAuthenticated(true);
         if (resp) {
           tokenService.setAccessToken(resp?.token?.accessToken);
           tokenService.setRefreshToken(resp?.token?.refreshToken);
@@ -59,7 +68,7 @@ export const LoginPage: FC = (): ReactElement => {
             label="Password"
             placeholder="Password"
           />
-          <Button type="submit" size="md">
+          <Button disabled={!isValid || isPending} type="submit" size="md">
             Login
           </Button>
         </section>
