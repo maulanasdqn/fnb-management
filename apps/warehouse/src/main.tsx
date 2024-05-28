@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router-dom';
 import { ReactQueryProvider } from '@fms/web-services';
 import { router } from './routers';
 import 'tailwindcss/tailwind.css';
+import { RecoilRoot } from 'recoil';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +13,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
     <ReactQueryProvider>
-      <RouterProvider router={router} />
+      <RecoilRoot>
+        <RouterProvider router={router} />
+      </RecoilRoot>
     </ReactQueryProvider>
   </StrictMode>
 );

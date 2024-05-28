@@ -17,6 +17,9 @@ export const Sidebar: FC<{ menu: TSidebar[]; userData: TUser }> = (
   props
 ): ReactElement => {
   const { pathname } = useLocation();
+  const userPermissions = userService
+    .getUserData()
+    ?.role?.permissions?.map((val) => val.name);
 
   const className = (url: string) =>
     clsx(
@@ -29,7 +32,7 @@ export const Sidebar: FC<{ menu: TSidebar[]; userData: TUser }> = (
   return (
     <aside
       className={
-        'min-h-screen h-full bg-white shadow-md w-1/6 flex flex-col p-4'
+        'min-h-screen h-full bg-white shadow-md w-1/4 flex flex-col p-4'
       }
     >
       <figure className="hidden md:flex w-full justify-center items-center bg-grey-50 p-2 rounded-lg shadow-sm flex-col gap-2">
@@ -43,10 +46,7 @@ export const Sidebar: FC<{ menu: TSidebar[]; userData: TUser }> = (
       <ul className="mt-6 flex flex-col gap-y-3 cursor-pointer w-full">
         {props.menu.map((menu, key) => (
           <Fragment key={key}>
-            {permissionChecker(
-              menu.permissions,
-              userService.getUserData()?.role?.permissions
-            ) && (
+            {permissionChecker(menu.permissions, userPermissions) && (
               <Link to={menu.path}>
                 <li className={className(menu.path)}>
                   <div className="w-6 h-6 items-center flex">{menu.icon}</div>

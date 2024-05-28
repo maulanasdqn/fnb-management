@@ -1,6 +1,8 @@
 import { redirect } from 'react-router-dom';
 import { tokenService, userService } from '@fms/web-services';
 import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { isAuthenticated as isBabi } from '@fms/web-services';
 
 export function permissionChecker<T>(arr1: T[], arr2: T[]): boolean {
   const [shorter, longer] =
@@ -13,7 +15,10 @@ export function permissionChecker<T>(arr1: T[], arr2: T[]): boolean {
   return longer?.some((element) => set.has(element));
 }
 
-export const isAuthenticated = tokenService.getAccessToken();
+export const isAuthenticated = (): boolean => {
+  const isAuth = useRecoilValue(isBabi);
+  return isAuth;
+};
 
 export const logOut = () => {
   window.location.reload();
@@ -22,12 +27,7 @@ export const logOut = () => {
   userService.removeUserData();
 };
 
-export const pagePermission = (
-  permissions: Array<{
-    id: string;
-    name: string;
-  }>
-) => {
+export const pagePermission = (permissions: Array<string>) => {
   if (!isAuthenticated) {
     return redirect('/auth/login');
   }
@@ -35,7 +35,7 @@ export const pagePermission = (
   if (
     !permissionChecker(
       permissions,
-      userService?.getUserData()?.role?.permissions
+      userService?.getUserData()?.role?.permissions?.map((val) => val.name)
     )
   ) {
     return redirect('/permission-denied');

@@ -1,5 +1,5 @@
 export const tokenService = {
-  getAccessToken: () => localStorage.getItem('accessToken'),
+  getAccessToken: () => localStorage.getItem('accessToken') || null,
   setAccessToken: (token: string) => localStorage.setItem('accessToken', token),
   removeAccessToken: () => localStorage.removeItem('accessToken'),
   getRefreshToken: () => localStorage.getItem('refreshToken'),
