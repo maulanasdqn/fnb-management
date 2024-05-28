@@ -13,7 +13,7 @@ import {
 export const login = async (request: z.infer<typeof loginRequestSchema>) => {
   try {
     const user = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.username, request.userName),
+      where: eq(users.username, request.userName),
       with: {
         role: {
           with: {
@@ -26,11 +26,15 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
         },
       },
     });
+
     if (!user) {
       throw Error('User tidak ditemukan');
     }
 
-    const isPasswordSame = comparePassword(user.password, request.password);
+    const isPasswordSame = await comparePassword(
+      user.password,
+      request.password
+    );
 
     if (!isPasswordSame) {
       throw Error('Password tidak valid');
@@ -43,12 +47,10 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
         name: user.role.name,
         createdAt: user.role.createdAt,
         updatedAt: user.role.updatedAt,
-        permissions: user.role.rolesToPermissions.flatMap((rtp) => {
-          return {
-            id: rtp.permission.id,
-            name: rtp.permission.name,
-          };
-        }),
+        permissions: user.role.rolesToPermissions.map((rtp) => ({
+          id: rtp.permission.id,
+          name: rtp.permission.key,
+        })),
       },
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,

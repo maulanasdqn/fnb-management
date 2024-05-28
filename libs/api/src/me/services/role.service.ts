@@ -18,17 +18,14 @@ export const findMany = async (
       },
     },
   });
-
+  
   const mappingData = data.map((role) => ({
     id: role.id,
     name: role.name,
-    permissions: role.rolesToPermissions.flatMap((rtp) => {
-      return {
-        id: rtp.permission.id,
-        name : rtp.permission.name
-      } 
-      
-    }),
+    permissions: role.rolesToPermissions.map((rtp) => ({
+      id: rtp.permission.id,
+      name: rtp.permission.name,
+    })),
   }));
 
   return {

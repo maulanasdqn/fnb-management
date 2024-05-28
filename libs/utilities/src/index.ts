@@ -13,7 +13,8 @@ export function permissionChecker<T>(arr1: T[], arr2: T[]): boolean {
   return longer?.some((element) => set.has(element));
 }
 
-export const isAuthenticated = tokenService.getAccessToken();
+
+export const isAuthenticated = !!tokenService.getAccessToken();
 
 export const logOut = () => {
   window.location.reload();
@@ -23,10 +24,7 @@ export const logOut = () => {
 };
 
 export const pagePermission = (
-  permissions: Array<{
-    id: string;
-    name: string;
-  }>
+  permissions: Array<string>
 ) => {
   if (!isAuthenticated) {
     return redirect('/auth/login');
@@ -35,7 +33,7 @@ export const pagePermission = (
   if (
     !permissionChecker(
       permissions,
-      userService?.getUserData()?.role?.permissions
+      userService?.getUserData()?.role?.permissions?.map(val => val.name)
     )
   ) {
     return redirect('/permission-denied');

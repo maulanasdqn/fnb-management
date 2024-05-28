@@ -1,13 +1,15 @@
 import * as argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
+import {config} from 'dotenv';
 
+config();
 export const encryptPassword = async (password: string): Promise<string> => {
   return await argon2.hash(password);
 };
 
 export const comparePassword = async (
-  password: string,
-  hash: string
+  hash: string,
+  password: string
 ): Promise<boolean> => {
   return await argon2.verify(hash, password);
 };
