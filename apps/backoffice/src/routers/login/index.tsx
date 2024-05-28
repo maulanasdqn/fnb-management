@@ -54,12 +54,12 @@ export const LoginPage: FC = (): ReactElement => {
     <div className="bg-grey-100 flex items-center justify-center w-full h-screen text-white">
       <form
         onSubmit={onSubmit}
-        className="bg-white shadow-sm rounded-lg p-6 md:w-1/3 w-1/2 h-1/2 flex-col justify-start flex"
+        className="bg-white shadow-sm rounded-lg p-6 md:w-1/3 w-1/2 h-2/3 flex-col justify-start flex"
       >
        <div className="flex flex-col gap-y-2">
           <h1 className="text-black text-3xl font-medium">Login Backoffice</h1>
           {errorMessage && (
-            <span className="text-error-500 bg-error-50 border border-error-500 rounded-lg p-4">
+            <span className="text-error-500 bg-error-50 border border-error-500 rounded-lg p-2 text-center">
               {errorMessage}
             </span>
           )}
