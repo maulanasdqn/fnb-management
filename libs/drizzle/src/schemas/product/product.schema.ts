@@ -9,14 +9,12 @@ import { users } from '../me';
 export const products = pgTable('products', {
   name: text('name').notNull(),
   productCategoryId: uuid('product_category_id')
-    .notNull()
     .references(() => productCategories.id),
   price: integer('price').notNull(),
   priceSelling: integer('price_selling').notNull(),
   image: text('image'),
   description: text('description'),
   recipeId: uuid('recipe_id')
-    .notNull()
     .references(() => recipes.id),
   createdBy: uuid('created_by').references(() => users.id),
   updatedBy: uuid('updated_by').references(() => users.id),
