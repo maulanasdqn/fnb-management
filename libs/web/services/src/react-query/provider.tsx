@@ -16,10 +16,9 @@ export const ReactQueryProvider: FC<PropsWithChildren> = ({
         url: import.meta.env?.['VITE_TRPC_URL'] || 'http://localhost:3000/trpc',
         headers() {
           const token = tokenService.getAccessToken();
-          console.log(token);
           return {
             cookie : document.cookie,
-            Authorization: token ? `Bearer ${token}` : undefined,
+            // Authorization: token ? `Bearer ${token}` : undefined,
           }
           
         },

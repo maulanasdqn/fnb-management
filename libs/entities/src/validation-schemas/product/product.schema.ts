@@ -20,10 +20,10 @@ export const productCreateRequestSchema = z.object({
   name: z.string(),
   price: z.number(),
   priceSelling: z.number(),
-  productCategoryId: z.string(),
+  productCategoryId: z.string().optional(),
   image: z.string().nullable(),
   description: z.string().optional().nullable(),
-  recipeId: z.string(),
+  recipeId: z.string().optional(),
   ...baseSchema.omit({ id: true }).shape,
 });
 
@@ -32,9 +32,9 @@ export const productUpdateRequestSchema = z.object({
   name: z.string(),
   price: z.number(),
   priceSelling: z.number(),
-  productCategoryId: z.string(),
+  productCategoryId: z.string().optional(),
   image: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
-  recipeId: z.string(),
+  recipeId: z.string().optional(),
   ...baseSchema.omit({ id: true }).shape,
 });

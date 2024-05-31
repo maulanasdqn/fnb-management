@@ -55,8 +55,10 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
     .select({
       id: products.id,
       name: products.name,
+      price : products.price,
       priceSelling: products.priceSelling,
       image: products.image,
+      productsCategoryId: products.productCategoryId,
       description: products.description,
       createdAt: products.createdAt,
       updatedAt: products.updatedAt,
@@ -74,10 +76,10 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
 export const create = async ({
   name,
   priceSelling,
-  productCategoryId,
+  // productCategoryId,
   image,
   price,
-  recipeId,
+  // recipeId,
   description,
 }: TProductCreateRequest): Promise<TProductSingleResponse> => {
   await db
@@ -86,10 +88,10 @@ export const create = async ({
       name,
       price,
       priceSelling,
-      productCategoryId,
+      // productCategoryId,
       image,
       description,
-      recipeId,
+      // recipeId,
     })
     .returning();
   return {
@@ -101,10 +103,10 @@ export const update = async ({
   id,
   name,
   priceSelling,
-  productCategoryId,
+  // productCategoryId,
   image,
   price,
-  recipeId,
+  // recipeId,
   description,
 }: TProductUpdateRequest) => {
   await db
@@ -113,10 +115,10 @@ export const update = async ({
       name,
       price,
       priceSelling,
-      productCategoryId,
+      // productCategoryId,
       image,
       description,
-      recipeId,
+      // recipeId,
     })
     .where(eq(products.id, id))
     .returning();

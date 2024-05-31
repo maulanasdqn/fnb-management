@@ -106,12 +106,12 @@ export const DataTable = <T extends Record<string, unknown>>(
               <tr key={row.id} className="hover:bg-gray-50">
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="p-4 border-b border-grey-100">
-                    <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-grey-900">
+                    <div className="block font-sans text-sm antialiased font-normal leading-normal text-blue-grey-900">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
-                    </p>
+                    </div>
                   </td>
                 ))}
               </tr>

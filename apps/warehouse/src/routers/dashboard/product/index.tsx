@@ -17,7 +17,6 @@ export const DashboardProduct: FC = (): ReactElement => {
   const { data, refetch } = trpc.product.findMany.useQuery({
     search: debounceValue || undefined,
   });
-  console.log(data);
 
   const { mutate } = trpc.product.delete.useMutation()
 
