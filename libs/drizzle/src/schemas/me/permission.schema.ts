@@ -1,6 +1,6 @@
 import { pgTable, text } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import { baseSchema } from '../base';
+import { baseSchema } from '../base/base.schema';
 import { rolesToPermissions } from './role.schema';
 
 export const permissions = pgTable('permissions', {

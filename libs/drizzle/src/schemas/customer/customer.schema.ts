@@ -1,7 +1,7 @@
 import { pgTable, text } from 'drizzle-orm/pg-core';
-import { baseSchema } from '../base';
 import { relations } from 'drizzle-orm';
 import { orders } from '../order/order.schema';
+import { baseSchema } from '../base/base.schema';
 
 export const customers = pgTable('customers', {
   name: text('name').notNull(),
@@ -9,6 +9,4 @@ export const customers = pgTable('customers', {
   ...baseSchema,
 });
 
-export const customersRelations = relations(customers, ({ many }) => ({
-  order: many(orders),
-}));
+export const customersRelations = relations(customers, ({ many }) => ({}));

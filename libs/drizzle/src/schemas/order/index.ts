@@ -1,2 +1,2 @@
-export * from './order-detail.index';
+export * from './order-detail.schema';
 export * from './order.schema';

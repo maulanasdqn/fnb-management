@@ -1,13 +1,13 @@
 import { pgTable, text } from 'drizzle-orm/pg-core';
-import { baseSchema } from '../base';
+import { baseSchema } from '../base/base.schema';
 import { relations } from 'drizzle-orm';
-import { items } from '../item/item.schema';
+import { ingredients } from '../ingredient/ingredient.schema';
 
 export const unitTypes = pgTable('unit_types', {
-  name: text('fullname').notNull(),
+  name: text('name').notNull(),
   ...baseSchema,
 });
 
-export const unitTypeRelations = relations(unitTypes, ({ many }) => ({
-  item: many(items),
+export const unitTypeRelations = relations(ingredients, ({ many }) => ({
+  ingredients: many(ingredients),
 }));
