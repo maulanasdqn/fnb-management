@@ -11,6 +11,6 @@ export * from './payment/payment.schema';
 export * from './place/place.schema';
 export * from './product/product.schema';
 export * from './product/product-category.schema';
-export * from './unit-type/unit-type.schema';
+export * from './unit/unit-type.schema';
 export * from './variant/variant.schema';
 export * from './variant/variant-option.schema';

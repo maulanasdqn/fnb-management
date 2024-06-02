@@ -4,7 +4,7 @@ import { variants } from './variant.schema';
 import { relations } from 'drizzle-orm';
 import { products } from '../product/product.schema';
 import { ingredients } from '../ingredient/ingredient.schema';
-import { unitTypes } from '../unit-type/unit-type.schema';
+import { unitTypes } from '../unit/unit-type.schema';
 
 export const variantOptions = pgTable('variant_options', {
   name: text('name').notNull(),

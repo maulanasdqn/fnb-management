@@ -1,6 +1,6 @@
 import { pgTable, text, uuid, integer } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base/base.schema';
-import { unitTypes } from '../unit-type/unit-type.schema';
+import { unitTypes } from '../unit/unit-type.schema';
 import { users } from '../me/user.schema';
 import { relations } from 'drizzle-orm';
 import { ingredientLogs } from './ingredient-log.schema';
