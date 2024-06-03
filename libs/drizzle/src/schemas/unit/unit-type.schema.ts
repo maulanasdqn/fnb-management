@@ -8,6 +8,6 @@ export const unitTypes = pgTable('unit_types', {
   ...baseSchema,
 });
 
-export const unitTypeRelations = relations(ingredients, ({ many }) => ({
+export const unitTypeRelations = relations(unitTypes, ({ many }) => ({
   ingredients: many(ingredients),
 }));
