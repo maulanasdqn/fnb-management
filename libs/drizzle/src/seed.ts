@@ -5,6 +5,7 @@ import * as schema from './schemas';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { seedProductCategory } from './seeders/product-category.seeder';
 import { seedVariant } from './seeders/variant.seeder';
+import { seedProduct } from './seeders/product.seeder';
 const dbUrl = process.env['DATABASE_URL'] as string;
 const dbQueryClient = new Pool({
   connectionString: dbUrl,
@@ -20,6 +21,7 @@ async function main() {
     await seedSuperAdmin(db);
     await seedProductCategory(db);
     await seedVariant<typeof schema>(db);
+    await seedProduct<typeof schema>(db);
   } catch (error) {
     console.error(error);
   }

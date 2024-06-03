@@ -2,7 +2,7 @@ import { integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base/base.schema';
 import { variants } from './variant.schema';
 import { relations } from 'drizzle-orm';
-import { productVarians } from '../product/product.schema';
+import { productVariants } from '../product/product.schema';
 import { ingredients } from '../ingredient/ingredient.schema';
 import { unitTypes } from '../unit/unit-type.schema';
 
@@ -24,6 +24,6 @@ export const variantOptionRelations = relations(
       fields: [variantOptions.variantId],
       references: [variants.id],
     }),
-    productVarians: many(productVarians),
+    productVarians: many(productVariants),
   })
 );

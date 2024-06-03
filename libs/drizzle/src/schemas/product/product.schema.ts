@@ -7,6 +7,7 @@ import { orderDetails } from '../order/order-detail.schema';
 import { ingredients } from '../ingredient/ingredient.schema';
 import { unitTypes } from '../unit/unit-type.schema';
 import { variants } from '../variant/variant.schema';
+import { variantOptions } from '../variant/variant-option.schema';
 
 export const products = pgTable('products', {
   name: text('name').notNull(),
@@ -29,22 +30,25 @@ export const productIngredients = pgTable('product_ingredients', {
   ...baseSchema,
 });
 
-export const productVarians = pgTable('product_variants', {
+export const productVariants = pgTable('product_variants', {
   productId: uuid('product_id').references(() => products.id),
-  variantId: uuid('variant_id').references(() => variants.id),
+  variantOptionId: uuid('variant_id').references(() => variantOptions.id),
   ...baseSchema,
 });
 
-export const productVariantRelations = relations(productVarians, ({ one }) => ({
-  product: one(products, {
-    fields: [productVarians.productId],
-    references: [products.id],
-  }),
-  variant: one(variants, {
-    fields: [productVarians.variantId],
-    references: [variants.id],
-  }),
-}));
+export const productVariantRelations = relations(
+  productVariants,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [productVariants.productId],
+      references: [products.id],
+    }),
+    variant: one(variantOptions, {
+      fields: [productVariants.variantOptionId],
+      references: [variantOptions.id],
+    }),
+  })
+);
 
 export const productIngredientRelations = relations(
   productIngredients,
