@@ -17,7 +17,7 @@ async function main() {
   try {
     await seedPermission(db);
     await seedSuperAdmin(db);
-    // await seedProductCategory(db);
+    await seedProductCategory(db);
   } catch (error) {
     console.error(error);
   }
