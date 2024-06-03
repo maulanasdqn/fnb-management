@@ -5,6 +5,8 @@ import { productCategories } from './product-category.schema';
 import { users } from '../me/user.schema';
 import { variantOptions } from '../variant/variant-option.schema';
 import { orderDetails } from '../order/order-detail.schema';
+import { ingredients } from '../ingredient/ingredient.schema';
+import { unitTypes } from '../unit/unit-type.schema';
 
 export const products = pgTable('products', {
   name: text('name').notNull(),
@@ -23,6 +25,32 @@ export const products = pgTable('products', {
   ...baseSchema,
 });
 
+export const productIngredients = pgTable('product_ingredients', {
+  productId: uuid('product_id').references(() => products.id),
+  ingredientId: uuid('ingredient_id').references(() => ingredients.id),
+  unitTypeId: uuid('unit_type_id').references(() => unitTypes.id),
+  amount: integer('amount').notNull(),
+  ...baseSchema,
+});
+
+export const productIngredientRelations = relations(
+  productIngredients,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [productIngredients.productId],
+      references: [products.id],
+    }),
+    ingredient: one(ingredients, {
+      fields: [productIngredients.ingredientId],
+      references: [ingredients.id],
+    }),
+    unitType: one(unitTypes, {
+      fields: [productIngredients.unitTypeId],
+      references: [unitTypes.id],
+    }),
+  })
+);
+
 export const productRelations = relations(products, ({ one, many }) => ({
   productCategory: one(productCategories, {
     fields: [products.productCategoryId],
@@ -39,4 +67,5 @@ export const productRelations = relations(products, ({ one, many }) => ({
     references: [users.id],
     relationName: 'updated_by',
   }),
+  productIngredients: many(productIngredients),
 }));
