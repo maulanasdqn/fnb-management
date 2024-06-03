@@ -3,6 +3,7 @@ import { seedSuperAdmin } from './seeders/user.seeder';
 import { Pool } from 'pg';
 import * as schema from './schemas';
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { seedProductCategory } from './seeders/product-category.seeder';
 const dbUrl = process.env['DATABASE_URL'] as string;
 const dbQueryClient = new Pool({
   connectionString: dbUrl,
@@ -16,6 +17,7 @@ async function main() {
   try {
     await seedPermission(db);
     await seedSuperAdmin(db);
+    // await seedProductCategory(db);
   } catch (error) {
     console.error(error);
   }
