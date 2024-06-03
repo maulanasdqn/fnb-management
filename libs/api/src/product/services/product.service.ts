@@ -3,8 +3,8 @@ import {
   TProductCreateRequest,
   TProductUpdateRequest,
   TProductResponse,
-  TProductSingleResponse,
   TQueryParams,
+  TProductSingleResponse,
 } from '@fms/entities';
 import { ilike, asc, eq } from 'drizzle-orm';
 
@@ -22,6 +22,8 @@ export const findMany = async (
       priceSelling: products.priceSelling,
       image: products.image,
       description: products.description,
+      createdAt: products.createdAt,
+      updatedAt: products.updatedAt,
     })
     .from(products)
     .where(ilike(products.name, `%${params?.search || ''}%`))
@@ -55,20 +57,17 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
     .select({
       id: products.id,
       name: products.name,
-      price : products.price,
       priceSelling: products.priceSelling,
       image: products.image,
       productsCategoryId: products.productCategoryId,
       description: products.description,
       createdAt: products.createdAt,
       updatedAt: products.updatedAt,
-      deletedAt: products.deletedAt,
     })
     .from(products)
     .where(eq(products.id, id))
     .then((data) => data?.at(0));
   return {
-    message: 'Success',
     data,
   };
 };
@@ -78,20 +77,16 @@ export const create = async ({
   priceSelling,
   // productCategoryId,
   image,
-  price,
-  // recipeId,
   description,
 }: TProductCreateRequest): Promise<TProductSingleResponse> => {
   await db
     .insert(products)
     .values({
       name,
-      price,
       priceSelling,
       // productCategoryId,
       image,
       description,
-      // recipeId,
     })
     .returning();
   return {
@@ -103,24 +98,18 @@ export const update = async ({
   id,
   name,
   priceSelling,
-  // productCategoryId,
   image,
-  price,
-  // recipeId,
   description,
 }: TProductUpdateRequest) => {
   await db
     .update(products)
     .set({
       name,
-      price,
       priceSelling,
-      // productCategoryId,
       image,
       description,
-      // recipeId,
     })
-    .where(eq(products.id, id))
+    .where(eq(products.id, id as string))
     .returning();
   return {
     message: 'Update Product Success',

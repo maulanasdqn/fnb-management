@@ -10,6 +10,7 @@ import {
   recipeController,
   unitTypeController,
   permissionController,
+  productCategoryController,
 } from '@fms/api-libs';
 
 export const appRouter = router({
@@ -20,6 +21,7 @@ export const appRouter = router({
   item: itemController,
   order: orderController,
   product: productController,
+  productCategory: productCategoryController,
   purchase: purchaseController,
   recipe: recipeController,
   unitType: unitTypeController,

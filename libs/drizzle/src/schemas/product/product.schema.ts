@@ -13,7 +13,6 @@ export const products = pgTable('products', {
   productCategoryId: uuid('product_category_id').references(
     () => productCategories.id
   ),
-  price: integer('price').notNull(),
   priceSelling: integer('price_selling').notNull(),
   image: text('image'),
   description: text('description'),
