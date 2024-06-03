@@ -3,10 +3,10 @@ import { relations } from 'drizzle-orm';
 import { baseSchema } from '../base/base.schema';
 import { productCategories } from './product-category.schema';
 import { users } from '../me/user.schema';
-import { variantOptions } from '../variant/variant-option.schema';
 import { orderDetails } from '../order/order-detail.schema';
 import { ingredients } from '../ingredient/ingredient.schema';
 import { unitTypes } from '../unit/unit-type.schema';
+import { variants } from '../variant/variant.schema';
 
 export const products = pgTable('products', {
   name: text('name').notNull(),
@@ -16,9 +16,6 @@ export const products = pgTable('products', {
   priceSelling: integer('price_selling').notNull(),
   image: text('image'),
   description: text('description'),
-  variantOptionId: uuid('variant_option_id').references(
-    () => variantOptions.id
-  ),
   createdBy: uuid('created_by').references(() => users.id),
   updatedBy: uuid('updated_by').references(() => users.id),
   ...baseSchema,
@@ -31,6 +28,23 @@ export const productIngredients = pgTable('product_ingredients', {
   amount: integer('amount').notNull(),
   ...baseSchema,
 });
+
+export const productVarians = pgTable('product_variants', {
+  productId: uuid('product_id').references(() => products.id),
+  variantId: uuid('variant_id').references(() => variants.id),
+  ...baseSchema,
+});
+
+export const productVariantRelations = relations(productVarians, ({ one }) => ({
+  product: one(products, {
+    fields: [productVarians.productId],
+    references: [products.id],
+  }),
+  variant: one(variants, {
+    fields: [productVarians.variantId],
+    references: [variants.id],
+  }),
+}));
 
 export const productIngredientRelations = relations(
   productIngredients,

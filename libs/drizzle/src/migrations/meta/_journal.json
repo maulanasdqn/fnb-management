@@ -8,6 +8,13 @@
       "when": 1717433550681,
       "tag": "0000_awesome_barracuda",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1717434574386,
+      "tag": "0001_left_synch",
+      "breakpoints": true
     }
   ]
 }
