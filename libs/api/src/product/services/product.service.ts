@@ -75,7 +75,7 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
 export const create = async ({
   name,
   priceSelling,
-  // productCategoryId,
+  productCategoryId,
   image,
   description,
 }: TProductCreateRequest): Promise<TProductSingleResponse> => {
@@ -84,7 +84,7 @@ export const create = async ({
     .values({
       name,
       priceSelling,
-      // productCategoryId,
+      productCategoryId,
       image,
       description,
     })
