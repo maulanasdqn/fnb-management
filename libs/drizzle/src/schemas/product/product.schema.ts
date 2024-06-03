@@ -32,7 +32,9 @@ export const productIngredients = pgTable('product_ingredients', {
 
 export const productVariants = pgTable('product_variants', {
   productId: uuid('product_id').references(() => products.id),
-  variantOptionId: uuid('variant_id').references(() => variantOptions.id),
+  variantOptionId: uuid('variant_option_id').references(
+    () => variantOptions.id
+  ),
   ...baseSchema,
 });
 

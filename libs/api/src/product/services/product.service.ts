@@ -1,4 +1,11 @@
-import { db, products } from '@fms/drizzle';
+import {
+  db,
+  products,
+  productCategories,
+  productVariants,
+  variantOptions,
+  variants,
+} from '@fms/drizzle';
 import {
   TProductCreateRequest,
   TProductUpdateRequest,
@@ -59,14 +66,40 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
       name: products.name,
       priceSelling: products.priceSelling,
       image: products.image,
-      productsCategoryId: products.productCategoryId,
+      category: {
+        id: productCategories.id,
+        name: productCategories.name,
+      },
       description: products.description,
       createdAt: products.createdAt,
       updatedAt: products.updatedAt,
     })
     .from(products)
+    .leftJoin(
+      productCategories,
+      eq(productCategories.id, products.productCategoryId)
+    )
     .where(eq(products.id, id))
     .then((data) => data?.at(0));
+
+  const variantProduct = await db
+    .select({
+      id: variants.id,
+      name: variants.name,
+      option: {
+        id: variantOptions.id,
+        name: variantOptions.name,
+      },
+    })
+    .from(variants)
+    .leftJoin(variantOptions, eq(variantOptions.variantId, variants.id))
+    .leftJoin(
+      productVariants,
+      eq(productVariants.variantOptionId, variantOptions.id)
+    )
+    .leftJoin(products, eq(products.id, productVariants.productId))
+    .where(eq(productVariants.productId, id));
+
   return {
     data,
   };

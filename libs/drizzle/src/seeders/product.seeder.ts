@@ -66,14 +66,14 @@ export const seedProduct = async <T extends Record<string, unknown>>(
       const variantLatte = variantOptions.map((el) => {
         return {
           productId: createLatte.id,
-          variantId: el.id,
+          variantOptionId: el.id,
         };
       });
 
       const variantCoffeeMilk = variantOptions.map((el) => {
         return {
           productId: createCoffeeMilk.id,
-          variantId: el.id,
+          variantOptionId: el.id,
         };
       });
 

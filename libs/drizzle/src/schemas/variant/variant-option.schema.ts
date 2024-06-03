@@ -24,6 +24,6 @@ export const variantOptionRelations = relations(
       fields: [variantOptions.variantId],
       references: [variants.id],
     }),
-    productVarians: many(productVariants),
+    productVariants: many(productVariants),
   })
 );

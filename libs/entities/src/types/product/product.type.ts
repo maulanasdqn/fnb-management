@@ -7,6 +7,14 @@ export const productSchema = z.object({
   priceSelling: z.number(),
   image: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+  category: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .nullable()
+    .optional(),
+
   ...baseSchema.shape,
 });
 
