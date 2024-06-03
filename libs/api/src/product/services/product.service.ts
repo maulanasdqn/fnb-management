@@ -1,10 +1,17 @@
-import { db, products } from '@fms/drizzle';
+import {
+  db,
+  products,
+  productCategories,
+  productVariants,
+  variantOptions,
+  variants,
+} from '@fms/drizzle';
 import {
   TProductCreateRequest,
   TProductUpdateRequest,
   TProductResponse,
-  TProductSingleResponse,
   TQueryParams,
+  TProductSingleResponse,
 } from '@fms/entities';
 import { ilike, asc, eq } from 'drizzle-orm';
 
@@ -22,6 +29,8 @@ export const findMany = async (
       priceSelling: products.priceSelling,
       image: products.image,
       description: products.description,
+      createdAt: products.createdAt,
+      updatedAt: products.updatedAt,
     })
     .from(products)
     .where(ilike(products.name, `%${params?.search || ''}%`))
@@ -55,20 +64,43 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
     .select({
       id: products.id,
       name: products.name,
-      price : products.price,
       priceSelling: products.priceSelling,
       image: products.image,
-      productsCategoryId: products.productCategoryId,
+      category: {
+        id: productCategories.id,
+        name: productCategories.name,
+      },
       description: products.description,
       createdAt: products.createdAt,
       updatedAt: products.updatedAt,
-      deletedAt: products.deletedAt,
     })
     .from(products)
+    .leftJoin(
+      productCategories,
+      eq(productCategories.id, products.productCategoryId)
+    )
     .where(eq(products.id, id))
     .then((data) => data?.at(0));
+
+  const variantProduct = await db
+    .select({
+      id: variants.id,
+      name: variants.name,
+      option: {
+        id: variantOptions.id,
+        name: variantOptions.name,
+      },
+    })
+    .from(variants)
+    .leftJoin(variantOptions, eq(variantOptions.variantId, variants.id))
+    .leftJoin(
+      productVariants,
+      eq(productVariants.variantOptionId, variantOptions.id)
+    )
+    .leftJoin(products, eq(products.id, productVariants.productId))
+    .where(eq(productVariants.productId, id));
+
   return {
-    message: 'Success',
     data,
   };
 };
@@ -76,22 +108,18 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
 export const create = async ({
   name,
   priceSelling,
-  // productCategoryId,
+  productCategoryId,
   image,
-  price,
-  // recipeId,
   description,
 }: TProductCreateRequest): Promise<TProductSingleResponse> => {
   await db
     .insert(products)
     .values({
       name,
-      price,
       priceSelling,
-      // productCategoryId,
+      productCategoryId,
       image,
       description,
-      // recipeId,
     })
     .returning();
   return {
@@ -103,24 +131,18 @@ export const update = async ({
   id,
   name,
   priceSelling,
-  // productCategoryId,
   image,
-  price,
-  // recipeId,
   description,
 }: TProductUpdateRequest) => {
   await db
     .update(products)
     .set({
       name,
-      price,
       priceSelling,
-      // productCategoryId,
       image,
       description,
-      // recipeId,
     })
-    .where(eq(products.id, id))
+    .where(eq(products.id, id as string))
     .returning();
   return {
     message: 'Update Product Success',

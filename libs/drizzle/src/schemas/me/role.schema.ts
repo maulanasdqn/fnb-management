@@ -1,7 +1,7 @@
 import { users } from './user.schema';
 import { pgTable, primaryKey, text, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import { baseSchema } from '../base';
+import { baseSchema } from '../base/base.schema';
 import { permissions } from './permission.schema';
 
 export const roles = pgTable('roles', {
