@@ -1,6 +1,6 @@
 {
-  "id": "d4da32dc-13c6-43dd-acce-e660727346e0",
-  "prevId": "a7d96627-fa30-4228-83c0-1508d7e78f60",
+  "id": "d8e376ef-c9f4-4da3-a7fe-686588cdab03",
+  "prevId": "c51764a2-676e-4f9b-8a36-a859e74d1354",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -861,8 +861,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "variant_id": {
-          "name": "variant_id",
+        "variant_option_id": {
+          "name": "variant_option_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
@@ -904,12 +904,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "product_variants_variant_id_variants_id_fk": {
-          "name": "product_variants_variant_id_variants_id_fk",
+        "product_variants_variant_option_id_variant_options_id_fk": {
+          "name": "product_variants_variant_option_id_variant_options_id_fk",
           "tableFrom": "product_variants",
-          "tableTo": "variants",
+          "tableTo": "variant_options",
           "columnsFrom": [
-            "variant_id"
+            "variant_option_id"
           ],
           "columnsTo": [
             "id"

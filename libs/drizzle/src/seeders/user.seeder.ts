@@ -23,8 +23,8 @@ export const seedSuperAdmin = async (db: any) => {
         name: RoleEnum.SuperAdmin,
       })
       .returning({ id: schema.roles.id });
-    
-    const roles = permissions.map((permission: { id: string; }) => ({
+
+    const roles = permissions.map((permission: { id: string }) => ({
       roleId: createRoleSuperAdmin.id,
       permissionId: permission.id,
     }));
@@ -33,7 +33,7 @@ export const seedSuperAdmin = async (db: any) => {
     await db.insert(schema.rolesToPermissions).values(roles);
 
     const hashedPassword = await encryptPassword('admin');
-    
+
     console.log('Creating Super Admin user... 🚀');
     await db.insert(schema.users).values({
       fullname: 'admin1',

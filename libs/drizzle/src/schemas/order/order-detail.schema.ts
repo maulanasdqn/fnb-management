@@ -1,8 +1,8 @@
 import { integer, pgTable, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import { baseSchema } from '../base';
 import { products } from '../product/product.schema';
 import { orders } from './order.schema';
+import { baseSchema } from '../base/base.schema';
 
 export const orderDetails = pgTable('order_details', {
   productId: uuid('product_id')
