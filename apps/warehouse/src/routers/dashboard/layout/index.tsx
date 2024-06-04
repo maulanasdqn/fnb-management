@@ -55,12 +55,17 @@ export const DashboardLayout: FC = (): ReactElement => {
       path: '/dashboard/role',
       permissions: [PERMISSION_ROLE.READ_ROLE],
     },
+   
   ];
   return (
-    <div className="flex gap-x-4 bg-grey-50 w-full">
+    <div className="flex bg-grey-50 h-screen overflow-hidden">
       <Sidebar userData={userService.getUserData()} menu={sidebarMenu} />
-      <div className="p-6 w-full">
-        <Outlet />
+      <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+        <div className="max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+          <main>
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   );

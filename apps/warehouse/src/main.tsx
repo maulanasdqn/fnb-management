@@ -5,7 +5,7 @@ import { ReactQueryProvider } from '@fms/web-services';
 import { router } from './routers';
 import 'tailwindcss/tailwind.css';
 import { RecoilRoot } from 'recoil';
-
+import '../global.css';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
