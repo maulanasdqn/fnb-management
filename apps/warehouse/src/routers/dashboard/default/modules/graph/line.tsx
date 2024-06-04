@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { FC, ReactElement } from 'react';
 import {
   LineChart,
@@ -30,11 +30,16 @@ const CustomToolTip = ({
       ))}
     </div>
   ) : null;
-
-const LineGraphMemoized = React.memo(
-  ({ data }: { data: typeof data }): ReactElement => (
-    <section className="w-full h-72  bg-white rounded bg-blur bg-opacity-25 border border-white border-opacity-25 shadow-md">
-      <ResponsiveContainer width={'100%'} height={'100%'} aspect={2 / 1}>
+type TDataLineGraph = {
+  name: string;
+  kopiSusu: number;
+  kopiTeh: number;
+  kopiCappucino: number;
+}
+const LineGraphMemoized = memo(
+  ({ data }: { data: TDataLineGraph[]}): ReactElement => (
+    
+      <ResponsiveContainer width={'100%'} height={300}>
         <LineChart
           width={400}
           height={400}
@@ -73,12 +78,11 @@ const LineGraphMemoized = React.memo(
           />
         </LineChart>
       </ResponsiveContainer>
-    </section>
   )
 );
 
-export const LineGraph: FC = React.memo((): ReactElement => {
-  const data = React.useMemo(
+export const LineGraph: FC = memo((): ReactElement => {
+  const data = useMemo(
     () => [
       { name: 'Senin', kopiSusu: 40, kopiTeh: 20, kopiCappucino: 30 },
       { name: 'Selasa', kopiSusu: 30, kopiTeh: 10, kopiCappucino: 20 },
