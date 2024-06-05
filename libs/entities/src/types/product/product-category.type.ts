@@ -1,5 +1,4 @@
-import { baseSchema } from '../../validation-schemas';
-import { TBaseResponse } from '../common';
+import { baseSchema, TBaseResponse } from '../common';
 
 import { z } from 'zod';
 

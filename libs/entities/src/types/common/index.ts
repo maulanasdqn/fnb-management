@@ -9,11 +9,50 @@ import type {
 } from 'react';
 import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import { AxiosError } from 'axios';
-import { z } from 'zod';
-import {
-  metaResponseSchema,
-  queryParamsSchema,
-} from '../../validation-schemas';
+import { z, ZodTypeAny } from 'zod';
+
+export const baseSchema = z.object({
+  id: z.string().optional().nullable(),
+  createdAt: z.coerce.date().optional().nullable(),
+  updatedAt: z.coerce.date().optional().nullable(),
+});
+
+export const metaResponseSchema = z.object({
+  page: z.number().optional(),
+  perPage: z.number().optional(),
+  totalPage: z.number().optional(),
+  total: z.number().optional(),
+  prevPage: z.number().optional().nullable(),
+  nextPage: z.number().optional().nullable(),
+});
+
+export const queryParamsSchema = z
+  .object({
+    id: z.string().optional(),
+    search: z.string().optional(),
+  })
+  .extend(metaResponseSchema.pick({ page: true, perPage: true }).shape)
+  .optional();
+
+export const dataResponseSchema = <T extends ZodTypeAny>(data: T) =>
+  z.object({
+    message: z.string().optional(),
+    data: z.array(data).optional(),
+    meta: metaResponseSchema.optional(),
+  });
+
+export const dataSingleResponseSchema = <T extends ZodTypeAny>(data: T) =>
+  z.object({
+    message: z.string().optional(),
+    data: z.object({ ...(data as object) }).optional(),
+  });
+
+export const responseSchema = <T extends ZodTypeAny>(data: T) =>
+  z.object({
+    message: z.string().optional(),
+    data: z.array(data).optional(),
+    meta: metaResponseSchema.optional(),
+  });
 
 export type TQueryParams = z.infer<typeof queryParamsSchema>;
 
