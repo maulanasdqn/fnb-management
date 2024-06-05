@@ -10,14 +10,14 @@ import { Link } from 'react-router-dom';
 export const DashboardRole: FC = (): ReactElement => {
   const [debounceValue, setDebounceValue] = useState<string>('');
   const [search, setSearch] = useState<string>('');
-  // const {data} = trpc.role.findMany.useQuery({
-  //   search: debounceValue || undefined
-  // })
+  const {data} = trpc.role.findMany.useQuery({
+    search: debounceValue || undefined
+  })
 
-  const data: TRole[] = [
-    { id: '1', name: 'super admin', permissions: ['edit', 'create', 'delete','read'], createdAt: new Date() },
-    { id: '2', name: 'admin', permissions: ['read'], createdAt: new Date() },
-  ];
+  // const data: TRole[] = [
+  //   { id: '1', name: 'super admin', permissions: ['edit', 'create', 'delete','read'], createdAt: new Date() },
+  //   { id: '2', name: 'admin', permissions: ['read'], createdAt: new Date() },
+  // ];
   useDebounce(() => {
     setDebounceValue(search);
   }, 500);
@@ -38,10 +38,10 @@ export const DashboardRole: FC = (): ReactElement => {
       accessorKey: 'name',
     },
 
-    {
-      header: 'Permissions',
-      accessorKey: 'permissions',
-    },
+    // {
+    //   header: 'Permissions',
+    //   accessorKey: 'permissions',
+    // },
 
     {
       header: 'Action',
@@ -62,7 +62,6 @@ export const DashboardRole: FC = (): ReactElement => {
       },
     },
   ];
-  console.log(data);
   return (
     <section className="flex flex-col gap-y-4">
       <div className="flex flex-col gap-y-2 w-full">
@@ -71,11 +70,11 @@ export const DashboardRole: FC = (): ReactElement => {
       </div>
       <div className="w-full bg-white rounded-md p-4 shadow-md h-auto">
         <DataTable
-          data={data || []}
+          data={data?.data || []}
           columns={columns}
           handleSearch={(e) => setSearch(e.target.value)}
           createLink="create"
-          createLabel="+ Add Role"
+          createLabel="+ Tambah Role"
         />
       </div>
     </section>

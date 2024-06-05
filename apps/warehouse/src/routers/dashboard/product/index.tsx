@@ -60,7 +60,7 @@ export const DashboardProduct: FC = (): ReactElement => {
               </Button>
             </Link>
             <Button variant={'error'} title="Delete" onClick={()=> {
-              mutate({ id: row.original.id}, {
+              mutate({ id: row?.original?.id as string}, {
                 onSuccess: () => {
                   refetch()
                 }
@@ -83,7 +83,7 @@ export const DashboardProduct: FC = (): ReactElement => {
           columns={columns}
           handleSearch={(e) => setSearch(e.target.value)}
           createLink='create'
-          createLabel='+ Add Produk'
+          createLabel='+ Tambah Produk'
           searchBox
         />
       </div>

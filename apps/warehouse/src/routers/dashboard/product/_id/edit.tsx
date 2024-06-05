@@ -27,7 +27,6 @@ export const DashboardProductEdit: FC = (): ReactElement => {
   ];
   useEffect(() => {
     reset(data?.data as TProductUpdateRequest);
-    console.log(data);
   }, [data, reset]);
 
   const category = [
@@ -42,7 +41,7 @@ export const DashboardProductEdit: FC = (): ReactElement => {
       id: data?.id,
       name: data?.name,
       priceSelling: Number(data?.priceSelling),
-      price:Number(data?.price),
+     
       productCategoryId: data?.productCategoryId,
       description: data?.description,
     },
@@ -66,7 +65,7 @@ export const DashboardProductEdit: FC = (): ReactElement => {
         </h1>
         <Breadcrumbs items={breadcrumbsItem} />
       </div>
-      <div className="flex items-center justify-center w-full h-full">
+      <div className="flex items-center justify-center w-full h-full mt-16">
         <form onSubmit={onFormSubmit} className="w-full">
           <div className="grid grid-cols-2 gap-4 w-5/6 mx-auto">
             <div className="col-span-2">
@@ -86,7 +85,7 @@ export const DashboardProductEdit: FC = (): ReactElement => {
               name="name"
               control={control}
             />
-            <ControlledFieldText
+            {/* <ControlledFieldText
               type="number"
               status={errors.price ? 'error' : 'default'}
               message={errors.price?.message}
@@ -94,7 +93,7 @@ export const DashboardProductEdit: FC = (): ReactElement => {
               name="price"
               control={control}
         
-            />
+            /> */}
             <ControlledFieldText
               type="number"
               status={errors.priceSelling ? 'error' : 'default'}
