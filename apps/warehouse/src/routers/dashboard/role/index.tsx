@@ -71,7 +71,7 @@ export const DashboardRole: FC = (): ReactElement => {
       <div className="w-full bg-white rounded-md p-4 shadow-md h-auto">
         <DataTable
           data={data?.data || []}
-          columns={columns}
+          columns={columns as TRole[]}
           handleSearch={(e) => setSearch(e.target.value)}
           createLink="create"
           createLabel="+ Tambah Role"
