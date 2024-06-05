@@ -14,10 +14,6 @@ export const DashboardRole: FC = (): ReactElement => {
     search: debounceValue || undefined
   })
 
-  // const data: TRole[] = [
-  //   { id: '1', name: 'super admin', permissions: ['edit', 'create', 'delete','read'], createdAt: new Date() },
-  //   { id: '2', name: 'admin', permissions: ['read'], createdAt: new Date() },
-  // ];
   useDebounce(() => {
     setDebounceValue(search);
   }, 500);
@@ -37,11 +33,6 @@ export const DashboardRole: FC = (): ReactElement => {
       header: 'Name',
       accessorKey: 'name',
     },
-
-    // {
-    //   header: 'Permissions',
-    //   accessorKey: 'permissions',
-    // },
 
     {
       header: 'Action',
