@@ -1,4 +1,12 @@
+import { z } from 'zod';
 import { TBase, TBaseResponse } from '../common';
+
+export const roleResponseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  createdAt: z.date().nullable(),
+  updatedAt: z.date().nullable(),
+});
 
 export type TRole = TBase & {
   id: string;
