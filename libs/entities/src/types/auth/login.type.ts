@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { roleSchema, userSchema } from '../me';
 
 export const loginRequestSchema = z.object({
   userName: z.string().min(1, 'Please enter your username'),
@@ -6,8 +7,15 @@ export const loginRequestSchema = z.object({
 });
 
 export const loginResponseSchema = z.object({
-  accessToken: z.string(),
-  refreshToken: z.string(),
+  user: z.object({
+    ...userSchema.shape,
+    role: roleSchema,
+  }),
+  token: z.object({
+    accessToken: z.string(),
+    refreshToken: z.string(),
+  }),
 });
 
 export type TLoginRequest = z.infer<typeof loginRequestSchema>;
+export type TLoginResponse = z.infer<typeof loginResponseSchema>;

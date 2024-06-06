@@ -1,5 +1,10 @@
 import { db, users } from '@fms/drizzle';
-import { loginRequestSchema, TUser } from '@fms/entities';
+import {
+  loginRequestSchema,
+  TLoginRequest,
+  TLoginResponse,
+  TUser,
+} from '@fms/entities';
 import { TRPCError } from '@trpc/server';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
@@ -10,7 +15,9 @@ import {
 } from '../../common';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 
-export const login = async (request: z.infer<typeof loginRequestSchema>) => {
+export const login = async (
+  request: TLoginRequest
+): Promise<TLoginResponse> => {
   try {
     const user = await db.query.users.findFirst({
       where: eq(users.username, request.userName),

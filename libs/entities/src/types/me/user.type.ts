@@ -4,7 +4,7 @@ import { roleSchema } from './role.type';
 
 export const userSchema = z.object({
   fullname: z.string(),
-  username: z.string(),
+  username: z.string().optional(),
   avatar: z.string().optional(),
   password: z.string().optional(),
   role: roleSchema,
