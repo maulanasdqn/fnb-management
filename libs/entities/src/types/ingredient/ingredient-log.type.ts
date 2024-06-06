@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { baseSchema } from '../common';
+import { baseSchema, TBaseResponse } from '../common';
 
 export const ingredientLogSchema = z.object({
   ingredient: z.object({
@@ -11,3 +11,7 @@ export const ingredientLogSchema = z.object({
   amountCurrent: z.number(),
   ...baseSchema.shape,
 });
+
+export type TIngredientLog = z.infer<typeof ingredientLogSchema>;
+export type TIngredientLogSingleResponse = TBaseResponse<TIngredientLog>;
+export type TIngredientLogResponse = TBaseResponse<TIngredientLog[]>;
