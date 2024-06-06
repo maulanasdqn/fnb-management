@@ -1,28 +1,28 @@
-import { TBase, TBaseResponse } from '../common';
+import { z } from 'zod';
+import { baseSchema, TBase, TBaseResponse } from '../common';
 
-export type TSupplier = TBase & {
-  fullname: string;
-  address: string;
-  phoneNumber: string;
-};
+export const supplierSchema = z.object({
+  fullname: z.string(),
+  address: z.string(),
+  phoneNumber: z.string(),
+  ...baseSchema.shape,
+});
 
-export type TSupplierQueryParams = {
-  id?: string;
-  search?: string;
-};
+export const supplierCreateSchema = z.object({
+  fullname: z.string(),
+  address: z.string(),
+  phoneNumber: z.string(),
+});
 
-export type TSupplierCreateRequest = {
-  fullname: string;
-  address: string;
-  phoneNumber: string;
-};
+export const supplierUpdateSchema = z.object({
+  id: z.string(),
+  fullname: z.string().optional(),
+  address: z.string().optional(),
+  phoneNumber: z.string().optional(),
+});
 
-export type TSupplierUpdateRequest = {
-  id?: string;
-  fullname?: string;
-  address?: string;
-  phoneNumber?: string;
-};
-
+export type TSupplier = z.infer<typeof supplierSchema>;
+export type TSupplierCreateRequest = z.infer<typeof supplierCreateSchema>;
+export type TSupplierUpdateRequest = z.infer<typeof supplierUpdateSchema>;
 export type TSupplierSingleResponse = TBaseResponse<TSupplier>;
 export type TSupplierResponse = TBaseResponse<TSupplier[]>;
