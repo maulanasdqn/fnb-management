@@ -10,8 +10,8 @@ import {
   TProductCreateRequest,
   TProductUpdateRequest,
   TProductResponse,
-  TQueryParams,
   TProductSingleResponse,
+  TQueryParams,
 } from '@fms/entities';
 import { ilike, asc, eq } from 'drizzle-orm';
 

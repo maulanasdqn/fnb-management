@@ -1,10 +1,8 @@
 import { db, roles } from '@fms/drizzle';
 import {
   TQueryParams,
-  TResponse,
   TRoleResponse,
   TRoleSingleResponse,
-  roleResponseSchema,
 } from '@fms/entities';
 import { eq } from 'drizzle-orm';
 

@@ -26,7 +26,7 @@ export const metaResponseSchema = z.object({
   nextPage: z.number().optional().nullable(),
 });
 
-export const queryRequestSchema = z
+export const queryParamsSchema = z
   .object({
     id: z.string().optional(),
     search: z.string().optional(),
@@ -54,7 +54,7 @@ export const responseSchema = <T extends ZodTypeAny>(data: T) =>
     meta: metaResponseSchema.optional(),
   });
 
-export type TQueryRequest = z.infer<typeof queryRequestSchema>;
+export type TQueryParams = z.infer<typeof queryParamsSchema>;
 
 export type TBase = {
   id: string;
