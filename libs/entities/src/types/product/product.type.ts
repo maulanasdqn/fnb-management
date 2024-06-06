@@ -12,7 +12,8 @@ export const productSchema = z.object({
       id: z.string(),
       name: z.string(),
     })
-    .optional(),
+    .optional()
+    .nullable(),
   ingredients: z
     .array(
       z.object({
