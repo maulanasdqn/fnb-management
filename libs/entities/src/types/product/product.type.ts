@@ -12,7 +12,19 @@ export const productSchema = z.object({
       id: z.string(),
       name: z.string(),
     })
-    .nullable()
+    .optional(),
+  ingredients: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        amount: z.number(),
+        unitType: z.object({
+          id: z.string(),
+          name: z.string(),
+        }),
+      })
+    )
     .optional(),
   ...baseSchema.shape,
 });

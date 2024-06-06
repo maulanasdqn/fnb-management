@@ -6,7 +6,6 @@ import { users } from '../me/user.schema';
 import { orderDetails } from '../order/order-detail.schema';
 import { ingredients } from '../ingredient/ingredient.schema';
 import { unitTypes } from '../unit/unit-type.schema';
-import { variants } from '../variant/variant.schema';
 import { variantOptions } from '../variant/variant-option.schema';
 
 export const products = pgTable('products', {
