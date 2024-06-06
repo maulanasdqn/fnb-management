@@ -59,7 +59,7 @@ export const DashboardProductCreate: FC = (): ReactElement => {
       {
         productCategoryId:"05c05238-c3e3-4e3f-b688-60b6ae899d9b",
         name: data?.name,
-        price: Number(data?.price),
+        // price: Number(data?.price),
         priceSelling: Number(data?.priceSelling),
         image: data?.image,
         description: data?.description, 
@@ -84,7 +84,7 @@ export const DashboardProductCreate: FC = (): ReactElement => {
         </h1>
         <Breadcrumbs items={breadcrumbsItem} />
       </div>
-      <div className="flex items-center justify-center w-full h-full">
+      <div className="flex items-center justify-center w-full h-full mt-16">
         <form className="w-full" onSubmit={onSubmit}>
           <div className="grid grid-cols-2 gap-4 w-5/6 mx-auto">
             <div className="col-span-2">
@@ -105,7 +105,7 @@ export const DashboardProductCreate: FC = (): ReactElement => {
               control={control}
               required
             />
-            <ControlledFieldText
+            {/* <ControlledFieldText
               type="number"
               status={errors.name ? 'error' : 'default'}
               message={errors.name?.message}
@@ -113,7 +113,7 @@ export const DashboardProductCreate: FC = (): ReactElement => {
               name="price"
               control={control}
               required
-            />
+            /> */}
             <ControlledFieldText
               status={errors.priceSelling ? 'error' : 'default'}
               message={errors.priceSelling?.message}

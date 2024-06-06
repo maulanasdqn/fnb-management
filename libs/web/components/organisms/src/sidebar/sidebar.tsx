@@ -38,7 +38,6 @@ export const Sidebar: FC<{ menu: TSidebar[]; userData: TUser }> = (
     };
     const sidebar = document.getElementById('sidebar-content');
     sidebar?.addEventListener('scroll', handleScroll);
-    console.log(isScrolled);
     return () => {
       sidebar?.removeEventListener('scroll', handleScroll);
     };
