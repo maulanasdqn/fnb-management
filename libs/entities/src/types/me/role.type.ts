@@ -1,13 +1,27 @@
+import { z } from 'zod';
 import { TBase, TBaseResponse } from '../common';
 
-export type TRole = TBase & {
-  id: string;
-  name: string;
-  permissions: Array<{
-    id: string;
-    name: string;
-  }>;
-};
+export const roleResponseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  createdAt: z.date().nullable(),
+  updatedAt: z.date().nullable(),
+  permissions: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        key: z.string(),
+        group: z.string(),
+        parent: z.string(),
+        createdAt: z.date().nullable(),
+        updatedAt: z.date().nullable(),
+      })
+    )
+    .optional(),
+});
+
+export type TRole = z.infer<typeof roleResponseSchema>;
 
 export type TRoleQueryParams = {
   id?: string;

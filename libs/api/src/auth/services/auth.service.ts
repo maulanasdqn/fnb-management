@@ -50,6 +50,11 @@ export const login = async (request: z.infer<typeof loginRequestSchema>) => {
         permissions: user.role.rolesToPermissions.map((rtp) => ({
           id: rtp.permission.id,
           name: rtp.permission.key,
+          key: rtp.permission.key,
+          group: rtp.permission.group,
+          parent: rtp.permission.parent,
+          createdAt: rtp.permission.createdAt,
+          updatedAt: rtp.permission.updatedAt,
         })),
       },
       createdAt: user.createdAt,
