@@ -13,6 +13,7 @@ export const orders = pgTable('orders', {
   paymentId: uuid('payment_id').references(() => payments.id),
   invoiceNumber: text('invoice_number').notNull(),
   status: text('status'),
+  type: text('type'),
   servedBy: uuid('served_by').references(() => users.id),
   ...baseSchema,
 });
