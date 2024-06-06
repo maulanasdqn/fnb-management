@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { baseSchema, TBaseResponse } from '../common';
+import { ingredientLogSchema } from './ingredient-log.type';
 
 export const ingredientSchema = z.object({
   name: z.string(),
@@ -9,6 +10,7 @@ export const ingredientSchema = z.object({
     id: z.string(),
     name: z.string(),
   }),
+  logs: z.array(ingredientLogSchema).optional(),
   ...baseSchema.shape,
 });
 
