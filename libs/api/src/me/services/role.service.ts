@@ -16,10 +16,33 @@ export const findMany = async (
       createdAt: true,
       updatedAt: true,
     },
+    with: {
+      rolesToPermissions: {
+        with: {
+          permission: true,
+        },
+      },
+    },
   });
 
+  const mappingData = data.map((role) => ({
+    id: role.id,
+    name: role.name,
+    createdAt: role.createdAt,
+    updatedAt: role.updatedAt,
+    permissions: role.rolesToPermissions.map((rtp) => ({
+      id: rtp.permission.id,
+      name: rtp.permission.name,
+      key: rtp.permission.key,
+      group: rtp.permission.group,
+      parent: rtp.permission.parent,
+      createdAt: rtp.permission.createdAt,
+      updatedAt: rtp.permission.updatedAt,
+    })),
+  }));
+
   return {
-    data,
+    data: mappingData,
   };
 };
 
