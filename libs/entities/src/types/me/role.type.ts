@@ -7,7 +7,7 @@ export const roleSchema = z.object({
   name: z.string(),
   createdAt: z.date().nullable(),
   updatedAt: z.date().nullable(),
-  permissions: z.array(permissionSchema).optional(),
+  permissions: z.array(permissionSchema),
 });
 
 export const roleCreateSchema = z.object({

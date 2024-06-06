@@ -9,7 +9,7 @@ export const loginRequestSchema = z.object({
 export const loginResponseSchema = z.object({
   user: z.object({
     ...userSchema.shape,
-    role: roleSchema,
+    role: roleSchema.optional(),
   }),
   token: z.object({
     accessToken: z.string(),
