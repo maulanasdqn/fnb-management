@@ -156,9 +156,7 @@ export const PermissionTable: FC<TPermissionTable> = (props): ReactElement => {
                                       name={`permissions.${permission.key}`}
                                       control={props.control}
                                       label={
-                                        permissionNameMapping[
-                                          permission.name
-                                        ] || permission.name
+                                       permission.name
                                       }
                                       size="sm"
                                       checked={props.checked}
