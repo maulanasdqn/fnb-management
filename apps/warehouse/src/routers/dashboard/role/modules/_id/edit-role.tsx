@@ -1,10 +1,5 @@
 import { Button } from '@fms/atoms';
-import { TRole } from '@fms/entities';
-import {
-  ControlledFieldCheckbox,
-  ControlledFieldSelect,
-  DataTable,
-} from '@fms/organisms';
+import { ControlledFieldCheckbox, ControlledFieldSelect } from '@fms/organisms';
 import { FC, ReactElement, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
