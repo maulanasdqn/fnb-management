@@ -2,11 +2,9 @@ import { FC, ReactElement, useId } from 'react';
 import { clsx } from 'clsx';
 import { TInputSpecial } from '@fms/entities';
 
-export const InputCheckbox: FC<TInputSpecial> = ({
-  size = 'sm',
-  status = 'default',
-  ...props
-}): ReactElement => {
+export const InputCheckbox: FC<
+  Omit<TInputSpecial, 'onChange'> & { onChange?: (e: string) => void }
+> = ({ size = 'sm', status = 'default', ...props }): ReactElement => {
   const id = useId();
   const className = clsx(
     'focus:ring-grey-800 bg-white rounded-full accent-primary',
@@ -25,10 +23,11 @@ export const InputCheckbox: FC<TInputSpecial> = ({
   return (
     <input
       {...props}
-      data-testid={'input-radio'}
+      data-testid={'input-checkbox'}
       id={id}
       type={'checkbox'}
       className={className}
+      onChange={(e) => props.onChange?.(e?.target?.value)}
     />
   );
 };

@@ -18,7 +18,9 @@ export const roleCreateSchema = z.object({
 export const roleUpdateSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
-  permissions: z.array(z.string()).optional(),
+  permissions: z
+    .array(z.object({ id: z.string(), name: z.string() }))
+    .optional(),
 });
 
 export type TRole = z.infer<typeof roleSchema>;
