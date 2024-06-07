@@ -8,7 +8,7 @@ export const orderDetails = pgTable('order_details', {
   productId: uuid('product_id')
     .notNull()
     .references(() => products.id),
-  amount: integer('amount').notNull(),
+  quantity: integer('quantity').notNull(),
   orderId: uuid('order_id')
     .notNull()
     .references(() => orders.id),

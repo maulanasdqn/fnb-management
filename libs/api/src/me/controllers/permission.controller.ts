@@ -1,8 +1,4 @@
-import {
-  permissionResponseSchema,
-  queryParamsSchema,
-  responseSchema,
-} from '@fms/entities';
+import { queryParamsSchema } from '@fms/entities';
 import { router, procedure } from '@fms/trpc-server';
 import { findMany } from '../services/permission.service';
 

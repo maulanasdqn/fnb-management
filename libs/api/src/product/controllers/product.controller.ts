@@ -7,11 +7,11 @@ import {
   destroy,
 } from '../services/product.service';
 import {
-  queryParamsSchema,
   responseSchema,
   productSchema,
   productCreateSchema,
   productUpdateSchema,
+  queryParamsSchema,
 } from '@fms/entities';
 import { z } from 'zod';
 

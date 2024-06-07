@@ -1,44 +1,28 @@
 import { z } from 'zod';
-import { TBase, TBaseResponse } from '../common';
+import { TBaseResponse } from '../common';
+import { permissionSchema } from './permission.type';
 
-export const roleResponseSchema = z.object({
+export const roleSchema = z.object({
   id: z.string(),
   name: z.string(),
   createdAt: z.date().nullable(),
   updatedAt: z.date().nullable(),
-  permissions: z
-    .array(
-      z.object({
-        id: z.string(),
-        name: z.string(),
-        key: z.string(),
-        group: z.string(),
-        parent: z.string(),
-        createdAt: z.date().nullable(),
-        updatedAt: z.date().nullable(),
-      })
-    )
-    .optional(),
+  permissions: z.array(permissionSchema),
 });
 
-export type TRole = z.infer<typeof roleResponseSchema>;
+export const roleCreateSchema = z.object({
+  name: z.string(),
+  permissions: z.array(z.string()),
+});
 
-export type TRoleQueryParams = {
-  id?: string;
-  search?: string;
-};
+export const roleUpdateSchema = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  permissions: z.array(z.string()).optional(),
+});
 
-export type TRoleCreateRequest = {
-  id: string;
-  name: string;
-  permissions: Array<string>;
-};
-
-export type TRoleUpdateRequest = {
-  id?: string;
-  name?: string;
-  permissions?: Array<string>;
-};
-
+export type TRole = z.infer<typeof roleSchema>;
+export type TRoleCreateRequest = z.infer<typeof roleCreateSchema>;
+export type TRoleUpdateRequest = z.infer<typeof roleUpdateSchema>;
 export type TRoleSingleResponse = TBaseResponse<TRole>;
 export type TRoleResponse = TBaseResponse<TRole[]>;

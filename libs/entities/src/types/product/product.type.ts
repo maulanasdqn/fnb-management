@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 export const productSchema = z.object({
   name: z.string(),
+  price: z.number().optional(),
   priceSelling: z.number(),
   image: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
@@ -11,9 +12,21 @@ export const productSchema = z.object({
       id: z.string(),
       name: z.string(),
     })
-    .nullable()
+    .optional()
+    .nullable(),
+  ingredients: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        amount: z.number(),
+        unitType: z.object({
+          id: z.string(),
+          name: z.string(),
+        }),
+      })
+    )
     .optional(),
-
   ...baseSchema.shape,
 });
 

@@ -1,9 +1,6 @@
 import { router, procedure } from '@fms/trpc-server';
-import { create, findMany,findOne } from '../services/order.service';
-import {
-  orderCreateRequestSchema,
-  orderQueryParamSchema,
-} from '@fms/entities';
+import { create, findMany, findOne } from '../services/order.service';
+import { orderCreateRequestSchema, queryParamsSchema } from '@fms/entities';
 
 export const orderController = router({
   create: procedure
@@ -12,13 +9,10 @@ export const orderController = router({
       return await create(input);
     }),
 
-  findMany: procedure
-  .query(async () => {
+  findMany: procedure.query(async () => {
     return findMany();
   }),
-  findOne: procedure
-    .input(orderQueryParamSchema.pick({ id: true }))
-    .query(async ({ input }) => {
-      return await findOne(input?.id as string);
-    }),
+  findOne: procedure.input(queryParamsSchema).query(async ({ input }) => {
+    return await findOne(input?.id as string);
+  }),
 });

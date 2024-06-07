@@ -2,9 +2,12 @@
   "name": "@fms/drizzle",
   "version": "0.0.1",
   "dependencies": {
-    "drizzle-kit": "^0.20.14",
+    "drizzle-kit": "^0.21.4",
     "drizzle-orm": "^0.30.2",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "@fms/entities": "0.0.1",
+    "dotenv": "^16.4.5",
+    "argon2": "^0.40.1"
   },
   "main": "./index.js",
   "module": "./index.mjs",
