@@ -11,13 +11,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 8
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm nx run-many --target=lint ---all --skip-nx-cache
+      - run: pnpm nx run-many --target=lint --projects= --skip-nx-cache
 
   build:
     runs-on: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 8
       - uses: actions/setup-node@v4
         with:
           node-version: 20
