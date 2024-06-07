@@ -17,7 +17,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm nx run-many --target=lint --projects= --skip-nx-cache
+      - run: pnpm nx run-many --target=lint ---all --skip-nx-cache
 
   build:
     runs-on: ubuntu-latest
