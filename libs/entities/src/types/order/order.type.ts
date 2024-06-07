@@ -1,7 +1,29 @@
 import { z } from 'zod';
 import { EOrderStatus } from '../../enums/order.enum';
-import { baseSchema, TBase, TBaseResponse } from '../common';
-import { TCommonObject } from '../common';
+import { baseSchema, TBaseResponse } from '../common';
+import { orderDetailSchema } from './order-detail.type';
+
+export const orderSchema = z.object({
+  customer: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+  place: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+  payment: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+  amountTotal: z.number(),
+  invoiceNumber: z.string().optional(),
+  status: z.string().optional(),
+  type: z.string().optional(),
+  servedBy: z.string().optional(),
+  orderDetails: z.array(orderDetailSchema),
+  ...baseSchema.shape,
+});
 
 export const orderCreateRequestSchema = z.object({
   customerName: z.string(),
@@ -16,53 +38,13 @@ export const orderCreateRequestSchema = z.object({
     .array(),
 });
 
-export const orderResponseSchema = z.object({
+export const orderUpdateRequestSchema = z.object({
   id: z.string(),
-  customerId: z.string(),
-  placeId: z.string().optional(),
-  amountTotal: z.number(),
-  paymentId: z.string().optional(),
-  invoiceNumber: z.string().optional(),
-  status: z.string().optional(),
-  products: z
-    .object({
-      id: z.string(),
-      amount: z.number(),
-    })
-    .array(),
-  ...baseSchema.omit({ id: true }).shape,
-});
-export const orderQueryParamSchema = z.object({
-  id: z.string(),
-  search: z.string().optional(),
-  productCategoryId: z.string().optional(),
+  status: z.string(),
 });
 
-export type TOrder = TBase & {
-  customer: TCommonObject;
-  place: TCommonObject;
-  payment: TCommonObject;
-  orderDetails: Array<{
-    product: TCommonObject;
-    qty: number;
-    price: number;
-    amount: number;
-  }>;
-  amountTotal: number;
-  invoiceNumber: number;
-  status: EOrderStatus;
-};
-
-export type TOrderQueryParams = {
-  id?: string;
-};
-
+export type TOrder = z.infer<typeof orderSchema>;
 export type TOrderCreateRequest = z.infer<typeof orderCreateRequestSchema>;
-
-export type TOrderUpdateRequest = {
-  id?: string;
-  status?: EOrderStatus;
-};
-
+export type TOrderUpdateRequest = z.infer<typeof orderUpdateRequestSchema>;
 export type TOrderSingleResponse = TBaseResponse<TOrder>;
 export type TOrderResponse = TBaseResponse<TOrder[]>;

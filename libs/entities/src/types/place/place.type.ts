@@ -1,22 +1,22 @@
-import { TBase, TBaseResponse } from '../common';
+import { z } from 'zod';
+import { baseSchema, TBase, TBaseResponse } from '../common';
 
-export type TPlace = TBase & {
-  name: string;
-};
+export const placeSchema = z.object({
+  name: z.string(),
+  ...baseSchema.shape,
+});
 
-export type TPlaceQueryParams = {
-  id?: string;
-  search?: string;
-};
+export const placeCreateSchema = z.object({
+  name: z.string(),
+});
 
-export type TPlaceCreateRequest = {
-  name: string;
-};
+export const placeUpdateSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
 
-export type TPlaceUpdateRequest = {
-  id?: string;
-  name?: string;
-};
-
+export type TPlace = z.infer<typeof placeSchema>;
+export type TPlaceCreateRequest = z.infer<typeof placeCreateSchema>;
+export type TPlaceUpdateRequest = z.infer<typeof placeUpdateSchema>;
 export type TPlaceSingleResponse = TBaseResponse<TPlace>;
 export type TPlaceResponse = TBaseResponse<TPlace[]>;

@@ -5,3 +5,8 @@ export enum EOrderStatus {
   PENDING = 'pending',
   PROCESSING = 'processing',
 }
+
+export enum EOrderType {
+  DINEIN = 'Dine In',
+  TAKEAWAY = 'Take Away',
+}

@@ -1,20 +1,28 @@
 import { db, orders, customers, orderDetails } from '@fms/drizzle';
-import { TOrderCreateRequest, TOrderResponse, TOrderSingleResponse } from '@fms/entities';
+import {
+  TOrderCreateRequest,
+  TOrderResponse,
+  TOrderSingleResponse,
+} from '@fms/entities';
 import { dummyData } from './store';
 
-export const findOne = async (id: string):Promise<TOrderSingleResponse ['data']> => {
+export const findOne = async (
+  id: string
+): Promise<TOrderSingleResponse['data']> => {
   const res = dummyData?.find((item) => item.id === id);
   return res;
 };
 
-export const findMany = ():Promise<TOrderResponse['data']> =>  Promise.resolve(dummyData);
+export const findMany = (): Promise<TOrderResponse['data']> =>
+  Promise.resolve(dummyData);
 
 export const create = async (request: TOrderCreateRequest) => {
   const products: {
     productId: string;
-    amount: number;
+    quantity: number;
     orderId: string;
   }[] = [];
+
   await db.transaction(async (tx) => {
     const customer = await tx
       .insert(customers)
@@ -38,7 +46,7 @@ export const create = async (request: TOrderCreateRequest) => {
     for await (const item of request.products) {
       products.push({
         productId: item.id,
-        amount: item.amount,
+        quantity: item.amount,
         orderId: String(order[0].id),
       });
     }

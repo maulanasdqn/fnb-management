@@ -1,9 +1,5 @@
 import { db, permissions } from '@fms/drizzle';
-import {
-  TQueryParams,
-  TResponse,
-  permissionResponseSchema,
-} from '@fms/entities';
+import { TQueryParams } from '@fms/entities';
 import { z } from 'zod';
 import { groupPermissions } from '../../common/utils';
 
