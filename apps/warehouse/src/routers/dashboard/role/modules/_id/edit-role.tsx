@@ -1,36 +1,36 @@
 import { Button } from '@fms/atoms';
-import { ControlledFieldCheckbox, ControlledFieldSelect } from '@fms/organisms';
-import { FC, ReactElement, useState } from 'react';
+import { TRoleUpdateRequest } from '@fms/entities';
+import { ControlledFieldSelect } from '@fms/organisms';
+import { trpc } from '@fms/trpc-client';
+import { FC, ReactElement, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
+import { PermissionTable } from '../permission-table';
 
 export const EditRole: FC = (): ReactElement => {
-  const [isCollapse, setIsCollapse] = useState<boolean>(true);
-  const roles = [
-    { label: 'Super Admin', value: 'super admin' },
-    { label: 'Admin', value: 'admin' },
-  ];
-  const { control } = useForm();
-  const dataPermission = [
-    {
-      id: 1,
-      name: 'Employee',
-      permissions: ['Aksi', 'Lihat', 'Tambah', 'Ubah'],
-    },
-    {
-      id: 2,
-      name: 'Role',
-      permissions: ['Aksi', 'Lihat', 'Tambah', 'Ubah'],
-    },
-    {
-      id: 3,
-      name: 'Warehouse',
-      permissions: ['Aksi', 'Lihat', 'Tambah', 'Ubah'],
-    },
-  ];
+  const navigate = useNavigate();
+  const params = useParams();
+  const { data, isPending } = trpc.role.findOne.useQuery({
+    id: params.id as string,
+  });
 
-  const handleIsColapse = (): void => setIsCollapse(!isCollapse);
-  const permissionsArray = dataPermission.map((item) => item.permissions);
-  const modulsArray = dataPermission.map((item) => item.name);
+  const roles = [
+    { label: data?.data?.name as string, value: data?.data?.name as string },
+  ];
+  const {
+    control,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { isValid, errors },
+  } = useForm<TRoleUpdateRequest>({
+    mode: 'all',
+  });
+
+  useEffect(() => {
+    reset(data?.data as unknown as TRoleUpdateRequest);
+  }, [data, reset]);
+
   return (
     <section className="w-full min-h-screen">
       <div>
@@ -42,80 +42,44 @@ export const EditRole: FC = (): ReactElement => {
       <form className=" flex flex-col gap-y-4 w-full h-auto bg-white rounded-md p-4">
         <div>
           <ControlledFieldSelect
-            name="roles"
+            name="name"
             options={roles}
             control={control}
             label="Nama Role"
             size="sm"
+            status={errors?.name ? 'error' : 'success'}
             required
           />
         </div>
         <div className="flex flex-col gap-y-2">
           <h2 className="mb-4">Role Permission :</h2>
-          <div className="border border-grey-100 rounded-md shadow-sm flex flex-col gap-y-2">
-            <div className="flex items-center gap-x-2 px-8 py-2">
-              {isCollapse ? (
-                <Button
-                  type="button"
-                  onClick={handleIsColapse}
-                  className="px-2 rounded text-lg font-medium"
-                >
-                  +
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  onClick={handleIsColapse}
-                  className="px-2 rounded text-lg font-medium"
-                >
-                  -
-                </Button>
-              )}
-              <h3>1: User Management - Employee</h3>
-            </div>
-            {!isCollapse && (
-              <section className="flex flex-col gap-y-2 bg-grey-50 py-2 pl-16">
-                <div className="w-full">
-                  <table className="min-w-full">
-                    <thead>
-                      <tr>
-                        <th className="font-semibold text-left px-4 py-2">
-                          Nama Modul
-                        </th>
-                        <th className="font-semibold text-left px-4 py-2">
-                          Jenis Permission
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white">
-                      {modulsArray.map((item, index) => (
-                        <tr key={index}>
-                          <td className="border-b border-grey-100 px-4 py-2">
-                            {item}
-                          </td>
-                          <td className="border-b border-grey-100 px-4 py-2">
-                            <div className="flex flex-wrap gap-x-8">
-                              {permissionsArray.map((permission, idx) => (
-                                <div>
-                                  <ControlledFieldCheckbox
-                                    key={idx}
-                                    name={`permission-${idx}`}
-                                    control={control}
-                                    label={permission[idx]}
-                                    size="md"
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-            )}
-          </div>
+          <PermissionTable
+            data={data?.data}
+            control={control}
+            isCollapse={false}
+            checked={watch('permissions') ? true : false}
+          />
+        </div>
+        <div className="mt-4 w-full flex gap-x-3 place-content-end col-span-2">
+          <Button
+            type="submit"
+            variant="primary"
+            variantType="outline"
+            size="sm"
+            onClick={() => navigate(-1)}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            state={isPending ? 'loading' : 'default'}
+            variant="primary"
+            variantType="solid"
+            size="sm"
+            disabled={!isValid || isPending}
+          >
+            Simpan
+          </Button>
         </div>
       </form>
     </section>
