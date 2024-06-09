@@ -28,7 +28,6 @@ export const PermissionTable: FC<TPermissionTable> = (props): ReactElement => {
   }>({});
 
   const currentPermissions = watch('permissions');
-  console.log(currentPermissions);
 
   const checkedPermissionsSet = new Set(currentPermissions?.map((cp) => cp.id));
 

@@ -9,13 +9,17 @@ import { ReactElement, useMemo, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { Button, Pagination } from '@fms/atoms';
 import { TDataTable } from './type';
+import { TMetaResponse } from '@fms/entities';
+import { useSearchParams } from 'react-router-dom';
+import { debounce } from 'radash';
 
 export const DataTable = <T extends Record<string, unknown>>(
   props: TDataTable<T>
 ): ReactElement => {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const memoizeColumns = useMemo(() => props.columns, [props.columns]);
-  const memoizeData = useMemo(() => props.data, [props.data]);
+  const memoizeData = useMemo(() => props.data || [], [props.data]);
 
   const table = useReactTable({
     data: memoizeData,
@@ -26,9 +30,6 @@ export const DataTable = <T extends Record<string, unknown>>(
       sorting,
     },
     onSortingChange: setSorting,
-    onPaginationChange: () => {
-      console.log('pagination');
-    },
     manualSorting: false,
     manualPagination: true,
   });
@@ -37,6 +38,15 @@ export const DataTable = <T extends Record<string, unknown>>(
     <div className="w-full h-full bg-white p-4 mt-10 rounded-lg">
       <div className="flex items-center gap-x-4">
         <input
+          value={searchParams.get('search') || ''}
+          onChange={(e) => {
+            debounce({ delay: 500 }, () => props?.handleSearch?.(e));
+            setSearchParams({
+              search: e.target.value,
+              page: String(searchParams.get('page')),
+              perPage: String(searchParams.get('perPage')),
+            });
+          }}
           className="w-fit my-2 p-2 border-grey-100 border text-grey-400 text-sm focus:outline-none focus:ring-0 focus-visible:ring-0 bg-white placeholder-grey-400 rounded-lg"
           placeholder="Search"
           type="search"
@@ -118,7 +128,7 @@ export const DataTable = <T extends Record<string, unknown>>(
             ))}
           </tbody>
         </table>
-        <Pagination />
+        {props.meta && <Pagination meta={props.meta as TMetaResponse} />}
       </div>
     </div>
   );
