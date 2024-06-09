@@ -11,7 +11,7 @@ export const isAuthenticated = atom({
   default: !!tokenService.getAccessToken,
 });
 
-export const isAuthed = () => {
+export const useIsAuthed = () => {
   const value = useRecoilValue(isAuthenticated);
   return value;
 };
