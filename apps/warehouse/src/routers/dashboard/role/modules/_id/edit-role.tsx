@@ -1,11 +1,13 @@
 import { Button } from '@fms/atoms';
-import { TRoleUpdateRequest } from '@fms/entities';
-import { ControlledFieldSelect } from '@fms/organisms';
+import { TRoleUpdateRequest, roleUpdateSchema } from '@fms/entities';
+import { ControlledFieldText } from '@fms/organisms';
 import { trpc } from '@fms/trpc-client';
 import { FC, ReactElement, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PermissionTable } from '../permission-table';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { userService } from '@fms/web-services';
 
 export const EditRole: FC = (): ReactElement => {
   const navigate = useNavigate();
@@ -14,22 +16,27 @@ export const EditRole: FC = (): ReactElement => {
     id: params.id as string,
   });
 
-  const roles = [
-    { label: data?.data?.name as string, value: data?.data?.name as string },
-  ];
-  const {
-    control,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { isValid, errors },
-  } = useForm<TRoleUpdateRequest>({
+  const methods = useForm<TRoleUpdateRequest>({
+    resolver: zodResolver(roleUpdateSchema),
     mode: 'all',
   });
 
+  const onSubmit = methods.handleSubmit((data) => {
+    console.log(data);
+  });
+
+  const userData = userService.getUserData();
+
   useEffect(() => {
-    reset(data?.data as unknown as TRoleUpdateRequest);
-  }, [data, reset]);
+    methods.reset({
+      id: userData?.role.id,
+      name: userData?.role?.name,
+      permissions: userData?.role?.permissions?.map((x) => ({
+        id: x.id,
+        name: x.name,
+      })),
+    });
+  }, [data, methods.reset]);
 
   return (
     <section className="w-full min-h-screen">
@@ -39,49 +46,53 @@ export const EditRole: FC = (): ReactElement => {
         </p>
         <h1 className="text-2xl font-bold my-4">Edit Role</h1>
       </div>
-      <form className=" flex flex-col gap-y-4 w-full h-auto bg-white rounded-md p-4">
-        <div>
-          <ControlledFieldSelect
-            name="name"
-            options={roles}
-            control={control}
-            label="Nama Role"
-            size="sm"
-            status={errors?.name ? 'error' : 'success'}
-            required
-          />
-        </div>
-        <div className="flex flex-col gap-y-2">
-          <h2 className="mb-4">Role Permission :</h2>
-          <PermissionTable
-            data={data?.data}
-            control={control}
-            isCollapse={false}
-            checked={watch('permissions') ? true : false}
-          />
-        </div>
-        <div className="mt-4 w-full flex gap-x-3 place-content-end col-span-2">
-          <Button
-            type="submit"
-            variant="primary"
-            variantType="outline"
-            size="sm"
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            state={isPending ? 'loading' : 'default'}
-            variant="primary"
-            variantType="solid"
-            size="sm"
-            disabled={!isValid || isPending}
-          >
-            Simpan
-          </Button>
-        </div>
-      </form>
+      <FormProvider {...methods}>
+        <form
+          onSubmit={onSubmit}
+          className=" flex flex-col gap-y-4 w-full h-auto bg-white rounded-md p-4"
+        >
+          <div>
+            <ControlledFieldText
+              name="name"
+              control={methods.control}
+              label="Nama Role"
+              size="sm"
+              status={methods.formState.errors.name ? 'error' : 'default'}
+              message={methods.formState.errors.name?.message}
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-y-2">
+            <h2 className="mb-4">Role Permission :</h2>
+            <PermissionTable
+              data={data?.data}
+              control={methods.control}
+              isCollapse={false}
+            />
+          </div>
+          <div className="mt-4 w-full flex gap-x-3 place-content-end col-span-2">
+            <Button
+              type="submit"
+              variant="primary"
+              variantType="outline"
+              size="sm"
+              onClick={() => navigate(-1)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              state={isPending ? 'loading' : 'default'}
+              variant="primary"
+              variantType="solid"
+              size="sm"
+              disabled={isPending}
+            >
+              Simpan
+            </Button>
+          </div>
+        </form>
+      </FormProvider>
     </section>
   );
 };

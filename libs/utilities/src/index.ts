@@ -107,3 +107,10 @@ export const formatedDate = (date: Date) => {
     dateStyle: 'full',
   }).format(date);
 };
+
+export const capitalizeWords = (str: string) => {
+  if (!str) return undefined;
+  return str.toLowerCase().replace(/(^|\s)\S/g, function (firstLetter) {
+    return firstLetter.toUpperCase();
+  });
+};

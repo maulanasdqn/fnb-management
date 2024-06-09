@@ -1,7 +1,9 @@
 import { Button } from '@fms/atoms';
-import { TRoleSingleResponse } from '@fms/entities';
+import { TRoleSingleResponse, TRoleUpdateRequest } from '@fms/entities';
 import { ControlledFieldCheckbox } from '@fms/organisms';
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { capitalizeWords } from '@fms/utilities';
+import { FC, ReactElement, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 type Permission = {
   id: string;
@@ -9,6 +11,7 @@ type Permission = {
   key: string;
   group: string;
   parent: string;
+  checked?: boolean;
 };
 type TPermissionTable = {
   isCollapse: boolean;
@@ -16,95 +19,49 @@ type TPermissionTable = {
   control?: any;
   checked?: boolean;
 };
-const permissionNameMapping: { [key: string]: string } = {
-  'CREATE USER': 'Tambah',
-  'READ USER': 'Lihat',
-  'UPDATE USER': 'Ubah',
-  'DELETE USER': 'Hapus',
-  'CREATE ROLE': 'Tambah',
-  'READ ROLE': 'Lihat',
-  'UPDATE ROLE': 'Ubah',
-  'DELETE ROLE': 'Hapus',
-  'CREATE ORDER': 'Tambah',
-  'READ ORDER': 'Lihat',
-  'UPDATE ORDER': 'Ubah',
-  'DELETE ORDER': 'Hapus',
-  'APPROVE ORDER': 'Setujui',
-  'CANCEL ORDER': 'Batalkan',
-  'READ ALL ORDER': 'Lihat semua',
-  'READ ALL ORDER STATUS': 'Lihat Status',
-  'CREATE SUPPLIER': 'Tambah',
-  'READ SUPPLIER': 'Lihat',
-  'UPDATE SUPPLIER': 'Ubah',
-  'DELETE SUPPLIER': 'Hapus',
-  'CREATE PRODUCT': 'Tambah',
-  'READ PRODUCT': 'Lihat',
-  'UPDATE PRODUCT': 'Ubah',
-  'DELETE PRODUCT': 'Hapus',
-  'CREATE PURCHASE': 'Tambah',
-  'READ PURCHASE': 'Lihat',
-  'UPDATE PURCHASE': 'Ubah',
-  'DELETE PURCHASE': 'Hapus',
-  'APPROVE PURCHASE': 'Setujui',
-  'CANCEL PURCHASE': 'Batalkan',
-  'READ ALL PURCHASE': 'Lihat semua',
-  'REQUEST PURCHASE': 'Permintaan',
-  'CREATE PAYMENT': 'Tambah',
-  'READ PAYMENT': 'Lihat',
-  'UPDATE PAYMENT': 'Ubah',
-  'DELETE PAYMENT': 'Hapus',
-  'CREATE PLACE': 'Tambah',
-  'READ PLACE': 'Lihat',
-  'UPDATE PLACE': 'Ubah',
-  'DELETE PLACE': 'Hapus',
-  'CREATE INVOICE': 'Tambah',
-  'READ INVOICE': 'Lihat',
-  'UPDATE INVOICE': 'Ubah',
-  'DELETE INVOICE': 'Hapus',
-  'CREATE ITEM': 'Tambah',
-  'READ ITEM': 'Lihat',
-  'UPDATE ITEM': 'Ubah',
-  'DELETE ITEM': 'Hapus',
-  'CREATE CUSTOMER': 'Tambah',
-  'READ CUSTOMER': 'Lihat',
-  'UPDATE CUSTOMER': 'Ubah',
-  'DELETE CUSTOMER': 'Hapus',
-  'CREATE RECIPE': 'Tambah',
-  'READ RECIPE': 'Lihat',
-  'UPDATE RECIPE': 'Ubah',
-  'DELETE RECIPE': 'Hapus',
-  'CREATE INGREDIENT': 'Tambah',
-  'READ INGREDIENT': 'Lihat',
-  'UPDATE INGREDIENT': 'Ubah',
-  'DELETE INGREDIENT': 'Hapus',
-  'CREATE UNIT TYPE': 'Tambah',
-  'READ UNIT TYPE': 'Lihat',
-  'UPDATE UNIT TYPE': 'Ubah',
-  'DELETE UNIT TYPE': 'Hapus',
-  'CREATE TRANSACTION': 'Tambah',
-  'READ TRANSACTION': 'Lihat',
-  'UPDATE TRANSACTION': 'Ubah',
-  'DELETE TRANSACTION': 'Hapus',
-  'READ DASHBOARD TRANSACTION': 'Lihat',
-};
+
 export const PermissionTable: FC<TPermissionTable> = (props): ReactElement => {
+  const { control, watch } = useFormContext<TRoleUpdateRequest>();
+
   const [collapsedGroups, setCollapsedGroups] = useState<{
     [key: string]: boolean;
   }>({});
-  const groupedPermissions = props?.data?.permissions?.reduce(
-    (
-      acc: { [key: string]: { [key: string]: Permission[] } },
-      permission: Permission
-    ) => {
-      const group = permission.group;
-      const parent = permission.parent;
-      if (!acc[group]) acc[group] = {};
-      if (!acc[group][parent]) acc[group][parent] = [];
-      acc[group][parent].push(permission);
-      return acc;
-    },
-    {}
-  );
+
+  const currentPermissions = watch('permissions');
+  console.log(currentPermissions);
+
+  const checkedPermissionsSet = new Set(currentPermissions?.map((cp) => cp.id));
+
+  // Define the type for the accumulator
+  type GroupedPermissions = {
+    [key: string]: { [key: string]: (Permission & { checked: boolean })[] };
+  };
+
+  // Initialize the groupedPermissions with the correct type
+  const groupedPermissions =
+    props?.data?.permissions?.reduce<GroupedPermissions>(
+      (acc, permission) => {
+        const group = permission.group;
+        const parent = permission.parent;
+
+        // Determine if the permission is checked by looking up its ID in the set
+        const isChecked = checkedPermissionsSet.has(permission.id);
+
+        // Add the checked property to the permission
+        const permissionWithChecked = { ...permission, checked: isChecked };
+
+        // Ensure the group and parent keys are initialized in the accumulator
+        if (!acc[group]) acc[group] = {};
+        if (!acc[group][parent]) acc[group][parent] = [];
+
+        // Push the updated permission into the correct group and parent
+        acc[group][parent].push(permissionWithChecked);
+
+        return acc;
+      },
+      {} as GroupedPermissions // Explicitly cast the initial value to GroupedPermissions
+    );
+
   const handleGroupCollapse = (group: string) => {
     setCollapsedGroups((prev) => ({ ...prev, [group]: !prev[group] }));
   };
@@ -143,23 +100,25 @@ export const PermissionTable: FC<TPermissionTable> = (props): ReactElement => {
                   <tbody className="bg-white">
                     {groupedPermissions &&
                       Object.entries(groupedPermissions[group]).map(
-                        ([parent, permissions], index) => (
-                          <tr key={index}>
-                            <td className="border-b border-grey-100 px-2 py-2 lowercase">
-                              {parent}
+                        ([parent, permissions], idx) => (
+                          <tr key={idx}>
+                            <td className="border-b border-grey-100 px-2 py-2">
+                              {capitalizeWords(parent)}
                             </td>
                             <td className="border-b border-grey-100 px-2 py-2 ">
                               <div className="grid grid-flow-row grid-cols-4 gap-2 items-center place-self-center">
-                                {permissions.map((permission) => (
+                                {permissions.map((permission, index) => (
                                   <div key={permission.key}>
                                     <ControlledFieldCheckbox
-                                      name={`permissions.${permission.key}`}
-                                      control={props.control}
-                                      label={
-                                       permission.name
-                                      }
+                                      name={`permissions.${index}`}
+                                      control={control}
+                                      value={{
+                                        id: permission.id,
+                                        name: permission.key,
+                                      }}
+                                      text={capitalizeWords(permission.name)}
                                       size="sm"
-                                      checked={props.checked}
+                                      checked={permission.checked}
                                     />
                                   </div>
                                 ))}

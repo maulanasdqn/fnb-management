@@ -20,7 +20,7 @@ export const Fieldset: FC<TFieldSet> = (props): ReactElement => {
             {props.label}
           </Label>
         )}
-        <section className="flex items-center">
+        <section className="flex items-center gap-x-2">
           {props.children}
           {props?.text && (
             <Label
