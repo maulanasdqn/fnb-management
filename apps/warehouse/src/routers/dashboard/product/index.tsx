@@ -5,10 +5,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { FC, ReactElement, Suspense, useState } from 'react';
 import { trpc } from '@fms/trpc-client';
 import { useDebounce } from '@fms/utilities';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 export const DashboardProduct: FC = (): ReactElement => {
   const [debounceValue, setDebounceValue] = useState<string>('');
   const [search, setSearch] = useState<string>('');
+  const [searchParams] = useSearchParams();
 
   useDebounce(() => {
     setDebounceValue(search);
@@ -16,9 +17,11 @@ export const DashboardProduct: FC = (): ReactElement => {
 
   const { data, refetch } = trpc.product.findMany.useQuery({
     search: debounceValue || undefined,
+    page: Number(searchParams.get('page')),
+    perPage: Number(searchParams.get('perPage')),
   });
 
-  const { mutate } = trpc.product.delete.useMutation()
+  const { mutate } = trpc.product.delete.useMutation();
 
   const columns: ColumnDef<TProduct>[] = [
     {
@@ -47,11 +50,11 @@ export const DashboardProduct: FC = (): ReactElement => {
       header: 'Harga',
       accessorKey: 'priceSelling',
     },
-  
+
     {
       header: 'Aksi',
       accessorKey: 'action',
-      cell({ row}) {
+      cell({ row }) {
         return (
           <div className="flex gap-x-3 items-center">
             <Link to={`${row.original.id}/edit`} key={row.original.id}>
@@ -59,13 +62,20 @@ export const DashboardProduct: FC = (): ReactElement => {
                 Edit
               </Button>
             </Link>
-            <Button variant={'error'} title="Delete" onClick={()=> {
-              mutate({ id: row?.original?.id as string}, {
-                onSuccess: () => {
-                  refetch()
-                }
-              })
-          }}>
+            <Button
+              variant={'error'}
+              title="Delete"
+              onClick={() => {
+                mutate(
+                  { id: row?.original?.id as string },
+                  {
+                    onSuccess: () => {
+                      refetch();
+                    },
+                  }
+                );
+              }}
+            >
               Delete
             </Button>
           </div>
@@ -80,10 +90,11 @@ export const DashboardProduct: FC = (): ReactElement => {
         <h1 className="text-2xl font-bold">Products</h1>
         <DataTable
           data={data?.data || []}
+          meta={data?.meta}
           columns={columns}
           handleSearch={(e) => setSearch(e.target.value)}
-          createLink='create'
-          createLabel='+ Tambah Produk'
+          createLink="create"
+          createLabel="+ Tambah Produk"
           searchBox
         />
       </div>
