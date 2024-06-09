@@ -24,27 +24,17 @@ const schema = z.object({
   category: z.string({ required_error: 'Kategori harus Diisi' }).min(1, {
     message: 'Kategori harus Diisi',
   }),
-  price: z
-    .string({
-      required_error: 'Harga harus Diisi',
-    })
-    .min(1, { message: 'Harga harus Diisi' }),
 });
 
 type TCreateProduct = z.infer<typeof schema>;
 export const DashboardProductCreate: FC = (): ReactElement => {
   const navigate = useNavigate();
   const { mutate, isPending } = trpc.product.create.useMutation();
-
+  const {data} = trpc.productCategory.findMany.useQuery();
   const breadcrumbsItem = [
     { name: 'Create Data', path: '/dashboard/product/create' },
   ];
-  const category = [
-    {
-      value: '05c05238-c3e3-4e3f-b688-60b6ae899d9b',
-      label: 'Coffe',
-    },
-  ];
+  const category = data?.data?.map((item) => ({value:item.id, label:item.name}));
   const {
     control,
     handleSubmit,
@@ -57,9 +47,8 @@ export const DashboardProductCreate: FC = (): ReactElement => {
   const onSubmit = handleSubmit((data) => {
     mutate(
       {
-        productCategoryId:"05c05238-c3e3-4e3f-b688-60b6ae899d9b",
+        productCategoryId:data.category,
         name: data?.name,
-        // price: Number(data?.price),
         priceSelling: Number(data?.priceSelling),
         image: data?.image,
         description: data?.description, 
@@ -94,6 +83,8 @@ export const DashboardProductCreate: FC = (): ReactElement => {
                 label="Kategori"
                 options={category}
                 required
+                status={errors.category ? 'error' : 'default'}
+                message={errors.category?.message}
               />
             </div>
             <ControlledFieldText
@@ -105,15 +96,6 @@ export const DashboardProductCreate: FC = (): ReactElement => {
               control={control}
               required
             />
-            {/* <ControlledFieldText
-              type="number"
-              status={errors.name ? 'error' : 'default'}
-              message={errors.name?.message}
-              label="Harga Produk"
-              name="price"
-              control={control}
-              required
-            /> */}
             <ControlledFieldText
               status={errors.priceSelling ? 'error' : 'default'}
               message={errors.priceSelling?.message}

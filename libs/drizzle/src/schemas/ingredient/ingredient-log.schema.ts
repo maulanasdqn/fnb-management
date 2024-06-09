@@ -13,6 +13,9 @@ export const ingredientLogs = pgTable('ingredient-logs', {
   ...baseSchema,
 });
 
-export const ingredientLogRelations = relations(ingredientLogs, ({ many }) => ({
-  ingredients: many(ingredients),
+export const ingredientLogRelations = relations(ingredientLogs, ({ one }) => ({
+  ingredient: one(ingredients, {
+    fields: [ingredientLogs.ingredientId],
+    references: [ingredients.id], 
+  }),
 }));

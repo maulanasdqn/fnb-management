@@ -1,1 +1,1 @@
-pnpm nx affected -t lint build --run-many
+pnpm nx affected  -t lint build
