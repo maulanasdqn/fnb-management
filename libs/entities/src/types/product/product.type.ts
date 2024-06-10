@@ -1,12 +1,13 @@
 import { baseSchema, TBaseResponse } from '../common';
 import { z } from 'zod';
+import { variantOptionSchema } from '../variant';
 
 export const productSchema = z.object({
   name: z.string(),
-  price: z.number().optional(),
   priceSelling: z.number(),
   image: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+  variants: z.array(variantOptionSchema).optional().nullable(),
   category: z
     .object({
       id: z.string(),
