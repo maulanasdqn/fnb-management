@@ -1,4 +1,4 @@
-import z from 'zod';
+import { z } from 'zod';
 import { TBaseResponse } from '../common';
 
 export const variantOptionSchema = z.object({

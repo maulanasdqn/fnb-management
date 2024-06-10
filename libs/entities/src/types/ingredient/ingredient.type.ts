@@ -3,15 +3,13 @@ import { baseSchema, TBaseResponse } from '../common';
 import { ingredientLogSchema } from './ingredient-log.type';
 
 export const ingredientSchema = z.object({
+  id: z.string(),
   name: z.string(),
   price: z.number(),
   amount: z.number(),
-  unitType: z.object({
-    id: z.string(),
-    name: z.string(),
-  }),
+  stock: z.record(z.string(), z.number().nonnegative()),
   logs: z.array(ingredientLogSchema).optional(),
-  ...baseSchema.shape,
+  ...baseSchema.omit({ id: true }).shape,
 });
 
 export const ingredientCreateSchema = z.object({

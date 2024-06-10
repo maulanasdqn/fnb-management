@@ -29,6 +29,20 @@
       "when": 1717438565792,
       "tag": "0003_abnormal_blink",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1718040459888,
+      "tag": "0004_narrow_fenris",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1718042560905,
+      "tag": "0005_special_black_panther",
+      "breakpoints": true
     }
   ]
 }
