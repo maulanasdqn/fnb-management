@@ -27,6 +27,8 @@ export const DashboardProduct: FC = (): ReactElement => {
     {
       header: 'No',
       accessorKey: 'index',
+      size:8,
+      maxSize: 10,
       cell: ({ row }) => row.index + 1,
     },
     {

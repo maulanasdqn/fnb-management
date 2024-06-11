@@ -8,8 +8,13 @@ export const DashboardStockOpname: FC = (): ReactElement => {
   const [search, setSearch] = useState<string>('');
 
   const data = [
-    { name: 'Susu', jumlah: '20 ml', action: 'Tambah Stok' },
-    { name: 'Kopi', jumlah: '20 ml', action: 'Tambah Stok' },
+    { name: 'Susu', jumlah: '400 ml'},
+    { name: 'Kopi', jumlah: '4000 g'},
+    { name: 'Teh', jumlah: '2000 g' },
+    { name: 'Gula', jumlah: '4000 g'},
+    { name: 'Sirup Banana', jumlah: '600 ml'},
+    { name: 'Sirup Orange', jumlah: '500 ml'},
+
   ]
   const columns: ColumnDef<any>[] = [
     {
@@ -38,8 +43,8 @@ export const DashboardStockOpname: FC = (): ReactElement => {
                 Detail
               </Button>
             </Link>
-            <Button variant={'primary'} title="konfirmasi">
-              Konfirmasi
+            <Button variant={'warning'} title="Update">
+              Update
             </Button>
           </div>
         );
@@ -55,7 +60,7 @@ export const DashboardStockOpname: FC = (): ReactElement => {
         columns={columns}
         handleSearch={(e) => setSearch(e.target.value)}
         createLink="create"
-        createLabel="+ Tambah Data stock"
+        createLabel="+ Tambah Data"
       />
     </div>
   );

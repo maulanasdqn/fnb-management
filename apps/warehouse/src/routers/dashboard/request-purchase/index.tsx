@@ -7,13 +7,13 @@ import { Link } from 'react-router-dom';
 
 export const DashboardRequestPurchase: FC = (): ReactElement => {
   const data = [
-    { name: 'Susu', jumlah: '20 ml', action: 'Tambah Stok',requestBy : 'Admin',createAt : new Date() },
-    { name: 'Kopi', jumlah: '20 ml', action: 'Tambah Stok',requestBy : 'Admin',createAt : new Date() },
-    { name: 'Gula', jumlah: '20 ml', action: 'Buyer Stok',requestBy : 'Admin',createAt : new Date() },
-    { name: 'Sirup banana', jumlah: '20 ml', action: 'Buyer Stok',requestBy : 'Admin',createAt : new Date() },
-    { name: 'Sirup Avocado', jumlah: '20 ml', action: 'Buyer Stok',requestBy : 'Admin',createAt : new Date() },
-    { name: 'Sirup strawberry', jumlah: '20 ml', action: 'Buyer Stok',requestBy : 'Admin',createAt : new Date() },
-    { name: 'Coklat', jumlah: '20 ml', action: 'Buyer Stok',requestBy : 'Admin',createAt : new Date() },
+    { name: 'Susu', jumlah: '40 ml',requestBy : 'Admin',createAt : new Date() },
+    { name: 'Kopi', jumlah: '30 ml',requestBy : 'Admin',createAt : new Date() },
+    { name: 'Gula', jumlah: '80 ml', requestBy : 'Admin',createAt : new Date() },
+    { name: 'Sirup banana', jumlah: '100 ml', requestBy : 'Admin',createAt : new Date() },
+    { name: 'Sirup Avocado', jumlah: '50 ml', requestBy : 'Admin',createAt : new Date() },
+    { name: 'Sirup strawberry', jumlah: '100 ml', requestBy : 'Admin',createAt : new Date() },
+    { name: 'Coklat', jumlah: '30 g', requestBy : 'Admin',createAt : new Date() },
     
   ]
   const [search, setSearch] = useState<string>('');
@@ -70,7 +70,7 @@ export const DashboardRequestPurchase: FC = (): ReactElement => {
         columns={columns}
         handleSearch={(e) => setSearch(e.target.value)}
         createLink="create"
-        createLabel="+ Tambah Data stock"
+        createLabel="+ Tambah Data"
       />
     </div>
   );

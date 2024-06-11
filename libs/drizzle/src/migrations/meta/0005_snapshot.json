@@ -1,6 +1,6 @@
 {
-  "id": "ff4af371-bba8-4d44-8d42-0ae3aeff78fc",
-  "prevId": "d8e376ef-c9f4-4da3-a7fe-686588cdab03",
+  "id": "f4cc2b51-e53f-495f-b05a-5d911b0c24d8",
+  "prevId": "ff4af371-bba8-4d44-8d42-0ae3aeff78fc",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -59,13 +59,13 @@
         },
         "price": {
           "name": "price",
-          "type": "integer",
+          "type": "double precision",
           "primaryKey": false,
           "notNull": true
         },
         "amount": {
           "name": "amount",
-          "type": "integer",
+          "type": "double precision",
           "primaryKey": false,
           "notNull": true
         },
