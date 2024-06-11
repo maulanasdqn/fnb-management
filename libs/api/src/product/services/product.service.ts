@@ -1,11 +1,4 @@
-import {
-  db,
-  products,
-  productCategories,
-  productVariants,
-  variantOptions,
-  variants,
-} from '@fms/drizzle';
+import { db, products, productCategories } from '@fms/drizzle';
 import {
   TProductCreateRequest,
   TProductUpdateRequest,
@@ -14,6 +7,7 @@ import {
   TQueryParams,
 } from '@fms/entities';
 import { ilike, asc, eq } from 'drizzle-orm';
+import { variantService } from '../../variant';
 
 export const findMany = async (
   params?: TQueryParams
@@ -82,26 +76,14 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
     .where(eq(products.id, id))
     .then((data) => data?.at(0));
 
-  const variantProduct = await db
-    .select({
-      id: variants.id,
-      name: variants.name,
-      option: {
-        id: variantOptions.id,
-        name: variantOptions.name,
-      },
-    })
-    .from(variants)
-    .leftJoin(variantOptions, eq(variantOptions.variantId, variants.id))
-    .leftJoin(
-      productVariants,
-      eq(productVariants.variantOptionId, variantOptions.id)
-    )
-    .leftJoin(products, eq(products.id, productVariants.productId))
-    .where(eq(productVariants.productId, id));
+  if (!data) {
+    throw new Error('Product tidak ditemukan');
+  }
+
+  const variants = await variantService.findByProductId(id);
 
   return {
-    data,
+    data: { ...data, variants },
   };
 };
 

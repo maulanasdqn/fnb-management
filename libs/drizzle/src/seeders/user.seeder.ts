@@ -1,6 +1,7 @@
 import * as schema from '../schemas';
 import { config } from 'dotenv';
 import * as argon2 from 'argon2';
+import { eq } from 'drizzle-orm';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { RoleEnum } = require('../../../entities/src/enums/index');
 config();
@@ -11,6 +12,15 @@ export const encryptPassword = async (password: string): Promise<string> => {
 
 export const seedSuperAdmin = async (db: any) => {
   try {
+    const adminExist = await db
+      .select({ id: schema.users.id })
+      .from(schema.users)
+      .where(eq(schema.users.username, 'admin1@admin.com'));
+
+    if (adminExist.length > 0) {
+      return;
+    }
+
     console.log('Seeding permissions... 🚀');
     const permissions = await db
       .select({ id: schema.permissions.id })
