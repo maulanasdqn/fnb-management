@@ -8,20 +8,19 @@ export const DashboardStockOpname: FC = (): ReactElement => {
   const [search, setSearch] = useState<string>('');
 
   const data = [
-    { name: 'Susu', jumlah: '400 ml'},
-    { name: 'Kopi', jumlah: '4000 g'},
+    { name: 'Susu', jumlah: '400 ml' },
+    { name: 'Kopi', jumlah: '4000 g' },
     { name: 'Teh', jumlah: '2000 g' },
-    { name: 'Gula', jumlah: '4000 g'},
-    { name: 'Sirup Banana', jumlah: '600 ml'},
-    { name: 'Sirup Orange', jumlah: '500 ml'},
-
-  ]
+    { name: 'Gula', jumlah: '4000 g' },
+    { name: 'Sirup Banana', jumlah: '600 ml' },
+    { name: 'Sirup Orange', jumlah: '500 ml' },
+  ];
   const columns: ColumnDef<any>[] = [
     {
       header: 'No',
       accessorKey: 'index',
       cell: ({ row }) => row.index + 1,
-      size:8,
+      size: 8,
       maxSize: 10,
     },
     {
@@ -53,8 +52,11 @@ export const DashboardStockOpname: FC = (): ReactElement => {
   ];
 
   return (
-    <div className="flex flex-col">
-      <h1 className="text-3xl font-bold">Stock Opname</h1>
+    <div className="flex flex-col gap-y-4 ">
+      <div className="flex flex-col gap-y-2 w-full">
+        <small className="text-grey-500">Stock Opname List /</small>
+        <h1 className="text-3xl font-bold ">Stock Opname</h1>
+      </div>
       <DataTable
         data={data}
         columns={columns}

@@ -63,8 +63,11 @@ export const DashboardRequestPurchase: FC = (): ReactElement => {
   ];
 
   return (
-    <div className="flex flex-col">
-      <h1 className="text-3xl font-bold">Request Purchase</h1>
+    <div className="flex flex-col gap-y-4">
+     <div className="flex flex-col gap-y-2 w-full">
+      <small className="text-grey-500">Request Purchase List /</small>
+      <h1 className="text-3xl font-bold ">Request Purchase</h1>
+    </div>
       <DataTable
         data={data}
         columns={columns}

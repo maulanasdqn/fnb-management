@@ -30,16 +30,19 @@ type TCreateProduct = z.infer<typeof schema>;
 export const DashboardProductCreate: FC = (): ReactElement => {
   const navigate = useNavigate();
   const { mutate, isPending } = trpc.product.create.useMutation();
-  const {data} = trpc.productCategory.findMany.useQuery();
+  const { data } = trpc.productCategory.findMany.useQuery();
   const breadcrumbsItem = [
     { name: 'Create Data', path: '/dashboard/product/create' },
   ];
-  const category = data?.data?.map((item) => ({value:item.id, label:item.name}));
+  const category = data?.data?.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
   const {
     control,
     handleSubmit,
     reset,
-    formState: { errors,isValid },
+    formState: { errors, isValid },
   } = useForm<TCreateProduct>({
     mode: 'all',
     resolver: zodResolver(schema),
@@ -47,26 +50,26 @@ export const DashboardProductCreate: FC = (): ReactElement => {
   const onSubmit = handleSubmit((data) => {
     mutate(
       {
-        productCategoryId:data.category,
+        productCategoryId: data.category,
         name: data?.name,
         priceSelling: Number(data?.priceSelling),
         image: data?.image,
-        description: data?.description, 
+        description: data?.description,
       },
       {
         onSuccess: () => {
           toast.success('Product Baru Berhasil Ditambahkan');
           reset();
           setTimeout(() => {
-            navigate('/dashboard/product'); 
-          },1000)
+            navigate('/dashboard/product');
+          }, 1000);
         },
       }
     );
   });
   return (
     <section className="w-full py-4 bg-white shadow-md rounded px-8 h-5/6 ">
-      <ToastWrapper/>
+      <ToastWrapper />
       <div className="flex gap-x-1">
         <h1 className="text-grey">
           Product <span className="text-grey-400"> {'/'} </span>
