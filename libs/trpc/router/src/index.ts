@@ -9,6 +9,7 @@ import {
   unitTypeController,
   permissionController,
   productCategoryController,
+  ingredientController,
 } from '@fms/api-libs';
 
 export const appRouter = router({
@@ -21,5 +22,6 @@ export const appRouter = router({
   productCategory: productCategoryController,
   purchase: purchaseController,
   unitType: unitTypeController,
+  ingredient: ingredientController,
 });
 export type appRouter = typeof appRouter;

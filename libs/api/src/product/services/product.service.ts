@@ -7,7 +7,7 @@ import {
   TQueryParams,
 } from '@fms/entities';
 import { ilike, asc, eq } from 'drizzle-orm';
-import { findVariantByProductId } from '../../variant';
+import { variantService } from '../../variant';
 
 export const findMany = async (
   params?: TQueryParams
@@ -80,7 +80,7 @@ export const findOne = async (id: string): Promise<TProductSingleResponse> => {
     throw new Error('Product tidak ditemukan');
   }
 
-  const variants = await findVariantByProductId(id);
+  const variants = await variantService.findByProductId(id);
 
   return {
     data: { ...data, variants },

@@ -10,3 +10,4 @@ export * from './supplier';
 export * from './auth';
 export * from './unit';
 export * from './variant';
+export * from './ingredient';

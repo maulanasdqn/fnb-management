@@ -12,5 +12,6 @@ export * from './place/place.schema';
 export * from './product/product.schema';
 export * from './product/product-category.schema';
 export * from './unit/unit-type.schema';
+export * from './unit/unit-conversion.schema';
 export * from './variant/variant.schema';
 export * from './variant/variant-option.schema';

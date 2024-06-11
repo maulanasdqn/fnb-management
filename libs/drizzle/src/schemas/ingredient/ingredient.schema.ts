@@ -1,4 +1,10 @@
-import { pgTable, text, uuid, integer } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  text,
+  uuid,
+  integer,
+  doublePrecision,
+} from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base/base.schema';
 import { unitTypes } from '../unit/unit-type.schema';
 import { users } from '../me/user.schema';
@@ -8,8 +14,8 @@ import { productIngredients } from '../product/product.schema';
 
 export const ingredients = pgTable('ingredients', {
   name: text('name').notNull(),
-  price: integer('price').notNull(),
-  amount: integer('amount').notNull(),
+  price: doublePrecision('price').notNull(),
+  amount: doublePrecision('amount').notNull(),
   unitTypeId: uuid('unit_type_id')
     .notNull()
     .references(() => unitTypes.id),
