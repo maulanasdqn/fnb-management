@@ -85,15 +85,6 @@ export const DashboardProductEdit: FC = (): ReactElement => {
               name="name"
               control={control}
             />
-            {/* <ControlledFieldText
-              type="number"
-              status={errors.price ? 'error' : 'default'}
-              message={errors.price?.message}
-              label="Harga Produk"
-              name="price"
-              control={control}
-        
-            /> */}
             <ControlledFieldText
               type="number"
               status={errors.priceSelling ? 'error' : 'default'}
