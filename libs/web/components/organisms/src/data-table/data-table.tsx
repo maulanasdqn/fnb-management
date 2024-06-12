@@ -68,7 +68,7 @@ export const DataTable = <T extends Record<string, unknown>>(
         )}
       </div>
 
-      <div className="relative flex flex-col w-full h-full overflow-scroll text-grey-700 bg-white shadow-md bg-clip-border rounded-xl">
+      <div className="relative flex flex-col no-scrollbar w-full h-full overflow-scroll text-grey-700 bg-white shadow-md bg-clip-border rounded-xl">
         <table className="w-full text-left table-auto min-w-max">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (

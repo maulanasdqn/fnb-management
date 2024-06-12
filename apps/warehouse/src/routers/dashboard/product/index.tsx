@@ -27,6 +27,8 @@ export const DashboardProduct: FC = (): ReactElement => {
     {
       header: 'No',
       accessorKey: 'index',
+      size: 8,
+      maxSize: 10,
       cell: ({ row }) => row.index + 1,
     },
     {
@@ -87,7 +89,10 @@ export const DashboardProduct: FC = (): ReactElement => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="flex flex-col gap-4">
-        <h1 className="text-2xl font-bold">Products</h1>
+        <div className="flex flex-col gap-y-2 w-full">
+          <small className="text-grey-500">Product List /</small>
+          <h1 className="text-3xl font-bold ">Product</h1>
+        </div>
         <DataTable
           data={data?.data || []}
           meta={data?.meta}
