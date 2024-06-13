@@ -7,7 +7,7 @@ export const userSchema = z.object({
   username: z.string().optional(),
   avatar: z.string().optional(),
   password: z.string().optional(),
-  role: roleSchema,
+  role: roleSchema.optional(),
   ...baseSchema.shape,
 });
 
