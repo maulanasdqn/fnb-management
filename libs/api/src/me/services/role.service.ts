@@ -146,7 +146,7 @@ export const findOne = async (id: string): Promise<TRoleSingleResponse> => {
   };
 };
 
-export const deleteRole = async (id: string) => {
+export const deleteRole = async (id: string): Promise<TRoleSingleResponse> => {
   await db.transaction(async (tx) => {
     await tx.delete(roles).where(eq(roles.id, id));
 
@@ -154,4 +154,8 @@ export const deleteRole = async (id: string) => {
       .delete(rolesToPermissions)
       .where(eq(rolesToPermissions.roleId, id));
   });
+
+  return {
+    message: 'Delete Role Success',
+  };
 };
