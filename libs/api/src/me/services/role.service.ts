@@ -1,10 +1,67 @@
-import { db, roles } from '@fms/drizzle';
+import { db, roles, rolesToPermissions } from '@fms/drizzle';
 import {
   TQueryParams,
   TRoleResponse,
   TRoleSingleResponse,
+  TRoleCreateRequest,
+  TRoleUpdateRequest,
 } from '@fms/entities';
 import { eq } from 'drizzle-orm';
+
+export const create = async (
+  request: TRoleCreateRequest
+): Promise<TRoleSingleResponse> => {
+  await db.transaction(async (tx) => {
+    const createRole = await db
+      .insert(roles)
+      .values({
+        name: request.name,
+      })
+      .returning({
+        id: roles.id,
+      })
+      .then((res) => res.at(0));
+
+    for await (const permissionId of request.permissionIds) {
+      await tx
+        .insert(rolesToPermissions)
+        .values({ roleId: createRole?.id as string, permissionId });
+    }
+  });
+  await db.insert(roles).values({
+    name: request.name,
+  });
+
+  return {
+    message: 'Create Role Success',
+  };
+};
+
+export const update = async (request: TRoleUpdateRequest) => {
+  await db.transaction(async (tx) => {
+    if (request?.name) {
+      await tx
+        .update(roles)
+        .set({ name: request.name })
+        .where(eq(roles.id, request.id));
+    }
+
+    if (request?.permissionIds) {
+      await tx
+        .delete(rolesToPermissions)
+        .where(eq(rolesToPermissions.roleId, request.id));
+
+      for await (const permissionId of request.permissionIds) {
+        await tx
+          .insert(rolesToPermissions)
+          .values({ roleId: request.id, permissionId });
+      }
+    }
+  });
+  return {
+    message: 'Update Role Success',
+  };
+};
 
 export const findMany = async (
   params?: TQueryParams
@@ -87,4 +144,14 @@ export const findOne = async (id: string): Promise<TRoleSingleResponse> => {
       permissions,
     },
   };
+};
+
+export const deleteRole = async (id: string) => {
+  await db.transaction(async (tx) => {
+    await tx.delete(roles).where(eq(roles.id, id));
+
+    await tx
+      .delete(rolesToPermissions)
+      .where(eq(rolesToPermissions.roleId, id));
+  });
 };

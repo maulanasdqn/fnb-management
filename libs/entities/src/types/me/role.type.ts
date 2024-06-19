@@ -12,15 +12,13 @@ export const roleSchema = z.object({
 
 export const roleCreateSchema = z.object({
   name: z.string(),
-  permissions: z.array(z.string()),
+  permissionIds: z.array(z.string()),
 });
 
 export const roleUpdateSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
-  permissions: z
-    .array(z.object({ id: z.string(), name: z.string() }))
-    .optional(),
+  permissionIds: z.array(z.string()).optional(),
 });
 
 export type TRole = z.infer<typeof roleSchema>;
