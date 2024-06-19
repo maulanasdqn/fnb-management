@@ -35,7 +35,7 @@ export const pagePermission = (permissions: Array<string>) => {
   if (
     !permissionChecker(
       permissions,
-      userService?.getUserData()?.role?.permissions?.map((val) => val?.name)
+      userService?.getUserData()?.role?.permissions?.map((val) => val?.name) as Array<string>
     )
   ) {
     return redirect('/permission-denied');

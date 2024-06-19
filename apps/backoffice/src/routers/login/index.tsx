@@ -29,21 +29,22 @@ export const LoginPage: FC = (): ReactElement => {
   });
 
   const { mutate, isPending } = trpc.auth.login.useMutation();
-
   const onSubmit = handleSubmit((data) => {
-    mutate(data, {
-      onSuccess: (resp) => {
-        setIsAuthenticated(true);
-        if (resp) {
-          tokenService.setAccessToken(resp?.token?.accessToken);
-          tokenService.setRefreshToken(resp?.token?.refreshToken);
-          userService.setUserData(resp?.user);
-        }
-      },
-      onError: (error) => {
-        setErrorMessage(error.message);
-      },
-    });
+    console.log(data);
+    window.location.href = '/dashboard';
+    // mutate(data, {
+    //   onSuccess: (resp) => {
+    //     setIsAuthenticated(true);
+    //     if (resp) {
+    //       tokenService.setAccessToken(resp?.token?.accessToken);
+    //       tokenService.setRefreshToken(resp?.token?.refreshToken);
+    //       userService.setUserData(resp?.user);
+    //     }
+    //   },
+    //   onError: (error) => {
+    //     setErrorMessage(error.message);
+    //   },
+    // });
   });
   useEffect(() => {
     setTimeout(() => {
