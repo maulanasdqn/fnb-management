@@ -148,11 +148,11 @@ export const findOne = async (id: string): Promise<TRoleSingleResponse> => {
 
 export const deleteRole = async (id: string): Promise<TRoleSingleResponse> => {
   await db.transaction(async (tx) => {
-    await tx.delete(roles).where(eq(roles.id, id));
-
     await tx
       .delete(rolesToPermissions)
       .where(eq(rolesToPermissions.roleId, id));
+
+    await tx.delete(roles).where(eq(roles.id, id));
   });
 
   return {

@@ -6,7 +6,13 @@ import {
   roleUpdateSchema,
 } from '@fms/entities';
 import { router, procedure } from '@fms/trpc-server';
-import { findMany, findOne, create, update } from '../services/role.service';
+import {
+  findMany,
+  findOne,
+  create,
+  update,
+  deleteRole,
+} from '../services/role.service';
 import { z } from 'zod';
 export const roleController = router({
   findMany: procedure
@@ -37,7 +43,7 @@ export const roleController = router({
         id: z.string(),
       })
     )
-    .query(async ({ input }) => {
-      return await findOne(input.id);
+    .mutation(async ({ input }) => {
+      return await deleteRole(input.id);
     }),
 });
