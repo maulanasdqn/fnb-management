@@ -9,7 +9,7 @@ import {
 } from '@fms/entities';
 
 export const purchaseController = router({
-  index: procedure.input(queryParamsSchema).mutation(({ input }) => {
+  index: procedure.input(queryParamsSchema).query(({ input }) => {
     return purchaseService.pagination(input);
   }),
   detail: procedure.input(z.object({ id: z.string() })).query(({ input }) => {
