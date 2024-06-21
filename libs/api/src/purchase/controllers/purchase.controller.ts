@@ -29,4 +29,9 @@ export const purchaseController = router({
   approval: procedure.input(purchaseApprovalSchema).mutation(({ input }) => {
     return purchaseService.approval(input);
   }),
+  delete: procedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ input }) => {
+      return purchaseService.delete(input.id);
+    }),
 });

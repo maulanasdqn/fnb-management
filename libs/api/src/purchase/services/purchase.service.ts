@@ -160,15 +160,13 @@ export const purchaseService = {
         .where(eq(purchaseDetails.purchaseId, data.id));
 
       for await (const item of data.details) {
-        await tx
-          .insert(purchaseDetails)
-          .values({
-            purchaseId: data.id,
-            price: item.price,
-            amount: item.amount,
-            unitTypeId: item.unitTypeId,
-            ingredientId: item.ingredientId,
-          });
+        await tx.insert(purchaseDetails).values({
+          purchaseId: data.id,
+          price: item.price,
+          amount: item.amount,
+          unitTypeId: item.unitTypeId,
+          ingredientId: item.ingredientId,
+        });
       }
     });
     return {
@@ -198,15 +196,13 @@ export const purchaseService = {
         .then((data) => data[0]);
 
       for await (const item of data.details) {
-        await tx
-          .insert(purchaseDetails)
-          .values({
-            purchaseId: createPurchase.id,
-            price: item.price,
-            amount: item.amount,
-            unitTypeId: item.unitTypeId,
-            ingredientId: item.ingredientId,
-          });
+        await tx.insert(purchaseDetails).values({
+          purchaseId: createPurchase.id,
+          price: item.price,
+          amount: item.amount,
+          unitTypeId: item.unitTypeId,
+          ingredientId: item.ingredientId,
+        });
       }
     });
 
@@ -227,6 +223,13 @@ export const purchaseService = {
       .where(eq(purchases.id, data.id));
     return {
       message: 'Update Purchase Success',
+    };
+  },
+
+  delete: async (id: string): Promise<{ message: string }> => {
+    await db.delete(purchases).where(eq(purchases.id, id));
+    return {
+      message: 'Delete Purchase Success',
     };
   },
 };
