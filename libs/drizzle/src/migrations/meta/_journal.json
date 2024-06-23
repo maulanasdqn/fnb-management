@@ -43,6 +43,20 @@
       "when": 1718042560905,
       "tag": "0005_special_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1719141958988,
+      "tag": "0006_familiar_xavin",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1719142898681,
+      "tag": "0007_normal_loki",
+      "breakpoints": true
     }
   ]
 }
