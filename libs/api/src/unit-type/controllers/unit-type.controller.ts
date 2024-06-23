@@ -15,7 +15,7 @@ export const unitTypeController = router({
   }),
   delete: procedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
+    .mutation(async ({ input }) => {
       return await unitTypeService.delete(input.id);
     }),
   index: procedure.input(queryParamsSchema).query(async ({ input }) => {
