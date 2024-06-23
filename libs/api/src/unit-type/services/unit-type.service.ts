@@ -1,4 +1,4 @@
-import { db, unitTypes } from '@fms/drizzle';
+import { db, unitTypeConversions, unitTypes } from '@fms/drizzle';
 import {
   TQueryParams,
   TUnitTypeCreateRequest,
@@ -44,16 +44,33 @@ export const unitTypeService = {
   detail: async (id: string): Promise<TUnitTypeSingleResponse> => {
     const data = await db.query.unitTypes.findFirst({
       where: eq(unitTypes.id, id),
-      columns: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
+      with: {
+        fromUnits: {
+          columns: {
+            conversionFactor: true,
+          },
+          with: {
+            toUnitType: {
+              columns: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
+    if (!data) {
+      throw new Error('Unit Type not found');
+    }
+
     return {
-      data,
+      data: {
+        id: data.id,
+        name: data.name,
+        conversions: data.fromUnits,
+      },
     };
   },
   create: async (
@@ -61,7 +78,25 @@ export const unitTypeService = {
   ): Promise<{
     message: string;
   }> => {
-    await db.insert(unitTypes).values({ name: request.name }).returning();
+    await db.transaction(async (tx) => {
+      const createUnitType = await tx
+        .insert(unitTypes)
+        .values({ name: request.name })
+        .returning({
+          id: unitTypes.id,
+        })
+        .then((res) => res[0]);
+
+      if (request?.conversions) {
+        for await (const conversion of request.conversions) {
+          await tx.insert(unitTypeConversions).values({
+            fromUnitTypeId: createUnitType.id,
+            toUnitTypeId: conversion.toUnitTypeId,
+            conversionFactor: conversion.conversionFactor,
+          });
+        }
+      }
+    });
     return {
       message: 'Create Unit Type Success',
     };
@@ -75,6 +110,29 @@ export const unitTypeService = {
       .update(unitTypes)
       .set({ name: request.name })
       .where(eq(unitTypes.id, request.id));
+
+    await db.transaction(async (tx) => {
+      if (request?.name) {
+        await tx
+          .update(unitTypes)
+          .set({ name: request.name })
+          .where(eq(unitTypes.id, request.id));
+      }
+
+      if (request?.conversions) {
+        await tx
+          .delete(unitTypeConversions)
+          .where(eq(unitTypeConversions.fromUnitTypeId, request.id));
+
+        for await (const conversion of request.conversions) {
+          await tx.insert(unitTypeConversions).values({
+            fromUnitTypeId: request.id,
+            toUnitTypeId: conversion.toUnitTypeId,
+            conversionFactor: conversion.conversionFactor,
+          });
+        }
+      }
+    });
     return {
       message: 'Update Unit Type Success',
     };
