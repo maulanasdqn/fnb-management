@@ -43,6 +43,20 @@
       "when": 1718042560905,
       "tag": "0005_special_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1719155053220,
+      "tag": "0006_clammy_zarek",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1719155934242,
+      "tag": "0007_brave_spirit",
+      "breakpoints": true
     }
   ]
 }
