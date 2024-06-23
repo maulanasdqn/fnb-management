@@ -7,3 +7,4 @@ export * from './auth';
 export * from './unit-type';
 export * from './ingredient';
 export * from './payment';
+export * from './place';
