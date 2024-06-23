@@ -49,7 +49,7 @@ export const purchaseSchema = z.object({
   amountTotal: z.number(),
   invoiceNumber: z.string(),
   status: z.string(),
-  purchaseDetails: z.array(purchaseDetailSchema),
+  details: z.array(purchaseDetailSchema),
   ...baseSchema.shape,
 });
 
@@ -58,6 +58,4 @@ export type TPurchaseCreateRequest = z.infer<typeof purchaseCreateSchema>;
 export type TPurchaseUpdateRequest = z.infer<typeof purchaseUpdateSchema>;
 export type TPurchaseApprovalRequest = z.infer<typeof purchaseApprovalSchema>;
 export type TPurchaseSingleResponse = TBaseResponse<TPurchase>;
-export type TPurchaseResponse = TBaseResponse<
-  Omit<TPurchase, 'purchaseDetails'>[]
->;
+export type TPurchaseResponse = TBaseResponse<Omit<TPurchase, 'details'>[]>;

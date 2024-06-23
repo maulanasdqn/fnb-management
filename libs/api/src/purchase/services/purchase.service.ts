@@ -95,10 +95,11 @@ export const purchaseService = {
     if (!purchase) {
       throw Error('Purchase not found');
     }
-    const { supplier, ...restData } = purchase;
+    const { supplier, purchaseDetails, ...restData } = purchase;
     return {
       data: {
         ...restData,
+        details: purchaseDetails,
         supplier: {
           id: supplier.id,
           fullName: supplier.fullName,
@@ -148,25 +149,29 @@ export const purchaseService = {
     data: TPurchaseUpdateRequest
   ): Promise<{ message: string }> => {
     await db.transaction(async (tx) => {
-      await tx
-        .update(purchases)
-        .set({
-          supplierId: data.supplierId,
-        })
-        .where(eq(purchases.id, data.id));
+      if (data?.supplierId) {
+        await tx
+          .update(purchases)
+          .set({
+            supplierId: data.supplierId,
+          })
+          .where(eq(purchases.id, data.id));
+      }
 
-      await tx
-        .delete(purchaseDetails)
-        .where(eq(purchaseDetails.purchaseId, data.id));
+      if (data?.details) {
+        await tx
+          .delete(purchaseDetails)
+          .where(eq(purchaseDetails.purchaseId, data.id));
 
-      for await (const item of data.details) {
-        await tx.insert(purchaseDetails).values({
-          purchaseId: data.id,
-          price: item.price,
-          amount: item.amount,
-          unitTypeId: item.unitTypeId,
-          ingredientId: item.ingredientId,
-        });
+        for await (const item of data.details) {
+          await tx.insert(purchaseDetails).values({
+            purchaseId: data.id,
+            price: item.price,
+            amount: item.amount,
+            unitTypeId: item.unitTypeId,
+            ingredientId: item.ingredientId,
+          });
+        }
       }
     });
     return {
