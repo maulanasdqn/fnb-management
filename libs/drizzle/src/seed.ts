@@ -9,6 +9,7 @@ import { seedProduct } from './seeders/product.seeder';
 import { seedUnitType } from './seeders/unit-type.seeder';
 import { seedIngredient } from './seeders/ingredient.seeder';
 import { seedPayment } from './seeders/payment.seeder';
+import { seedPlace } from './seeders/place.seeder';
 const dbUrl = process.env['DATABASE_URL'] as string;
 const dbQueryClient = new Pool({
   connectionString: dbUrl,
@@ -28,6 +29,7 @@ async function main() {
     await seedUnitType(db);
     await seedIngredient(db);
     await seedPayment(db);
+    await seedPlace(db);
   } catch (error) {
     console.error(error);
   }
