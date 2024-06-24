@@ -55,28 +55,54 @@ export const userService = {
     };
   },
   detail: async (id: string): Promise<TUserSingleResponse> => {
-    const data = await db.query.users.findFirst({
+    const user = await db.query.users.findFirst({
       where: eq(users.id, id),
-      columns: {
-        id: true,
-        fullname: true,
-        username: true,
-        avatar: true,
-      },
       with: {
         role: {
           columns: {
             id: true,
             name: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          with: {
+            rolesToPermissions: {
+              with: {
+                permission: true,
+              },
+            },
           },
         },
       },
     });
-    if (!data) {
-      throw new Error('User not found');
+
+    if (!user) {
+      throw Error('User tidak ditemukan');
     }
     return {
-      data,
+      data: {
+        id: user.id,
+        fullname: user.fullname,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        username: user.username,
+        avatar: user.avatar,
+        role: {
+          id: user.role.id,
+          name: user.role.name,
+          createdAt: user.role.createdAt,
+          updatedAt: user.role?.updatedAt,
+          permissions: user.role.rolesToPermissions.map((rtp) => ({
+            id: rtp.permission.id,
+            name: rtp.permission.key,
+            key: rtp.permission.key,
+            group: rtp.permission.group,
+            parent: rtp.permission.parent,
+            createdAt: rtp.permission.createdAt,
+            updatedAt: rtp.permission.updatedAt,
+          })),
+        },
+      },
     };
   },
   create: async (
