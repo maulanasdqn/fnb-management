@@ -43,6 +43,13 @@
       "when": 1718042560905,
       "tag": "0005_special_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1719001495184,
+      "tag": "0006_normal_tomorrow_man",
+      "breakpoints": true
     }
   ]
 }
