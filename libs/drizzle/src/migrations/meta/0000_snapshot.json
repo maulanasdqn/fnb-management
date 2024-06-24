@@ -1,5 +1,5 @@
 {
-  "id": "a7d96627-fa30-4228-83c0-1508d7e78f60",
+  "id": "010a79c5-1e7d-4748-9e06-4acbcb9aaa27",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
@@ -59,13 +59,13 @@
         },
         "price": {
           "name": "price",
-          "type": "integer",
+          "type": "double precision",
           "primaryKey": false,
           "notNull": true
         },
         "amount": {
           "name": "amount",
-          "type": "integer",
+          "type": "double precision",
           "primaryKey": false,
           "notNull": true
         },
@@ -515,6 +515,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "served_by": {
           "name": "served_by",
           "type": "uuid",
@@ -598,8 +604,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "amount": {
-          "name": "amount",
+        "quantity": {
+          "name": "quantity",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -688,9 +694,10 @@
         },
         "amount": {
           "name": "amount",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false,
+          "default": 0
         },
         "id": {
           "name": "id",
@@ -851,6 +858,76 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.product_variants": {
+      "name": "product_variants",
+      "schema": "",
+      "columns": {
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "variant_option_id": {
+          "name": "variant_option_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "product_variants_product_id_products_id_fk": {
+          "name": "product_variants_product_id_products_id_fk",
+          "tableFrom": "product_variants",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "product_variants_variant_option_id_variant_options_id_fk": {
+          "name": "product_variants_variant_option_id_variant_options_id_fk",
+          "tableFrom": "product_variants",
+          "tableTo": "variant_options",
+          "columnsFrom": [
+            "variant_option_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.products": {
       "name": "products",
       "schema": "",
@@ -882,12 +959,6 @@
         "description": {
           "name": "description",
           "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "variant_option_id": {
-          "name": "variant_option_id",
-          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -933,19 +1004,6 @@
           "tableTo": "product_categories",
           "columnsFrom": [
             "product_category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "products_variant_option_id_variant_options_id_fk": {
-          "name": "products_variant_option_id_variant_options_id_fk",
-          "tableFrom": "products",
-          "tableTo": "variant_options",
-          "columnsFrom": [
-            "variant_option_id"
           ],
           "columnsTo": [
             "id"
@@ -1057,6 +1115,82 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.unit_type_conversions": {
+      "name": "unit_type_conversions",
+      "schema": "",
+      "columns": {
+        "from_unit_type_id": {
+          "name": "from_unit_type_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to_unit_type_id": {
+          "name": "to_unit_type_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conversion_factor": {
+          "name": "conversion_factor",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "unit_type_conversions_from_unit_type_id_unit_types_id_fk": {
+          "name": "unit_type_conversions_from_unit_type_id_unit_types_id_fk",
+          "tableFrom": "unit_type_conversions",
+          "tableTo": "unit_types",
+          "columnsFrom": [
+            "from_unit_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "unit_type_conversions_to_unit_type_id_unit_types_id_fk": {
+          "name": "unit_type_conversions_to_unit_type_id_unit_types_id_fk",
+          "tableFrom": "unit_type_conversions",
+          "tableTo": "unit_types",
+          "columnsFrom": [
+            "to_unit_type_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.variants": {
       "name": "variants",
       "schema": "",
@@ -1108,19 +1242,19 @@
           "name": "ingredient_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "unit_type_id": {
           "name": "unit_type_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "amount": {
           "name": "amount",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "variant_id": {
           "name": "variant_id",
@@ -1306,12 +1440,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "ingredient_id": {
-          "name": "ingredient_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
         "amount_total": {
           "name": "amount_total",
           "type": "integer",
@@ -1329,6 +1457,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "rejection_note": {
+          "name": "rejection_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "id": {
           "name": "id",
@@ -1360,19 +1494,6 @@
           "tableTo": "suppliers",
           "columnsFrom": [
             "supplier_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "purchases_ingredient_id_ingredients_id_fk": {
-          "name": "purchases_ingredient_id_ingredients_id_fk",
-          "tableFrom": "purchases",
-          "tableTo": "ingredients",
-          "columnsFrom": [
-            "ingredient_id"
           ],
           "columnsTo": [
             "id"
@@ -1430,82 +1551,6 @@
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.unit_conversions": {
-      "name": "unit_conversions",
-      "schema": "",
-      "columns": {
-        "from_unit_id": {
-          "name": "from_unit_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "to_unit_id": {
-          "name": "to_unit_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "conversion_factor": {
-          "name": "conversion_factor",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "unit_conversions_from_unit_id_unit_types_id_fk": {
-          "name": "unit_conversions_from_unit_id_unit_types_id_fk",
-          "tableFrom": "unit_conversions",
-          "tableTo": "unit_types",
-          "columnsFrom": [
-            "from_unit_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "unit_conversions_to_unit_id_unit_types_id_fk": {
-          "name": "unit_conversions_to_unit_id_unit_types_id_fk",
-          "tableFrom": "unit_conversions",
-          "tableTo": "unit_types",
-          "columnsFrom": [
-            "to_unit_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }
