@@ -47,15 +47,8 @@
     {
       "idx": 6,
       "version": "6",
-      "when": 1719155053220,
-      "tag": "0006_clammy_zarek",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1719155934242,
-      "tag": "0007_brave_spirit",
+      "when": 1719001495184,
+      "tag": "0006_normal_tomorrow_man",
       "breakpoints": true
     }
   ]

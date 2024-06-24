@@ -3,11 +3,11 @@ import { baseSchema } from '../base/base.schema';
 import { relations } from 'drizzle-orm';
 import { unitTypes } from './unit-type.schema';
 
-export const unitConversions = pgTable('unit_conversions', {
-  fromUnitId: uuid('from_unit_id')
+export const unitTypeConversions = pgTable('unit_type_conversions', {
+  fromUnitTypeId: uuid('from_unit_type_id')
     .notNull()
     .references(() => unitTypes.id),
-  toUnitId: uuid('to_unit_id')
+  toUnitTypeId: uuid('to_unit_type_id')
     .notNull()
     .references(() => unitTypes.id),
   conversionFactor: doublePrecision('conversion_factor').notNull(),
@@ -15,17 +15,17 @@ export const unitConversions = pgTable('unit_conversions', {
 });
 
 export const unitConversionRelations = relations(
-  unitConversions,
+  unitTypeConversions,
   ({ one }) => ({
-    fromUnit: one(unitTypes, {
-      fields: [unitConversions.fromUnitId],
+    fromUnitType: one(unitTypes, {
+      fields: [unitTypeConversions.fromUnitTypeId],
       references: [unitTypes.id],
-      relationName: 'from_unit',
+      relationName: 'from_unit_type',
     }),
-    toUnit: one(unitTypes, {
-      fields: [unitConversions.toUnitId],
+    toUnitType: one(unitTypes, {
+      fields: [unitTypeConversions.toUnitTypeId],
       references: [unitTypes.id],
-      relationName: 'to_unit',
+      relationName: 'to_unit_type',
     }),
   })
 );

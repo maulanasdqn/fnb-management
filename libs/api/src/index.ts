@@ -9,3 +9,4 @@ export * from './ingredient';
 export * from './payment';
 export * from './place';
 export * from './variant';
+export * from './supplier';

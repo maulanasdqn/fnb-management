@@ -1,4 +1,4 @@
-import { db, ingredients, unitConversions } from '@fms/drizzle';
+import { db, ingredients, unitTypeConversions } from '@fms/drizzle';
 import {
   TIngredientCreateRequest,
   TIngredientResponse,
@@ -9,19 +9,19 @@ import { and, eq, or } from 'drizzle-orm';
 
 export const ingredientService = {
   findMany: async (id: string) => {
-    const dataUnitConversions = await db.query.unitConversions.findMany({
+    const dataUnitConversions = await db.query.unitTypeConversions.findMany({
       columns: {
         id: true,
         conversionFactor: true,
       },
       with: {
-        fromUnit: {
+        fromUnitType: {
           columns: {
             id: true,
             name: true,
           },
         },
-        toUnit: {
+        toUnitType: {
           columns: {
             id: true,
             name: true,
@@ -60,11 +60,11 @@ export const ingredientService = {
       const stock = { [baseUnitName]: stockInBaseUnit };
 
       for (const conversion of dataUnitConversions) {
-        if (conversion.fromUnit.name === ingredient.unitType.name) {
-          stock[conversion.toUnit.name] =
+        if (conversion.fromUnitType.name === ingredient.unitType.name) {
+          stock[conversion.toUnitType.name] =
             stockInBaseUnit * conversion.conversionFactor;
-        } else if (conversion.toUnit.name === ingredient.unitType.name) {
-          stock[conversion.fromUnit.name] =
+        } else if (conversion.toUnitType.name === ingredient.unitType.name) {
+          stock[conversion.fromUnitType.name] =
             stockInBaseUnit / conversion.conversionFactor;
         }
       }
@@ -106,19 +106,19 @@ export const ingredientService = {
       throw new Error('Ingredient not found');
     }
 
-    const dataUnitConversions = await db.query.unitConversions.findMany({
+    const dataUnitConversions = await db.query.unitTypeConversions.findMany({
       columns: {
         id: true,
         conversionFactor: true,
       },
       with: {
-        fromUnit: {
+        fromUnitType: {
           columns: {
             id: true,
             name: true,
           },
         },
-        toUnit: {
+        toUnitType: {
           columns: {
             id: true,
             name: true,
@@ -133,11 +133,11 @@ export const ingredientService = {
     const stock = { [baseUnitName]: stockInBaseUnit };
 
     for (const conversion of dataUnitConversions) {
-      if (conversion.fromUnit.name === data.unitType.name) {
-        stock[conversion.toUnit.name] =
+      if (conversion.fromUnitType.name === data.unitType.name) {
+        stock[conversion.toUnitType.name] =
           stockInBaseUnit * conversion.conversionFactor;
-      } else if (conversion.toUnit.name === data.unitType.name) {
-        stock[conversion.fromUnit.name] =
+      } else if (conversion.toUnitType.name === data.unitType.name) {
+        stock[conversion.fromUnitType.name] =
           stockInBaseUnit / conversion.conversionFactor;
       }
     }

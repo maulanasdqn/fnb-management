@@ -17,8 +17,8 @@ export const seedUnitType = async <T extends Record<string, unknown>>(
 ) => {
   try {
     const unitConversionExist = await db
-      .select({ id: schema.unitConversions.id })
-      .from(schema.unitConversions);
+      .select({ id: schema.unitTypeConversions.id })
+      .from(schema.unitTypeConversions);
 
     if (unitConversionExist.length > 0) {
       return;
@@ -107,9 +107,9 @@ export const seedUnitType = async <T extends Record<string, unknown>>(
         unitMap[unitType.name] = createdUnit.id;
       }
       for (const conversion of unitConversions) {
-        await tx.insert(schema.unitConversions).values({
-          fromUnitId: unitMap[conversion.fromUnitName],
-          toUnitId: unitMap[conversion.toUnitName],
+        await tx.insert(schema.unitTypeConversions).values({
+          fromUnitTypeId: unitMap[conversion.fromUnitName],
+          toUnitTypeId: unitMap[conversion.toUnitName],
           conversionFactor: conversion.conversionFactor,
         });
       }
