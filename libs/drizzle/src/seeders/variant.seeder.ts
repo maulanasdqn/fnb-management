@@ -1,6 +1,7 @@
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from '../schemas';
-
+import { config } from 'dotenv';
+config();
 export const seedVariant = async <T extends Record<string, unknown>>(
   db: NodePgDatabase<T>
 ) => {

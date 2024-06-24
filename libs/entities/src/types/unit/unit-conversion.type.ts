@@ -1,28 +1,43 @@
 import { z } from 'zod';
 import { baseSchema, TBaseResponse } from '../common';
 
-export const unitConversionSchema = z.object({
-  fromUnitId: z.string(),
-  toUnitId: z.string(),
+export const unitTypeConversionSchema = z.object({
+  fromUnitType: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .nullable(),
+  toUnitType: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+    })
+    .nullable(),
   conversionFactor: z.number(),
   ...baseSchema.shape,
 });
 
-export const unitConversionCreateSchema = z.object({
-  fromUnitId: z.string(),
-  toUnitId: z.string(),
+export const unitTypeConversionCreateSchema = z.object({
+  fromUnitTypeId: z.string(),
+  toUnitTypeId: z.string(),
   conversionFactor: z.number(),
 });
 
-export const unitConversionUpdateSchema = z.object({
+export const unitTypeConversionUpdateSchema = z.object({
   id: z.string(),
-  fromUnitId: z.string().optional(),
-  toUnitId: z.string().optional(),
+  fromUnitTypeId: z.string().optional(),
+  toUnitTypeId: z.string().optional(),
   conversionFactor: z.number().optional(),
 });
 
-export type TUnitConversion = z.infer<typeof unitConversionSchema>;
-export type TUnitConversionCreate = z.infer<typeof unitConversionCreateSchema>;
-export type TUnitConversionUpdate = z.infer<typeof unitConversionUpdateSchema>;
-export type TUnitConversionSingleResponse = TBaseResponse<TUnitConversion>;
-export type TUnitConversionResponse = TBaseResponse<TUnitConversion[]>;
+export type TUnitTypeConversion = z.infer<typeof unitTypeConversionSchema>;
+export type TUnitTypeConversionCreateRequest = z.infer<
+  typeof unitTypeConversionCreateSchema
+>;
+export type TUnitTypeConversionUpdateRequest = z.infer<
+  typeof unitTypeConversionUpdateSchema
+>;
+export type TUnitTypeConversionSingleResponse =
+  TBaseResponse<TUnitTypeConversion>;
+export type TUnitTypeConversionResponse = TBaseResponse<TUnitTypeConversion[]>;
