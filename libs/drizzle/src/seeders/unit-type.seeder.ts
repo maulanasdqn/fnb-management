@@ -1,6 +1,7 @@
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from '../schemas';
-
+import { config } from 'dotenv';
+config();
 //Redeclare because canot import enum from entities
 export enum EUnitType {
   KILOGRAM = 'Kilogram',

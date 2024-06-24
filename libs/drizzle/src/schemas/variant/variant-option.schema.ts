@@ -24,6 +24,14 @@ export const variantOptionRelations = relations(
       fields: [variantOptions.variantId],
       references: [variants.id],
     }),
+    unitType: one(unitTypes, {
+      fields: [variantOptions.unitTypeId],
+      references: [unitTypes.id],
+    }),
+    ingredient: one(ingredients, {
+      fields: [variantOptions.ingredientId],
+      references: [ingredients.id],
+    }),
     productVariants: many(productVariants),
   })
 );

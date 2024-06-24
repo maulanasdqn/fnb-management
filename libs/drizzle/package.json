@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "dependencies": {
     "drizzle-kit": "^0.21.4",
-    "drizzle-orm": "^0.30.2",
     "pg": "^8.11.3",
     "@fms/entities": "0.0.1",
     "dotenv": "^16.4.5",
     "argon2": "^0.40.1",
+    "drizzle-orm": "^0.30.4",
     "@faker-js/faker": "^8.4.1"
   },
   "main": "./index.js",

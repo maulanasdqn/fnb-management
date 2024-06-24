@@ -1,5 +1,6 @@
 import * as schema from '../schemas';
-
+import { config } from 'dotenv';
+config();
 export const seedIngredient = async (db: any) => {
   try {
     const ingrdientExist = await db
