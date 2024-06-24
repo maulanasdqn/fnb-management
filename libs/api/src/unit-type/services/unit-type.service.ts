@@ -1,4 +1,4 @@
-import { db, unitTypes } from '@fms/drizzle';
+import { db, unitTypeConversions, unitTypes } from '@fms/drizzle';
 import {
   TQueryParams,
   TUnitTypeCreateRequest,
@@ -8,133 +8,143 @@ import {
 } from '@fms/entities';
 import { asc, eq, ilike } from 'drizzle-orm';
 
-export const findOneUnitType = async (
-  request: TQueryParams
-): Promise<TUnitTypeSingleResponse> => {
-  const res = await db
-    .select({
-      id: unitTypes.id,
-      name: unitTypes.name,
-      createdAt: unitTypes.createdAt,
-      updatedAt: unitTypes.updatedAt,
-    })
-    .from(unitTypes)
-    .where(eq(unitTypes.id, request?.id as string))
-    .then((res) => res.at(0));
+export const unitTypeService = {
+  pagination: async (params: TQueryParams): Promise<TUnitTypeResponse> => {
+    const page = params?.page || 1;
+    const perPage = params?.perPage || 10;
+    const offset = (page - 1) * perPage;
 
-  if (!res) {
-    return {
-      data: undefined,
-      meta: {
-        page: undefined,
-        perPage: undefined,
-        totalPage: undefined,
-      },
-    };
-  }
-  return {
-    meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
-    },
-    data: res,
-  };
-};
+    const data = await db
+      .select()
+      .from(unitTypes)
+      .where(ilike(unitTypes.name, `%${params?.search || ''}%`))
+      .limit(perPage)
+      .offset(params?.search ? 0 : offset)
+      .orderBy(asc(unitTypes.name));
+    const count = await db
+      .select({ id: unitTypes.id })
+      .from(unitTypes)
+      .then((res) => res.length);
 
-export const findManyUnitType = async (
-  request: TQueryParams
-): Promise<TUnitTypeResponse> => {
-  const res = await db
-    .select({
-      id: unitTypes.id,
-      name: unitTypes.name,
-      createdAt: unitTypes.createdAt,
-      updatedAt: unitTypes.updatedAt,
-    })
-    .from(unitTypes)
-    .where(ilike(unitTypes.name, `%${request?.search || ''}%`))
-    .orderBy(asc(unitTypes.name));
+    const totalPage = Math.ceil(count / perPage);
+    const nextPage = page < totalPage ? Number(page) + 1 : null;
+    const prevPage = page > 1 ? Number(page - 1) : null;
 
-  return {
-    meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
-    },
-    data: res,
-  };
-};
-
-export const createUnitType = async (
-  request: TUnitTypeCreateRequest
-): Promise<TUnitTypeSingleResponse> => {
-  const res = await db
-    .insert(unitTypes)
-    .values({
-      name: request.name,
-    })
-    .returning()
-    .then((res) => res.at(0));
-
-  return {
-    meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
-    },
-    data: res,
-  };
-};
-
-export const updateUnitType = async (
-  request: TUnitTypeUpdateRequest
-): Promise<TUnitTypeSingleResponse> => {
-  const res = await db
-    .update(unitTypes)
-    .set({
-      name: request.name,
-      updatedAt: new Date(),
-    })
-    .where(eq(unitTypes.id, request.id))
-    .returning()
-    .then((res) => res.at(0));
-
-  if (!res) {
     return {
       meta: {
-        page: 1,
-        perPage: 10,
-        totalPage: 1,
+        page,
+        nextPage,
+        prevPage,
+        perPage,
+        totalPage,
       },
-      data: res,
+      data,
     };
-  }
-  return {
-    meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
-    },
-    data: res,
-  };
-};
+  },
+  detail: async (id: string): Promise<TUnitTypeSingleResponse> => {
+    const data = await db.query.unitTypes.findFirst({
+      where: eq(unitTypes.id, id),
+      with: {
+        fromUnits: {
+          columns: {
+            conversionFactor: true,
+          },
+          with: {
+            toUnitType: {
+              columns: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
-export const deleteUnitType = async (
-  request: TQueryParams
-): Promise<TUnitTypeSingleResponse> => {
-  const res = await db
-    .delete(unitTypes)
-    .where(eq(unitTypes.id, request?.id as string))
-    .returning()
-    .then((res) => res.at(0));
+    if (!data) {
+      throw new Error('Unit Type not found');
+    }
 
-  return {
-    meta: {
-      page: 1,
-      perPage: 10,
-      totalPage: 1,
-    },
-    data: res,
-  };
+    return {
+      data: {
+        id: data.id,
+        name: data.name,
+        conversions: data.fromUnits,
+      },
+    };
+  },
+  create: async (
+    request: TUnitTypeCreateRequest
+  ): Promise<{
+    message: string;
+  }> => {
+    await db.transaction(async (tx) => {
+      const createUnitType = await tx
+        .insert(unitTypes)
+        .values({ name: request.name })
+        .returning({
+          id: unitTypes.id,
+        })
+        .then((res) => res[0]);
+
+      if (request?.conversions) {
+        for await (const conversion of request.conversions) {
+          await tx.insert(unitTypeConversions).values({
+            fromUnitTypeId: createUnitType.id,
+            toUnitTypeId: conversion.toUnitTypeId,
+            conversionFactor: conversion.conversionFactor,
+          });
+        }
+      }
+    });
+    return {
+      message: 'Create Unit Type Success',
+    };
+  },
+  update: async (
+    request: TUnitTypeUpdateRequest
+  ): Promise<{
+    message: string;
+  }> => {
+    await db
+      .update(unitTypes)
+      .set({ name: request.name })
+      .where(eq(unitTypes.id, request.id));
+
+    await db.transaction(async (tx) => {
+      if (request?.name) {
+        await tx
+          .update(unitTypes)
+          .set({ name: request.name })
+          .where(eq(unitTypes.id, request.id));
+      }
+
+      if (request?.conversions) {
+        await tx
+          .delete(unitTypeConversions)
+          .where(eq(unitTypeConversions.fromUnitTypeId, request.id));
+
+        for await (const conversion of request.conversions) {
+          await tx.insert(unitTypeConversions).values({
+            fromUnitTypeId: request.id,
+            toUnitTypeId: conversion.toUnitTypeId,
+            conversionFactor: conversion.conversionFactor,
+          });
+        }
+      }
+    });
+    return {
+      message: 'Update Unit Type Success',
+    };
+  },
+  delete: async (
+    id: string
+  ): Promise<{
+    message: string;
+  }> => {
+    await db.delete(unitTypes).where(eq(unitTypes.id, id));
+    return {
+      message: 'Delete Unit Type Success',
+    };
+  },
 };
