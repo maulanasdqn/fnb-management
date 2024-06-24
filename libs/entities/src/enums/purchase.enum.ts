@@ -1,4 +1,5 @@
 export enum EPurchaseStatus {
-  RECEIVED = 'received',
-  ORDERED = 'ordered',
+  Pending = 'PENDING',
+  Rejected = 'REJECTED',
+  Ordered = 'ORDERED',
 }
