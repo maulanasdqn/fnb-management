@@ -6,7 +6,10 @@ export const userSchema = z.object({
   fullname: z.string(),
   username: z.string(),
   avatar: z.string().nullable(),
-  role: z.object({ id: z.string(), name: z.string() }).nullable(),
+  role: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
   ...baseSchema.omit({ id: true }).shape,
 });
 
@@ -30,5 +33,5 @@ export const userUpdateSchema = z.object({
 export type TUser = z.infer<typeof userSchema>;
 export type TUserCreateRequest = z.infer<typeof userCreateSchema>;
 export type TUserUpdateRequest = z.infer<typeof userUpdateSchema>;
-export type TUserResponse = TBaseResponse<Omit<TUser, 'avatar'>[]>;
+export type TUserResponse = TBaseResponse<Omit<TUser, 'avatar' | 'role'>[]>;
 export type TUserSingleResponse = TBaseResponse<TUser>;

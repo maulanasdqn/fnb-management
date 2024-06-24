@@ -8,7 +8,7 @@ export const loginRequestSchema = z.object({
 
 export const loginResponseSchema = z.object({
   user: z.object({
-    ...userSchema.shape,
+    ...userSchema.omit({ role: true }).shape,
     role: roleSchema.optional(),
   }),
   token: z.object({
