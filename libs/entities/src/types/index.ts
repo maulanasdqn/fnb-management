@@ -11,3 +11,4 @@ export * from './auth';
 export * from './unit';
 export * from './variant';
 export * from './ingredient';
+export * from './stock-opname';

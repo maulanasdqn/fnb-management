@@ -11,6 +11,7 @@ import { users } from '../me/user.schema';
 import { relations } from 'drizzle-orm';
 import { ingredientLogs } from './ingredient-log.schema';
 import { productIngredients } from '../product/product.schema';
+import { stockOpnames } from '../stock-opname/stock-opname.schema';
 
 export const ingredients = pgTable('ingredients', {
   name: text('name').notNull(),
@@ -26,6 +27,7 @@ export const ingredients = pgTable('ingredients', {
 
 export const ingredientRelations = relations(ingredients, ({ one, many }) => ({
   ingredientLogs: many(ingredientLogs),
+  stockOpnames: many(stockOpnames),
   unitType: one(unitTypes, {
     fields: [ingredients.unitTypeId],
     references: [unitTypes.id],
