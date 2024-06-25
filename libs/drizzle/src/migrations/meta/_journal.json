@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1717433550681,
-      "tag": "0000_awesome_barracuda",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1717434574386,
-      "tag": "0001_left_synch",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1717438385169,
-      "tag": "0002_certain_thaddeus_ross",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1717438565792,
-      "tag": "0003_abnormal_blink",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1718040459888,
-      "tag": "0004_narrow_fenris",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1718042560905,
-      "tag": "0005_special_black_panther",
+      "when": 1719248847476,
+      "tag": "0000_ancient_zaran",
       "breakpoints": true
     }
   ]

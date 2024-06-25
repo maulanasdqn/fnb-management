@@ -6,3 +6,7 @@ export * from './purchase';
 export * from './auth';
 export * from './unit-type';
 export * from './ingredient';
+export * from './payment';
+export * from './place';
+export * from './variant';
+export * from './supplier';

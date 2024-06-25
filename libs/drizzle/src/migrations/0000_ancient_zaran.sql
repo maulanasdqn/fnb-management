@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS "customers" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "ingredients" (
 	"name" text NOT NULL,
-	"price" integer NOT NULL,
-	"amount" integer NOT NULL,
+	"price" double precision NOT NULL,
+	"amount" double precision NOT NULL,
 	"unit_type_id" uuid NOT NULL,
 	"created_by" uuid,
 	"updated_by" uuid,
@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS "orders" (
 	"payment_id" uuid,
 	"invoice_number" text NOT NULL,
 	"status" text,
+	"type" text,
 	"served_by" uuid,
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
@@ -81,7 +82,7 @@ CREATE TABLE IF NOT EXISTS "orders" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "order_details" (
 	"product_id" uuid NOT NULL,
-	"amount" integer NOT NULL,
+	"quantity" integer NOT NULL,
 	"order_id" uuid NOT NULL,
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
@@ -92,7 +93,7 @@ CREATE TABLE IF NOT EXISTS "payments" (
 	"name" text NOT NULL,
 	"account_name" text NOT NULL,
 	"account_number" text NOT NULL,
-	"amount" text NOT NULL,
+	"amount" integer DEFAULT 0,
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"updated_at" timestamp with time zone DEFAULT now()
@@ -115,13 +116,20 @@ CREATE TABLE IF NOT EXISTS "product_ingredients" (
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "product_variants" (
+	"product_id" uuid,
+	"variant_option_id" uuid,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "products" (
 	"name" text NOT NULL,
 	"product_category_id" uuid,
 	"price_selling" integer NOT NULL,
 	"image" text,
 	"description" text,
-	"variant_option_id" uuid,
 	"created_by" uuid,
 	"updated_by" uuid,
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -143,6 +151,15 @@ CREATE TABLE IF NOT EXISTS "unit_types" (
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "unit_type_conversions" (
+	"from_unit_type_id" uuid NOT NULL,
+	"to_unit_type_id" uuid NOT NULL,
+	"conversion_factor" double precision NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "variants" (
 	"name" text NOT NULL,
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -152,9 +169,9 @@ CREATE TABLE IF NOT EXISTS "variants" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "variant_options" (
 	"name" text NOT NULL,
-	"ingredient_id" uuid NOT NULL,
-	"unit_type_id" uuid NOT NULL,
-	"amount" integer NOT NULL,
+	"ingredient_id" uuid,
+	"unit_type_id" uuid,
+	"amount" integer,
 	"variant_id" uuid NOT NULL,
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
@@ -174,10 +191,10 @@ CREATE TABLE IF NOT EXISTS "purchase_details" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "purchases" (
 	"supplier_id" uuid NOT NULL,
-	"ingredient_id" uuid NOT NULL,
 	"amount_total" integer NOT NULL,
 	"invoice_number" text NOT NULL,
 	"status" text NOT NULL,
+	"rejection_note" text,
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"updated_at" timestamp with time zone DEFAULT now()
@@ -187,15 +204,6 @@ CREATE TABLE IF NOT EXISTS "suppliers" (
 	"full_name" text NOT NULL,
 	"address" text NOT NULL,
 	"phone_number" text NOT NULL,
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"created_at" timestamp with time zone DEFAULT now(),
-	"updated_at" timestamp with time zone DEFAULT now()
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "unit_conversions" (
-	"from_unit_id" uuid NOT NULL,
-	"to_unit_id" uuid NOT NULL,
-	"conversion_factor" integer NOT NULL,
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"updated_at" timestamp with time zone DEFAULT now()
@@ -292,13 +300,19 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "products" ADD CONSTRAINT "products_product_category_id_product_categories_id_fk" FOREIGN KEY ("product_category_id") REFERENCES "public"."product_categories"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "product_variants" ADD CONSTRAINT "product_variants_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "products" ADD CONSTRAINT "products_variant_option_id_variant_options_id_fk" FOREIGN KEY ("variant_option_id") REFERENCES "public"."variant_options"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "product_variants" ADD CONSTRAINT "product_variants_variant_option_id_variant_options_id_fk" FOREIGN KEY ("variant_option_id") REFERENCES "public"."variant_options"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "products" ADD CONSTRAINT "products_product_category_id_product_categories_id_fk" FOREIGN KEY ("product_category_id") REFERENCES "public"."product_categories"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -311,6 +325,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "products" ADD CONSTRAINT "products_updated_by_users_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "unit_type_conversions" ADD CONSTRAINT "unit_type_conversions_from_unit_type_id_unit_types_id_fk" FOREIGN KEY ("from_unit_type_id") REFERENCES "public"."unit_types"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "unit_type_conversions" ADD CONSTRAINT "unit_type_conversions_to_unit_type_id_unit_types_id_fk" FOREIGN KEY ("to_unit_type_id") REFERENCES "public"."unit_types"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -353,24 +379,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "purchases" ADD CONSTRAINT "purchases_supplier_id_suppliers_id_fk" FOREIGN KEY ("supplier_id") REFERENCES "public"."suppliers"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "purchases" ADD CONSTRAINT "purchases_ingredient_id_ingredients_id_fk" FOREIGN KEY ("ingredient_id") REFERENCES "public"."ingredients"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "unit_conversions" ADD CONSTRAINT "unit_conversions_from_unit_id_unit_types_id_fk" FOREIGN KEY ("from_unit_id") REFERENCES "public"."unit_types"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "unit_conversions" ADD CONSTRAINT "unit_conversions_to_unit_id_unit_types_id_fk" FOREIGN KEY ("to_unit_id") REFERENCES "public"."unit_types"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { baseSchema, TBase, TBaseResponse } from '../common';
+import { baseSchema, TBaseResponse } from '../common';
 
 export const paymentSchema = z.object({
   name: z.string(),
   accountName: z.string(),
   accountNumber: z.string(),
-  amount: z.string(),
+  amount: z.number().nullable(),
   ...baseSchema.shape,
 });
 
@@ -13,7 +13,6 @@ export const paymentCreateSchema = z.object({
   name: z.string(),
   accountName: z.string(),
   accountNumber: z.string(),
-  amount: z.string(),
 });
 
 export const paymentUpdateSchema = z.object({
@@ -21,7 +20,6 @@ export const paymentUpdateSchema = z.object({
   name: z.string().optional(),
   accountName: z.string().optional(),
   accountNumber: z.string().optional(),
-  amount: z.string().optional(),
 });
 
 export type TPayment = z.infer<typeof paymentSchema>;

@@ -1,14 +1,27 @@
 import { z } from 'zod';
 import { baseSchema, TBaseResponse } from '../common';
-import { roleSchema } from './role.type';
+import { permissionSchema } from './permission.type';
 
 export const userSchema = z.object({
+  id: z.string(),
   fullname: z.string(),
-  username: z.string().optional(),
-  avatar: z.string().optional(),
-  password: z.string().optional(),
-  role: roleSchema.optional(),
-  ...baseSchema.shape,
+  username: z.string(),
+  avatar: z.string().nullable(),
+  role: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+  ...baseSchema.omit({ id: true }).shape,
+});
+
+export const userDetailSchema = z.object({
+  ...userSchema.omit({ role: true }).shape,
+  role: z.object({
+    id: z.string(),
+    name: z.string(),
+    permissions: z.array(permissionSchema),
+    ...baseSchema.omit({ id: true }).shape,
+  }),
 });
 
 export const userCreateSchema = z.object({
@@ -29,7 +42,8 @@ export const userUpdateSchema = z.object({
 });
 
 export type TUser = z.infer<typeof userSchema>;
+export type TUserDetail = z.infer<typeof userDetailSchema>;
 export type TUserCreateRequest = z.infer<typeof userCreateSchema>;
 export type TUserUpdateRequest = z.infer<typeof userUpdateSchema>;
-export type TUserResponse = TBaseResponse<TUser>;
-export type TUserSingleResponse = TBaseResponse<TUser[]>;
+export type TUserResponse = TBaseResponse<Omit<TUser, 'avatar' | 'role'>[]>;
+export type TUserSingleResponse = TBaseResponse<TUserDetail>;

@@ -23,6 +23,12 @@ export const login = async (
       where: eq(users.username, request.userName),
       with: {
         role: {
+          columns: {
+            id: true,
+            name: true,
+            createdAt: true,
+            updatedAt: true,
+          },
           with: {
             rolesToPermissions: {
               with: {
@@ -46,29 +52,31 @@ export const login = async (
     if (!isPasswordSame) {
       throw Error('Password tidak valid');
     }
-    const dataUser: TUser = {
-      id: user.id,
-      fullname: user.fullname,
-      role: {
-        id: user.role.id,
-        name: user.role.name,
-        createdAt: user.role.createdAt,
-        updatedAt: user.role.updatedAt,
-        permissions: user.role.rolesToPermissions.map((rtp) => ({
-          id: rtp.permission.id,
-          name: rtp.permission.key,
-          key: rtp.permission.key,
-          group: rtp.permission.group,
-          parent: rtp.permission.parent,
-          createdAt: rtp.permission.createdAt,
-          updatedAt: rtp.permission.updatedAt,
-        })),
-      },
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+
     return {
-      user: dataUser,
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        username: user.username,
+        avatar: user.avatar,
+        role: {
+          id: user.role.id,
+          name: user.role.name,
+          createdAt: user.role.createdAt,
+          updatedAt: user.role?.updatedAt,
+          permissions: user.role.rolesToPermissions.map((rtp) => ({
+            id: rtp.permission.id,
+            name: rtp.permission.key,
+            key: rtp.permission.key,
+            group: rtp.permission.group,
+            parent: rtp.permission.parent,
+            createdAt: rtp.permission.createdAt,
+            updatedAt: rtp.permission.updatedAt,
+          })),
+        },
+      },
       token: {
         accessToken: generateAccessToken(user),
         refreshToken: generateRefreshToken(user),
