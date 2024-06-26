@@ -23,6 +23,7 @@ import { DashboardProductCreate } from './dashboard/product/create/create';
 import { EditRole } from './dashboard/role/modules';
 import { AuthProvider, GuestProvider } from '@fms/web-modules';
 import { tokenService } from '@fms/web-services';
+import { CreateRole } from './dashboard/role/modules/create/create-role';
 
 export const router = createBrowserRouter([
   {
@@ -97,6 +98,11 @@ export const router = createBrowserRouter([
       {
         path: 'role',
         element: <DashboardRole />,
+        loader: () => pagePermission([PERMISSION_ROLE.READ_ROLE]),
+      },
+      {
+        path: 'role/create',
+        element: <CreateRole />,
         loader: () => pagePermission([PERMISSION_ROLE.READ_ROLE]),
       },
       {
