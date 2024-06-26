@@ -10,13 +10,15 @@ export const users = pgTable('users', {
   password: text('password').notNull(),
   roleId: uuid('role_id')
     .notNull()
-    .references(() => roles.id),
+    .references(() => roles.id, {
+      onDelete: 'set null',
+    }),
   createdBy: uuid('created_by'),
   updatedBy: uuid('updated_by'),
   ...baseSchema,
 });
 
-export const userRelations = relations(users, ({ one, many }) => ({
+export const userRelations = relations(users, ({ one }) => ({
   role: one(roles, {
     fields: [users.roleId],
     references: [roles.id],

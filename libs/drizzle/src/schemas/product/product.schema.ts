@@ -11,28 +11,42 @@ import { variantOptions } from '../variant/variant-option.schema';
 export const products = pgTable('products', {
   name: text('name').notNull(),
   productCategoryId: uuid('product_category_id').references(
-    () => productCategories.id
+    () => productCategories.id,
+    { onDelete: 'set null' }
   ),
   priceSelling: integer('price_selling').notNull(),
   image: text('image'),
   description: text('description'),
-  createdBy: uuid('created_by').references(() => users.id),
-  updatedBy: uuid('updated_by').references(() => users.id),
+  createdBy: uuid('created_by').references(() => users.id, {
+    onDelete: 'set null',
+  }),
+  updatedBy: uuid('updated_by').references(() => users.id, {
+    onDelete: 'set null',
+  }),
   ...baseSchema,
 });
 
 export const productIngredients = pgTable('product_ingredients', {
-  productId: uuid('product_id').references(() => products.id),
-  ingredientId: uuid('ingredient_id').references(() => ingredients.id),
-  unitTypeId: uuid('unit_type_id').references(() => unitTypes.id),
+  productId: uuid('product_id').references(() => products.id, {
+    onDelete: 'cascade',
+  }),
+  ingredientId: uuid('ingredient_id').references(() => ingredients.id, {
+    onDelete: 'set null',
+  }),
+  unitTypeId: uuid('unit_type_id').references(() => unitTypes.id, {
+    onDelete: 'set null',
+  }),
   amount: integer('amount').notNull(),
   ...baseSchema,
 });
 
 export const productVariants = pgTable('product_variants', {
-  productId: uuid('product_id').references(() => products.id),
+  productId: uuid('product_id').references(() => products.id, {
+    onDelete: 'cascade',
+  }),
   variantOptionId: uuid('variant_option_id').references(
-    () => variantOptions.id
+    () => variantOptions.id,
+    { onDelete: 'cascade' }
   ),
   ...baseSchema,
 });

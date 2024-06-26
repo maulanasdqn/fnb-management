@@ -7,11 +7,11 @@ import { baseSchema } from '../base/base.schema';
 export const orderDetails = pgTable('order_details', {
   productId: uuid('product_id')
     .notNull()
-    .references(() => products.id),
+    .references(() => products.id, { onDelete: 'set null' }),
   quantity: integer('quantity').notNull(),
   orderId: uuid('order_id')
     .notNull()
-    .references(() => orders.id),
+    .references(() => orders.id, { onDelete: 'cascade' }),
   ...baseSchema,
 });
 
