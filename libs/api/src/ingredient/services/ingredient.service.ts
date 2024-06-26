@@ -4,11 +4,12 @@ import {
   TIngredientResponse,
   TIngredientSingleResponse,
   TIngredientUpdateRequest,
+  TQueryParams,
 } from '@fms/entities';
 import { and, eq, or } from 'drizzle-orm';
 
 export const ingredientService = {
-  findMany: async (id: string) => {
+  findMany: async (params?: TQueryParams) => {
     const dataUnitConversions = await db.query.unitTypeConversions.findMany({
       columns: {
         id: true,

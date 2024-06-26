@@ -11,6 +11,7 @@ import { seedIngredient } from './seeders/ingredient.seeder';
 import { seedPayment } from './seeders/payment.seeder';
 import { seedPlace } from './seeders/place.seeder';
 import { seedSupplier } from './seeders/supplier.seeder';
+import { seedRecipe } from './seeders/recipe.seeder';
 const dbUrl = process.env['DATABASE_URL'] as string;
 const dbQueryClient = new Pool({
   connectionString: dbUrl,
@@ -32,6 +33,7 @@ async function main() {
     await seedPayment(db);
     await seedPlace(db);
     await seedSupplier(db);
+    await seedRecipe<typeof schema>(db);
   } catch (error) {
     console.error(error);
   }
