@@ -7,7 +7,7 @@ import { baseSchema } from '../base/base.schema';
 import { users } from '../me/user.schema';
 
 export const orders = pgTable('orders', {
-  customerId: text('customer_id')
+  customerId: uuid('customer_id')
     .notNull()
     .references(() => customers.id, {
       onDelete: 'set null',

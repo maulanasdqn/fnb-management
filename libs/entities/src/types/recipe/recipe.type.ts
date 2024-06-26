@@ -16,7 +16,7 @@ export const recipeIngredientSchema = z.object({
 export const recipeSchema = z.object({
   id: z.string(),
   name: z.string(),
-  description: z.string(),
+  description: z.string().nullable().optional(),
   details: z.array(recipeIngredientSchema).optional(),
   ...baseSchema.omit({ id: true }).shape,
 });
@@ -40,9 +40,9 @@ export const recipeUpdateSchema = z.object({
   details: z
     .array(
       z.object({
-        amount: z.number().optional(),
-        unitTypeId: z.string().optional(),
-        ingredientId: z.string().optional(),
+        amount: z.number(),
+        unitTypeId: z.string(),
+        ingredientId: z.string(),
       })
     )
     .optional(),
@@ -51,5 +51,5 @@ export const recipeUpdateSchema = z.object({
 export type TRecipe = z.infer<typeof recipeSchema>;
 export type TRecipeCreateRequest = z.infer<typeof recipeCreateSchema>;
 export type TRecipeUpdateRequest = z.infer<typeof recipeUpdateSchema>;
-export type TRecipeResponse = TBaseResponse<TRecipe[]>;
+export type TRecipeResponse = TBaseResponse<Omit<TRecipe, 'details'>[]>;
 export type TRecipeSingleResponse = TBaseResponse<TRecipe>;

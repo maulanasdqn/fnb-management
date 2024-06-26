@@ -1,7 +1,8 @@
-import { pgTable, text } from 'drizzle-orm/pg-core';
+import { integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base/base.schema';
 import { relations } from 'drizzle-orm';
 import { ingredients } from '../ingredient/ingredient.schema';
+import { unitTypes } from '../unit/unit-type.schema';
 
 export const recipes = pgTable('recipes', {
   name: text('name').notNull(),
@@ -10,16 +11,16 @@ export const recipes = pgTable('recipes', {
 });
 
 export const recipeIngredients = pgTable('recipe_ingredients', {
-  recipeId: text('recipe_id')
+  recipeId: uuid('recipe_id')
     .notNull()
     .references(() => recipes.id, { onDelete: 'cascade' }),
-  ingredientId: text('ingredient_id')
+  ingredientId: uuid('ingredient_id')
     .notNull()
     .references(() => ingredients.id, { onDelete: 'set null' }),
-  unitTypeId: text('unit_type_id')
+  unitTypeId: uuid('unit_type_id')
     .notNull()
-    .references(() => ingredients.unitTypeId, { onDelete: 'set null' }),
-  amount: text('amount').notNull(),
+    .references(() => unitTypes.id, { onDelete: 'set null' }),
+  amount: integer('amount').notNull(),
   ...baseSchema,
 });
 

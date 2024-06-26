@@ -1,6 +1,6 @@
 {
-  "id": "5daf3d99-a87d-40ee-9088-57857b2690ad",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "98f2983e-02f4-4fcd-bebf-8cd4ebfb3068",
+  "prevId": "5daf3d99-a87d-40ee-9088-57857b2690ad",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -1645,15 +1645,15 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "recipe_ingredients_unit_type_id_ingredients_unit_type_id_fk": {
-          "name": "recipe_ingredients_unit_type_id_ingredients_unit_type_id_fk",
+        "recipe_ingredients_unit_type_id_unit_types_id_fk": {
+          "name": "recipe_ingredients_unit_type_id_unit_types_id_fk",
           "tableFrom": "recipe_ingredients",
-          "tableTo": "ingredients",
+          "tableTo": "unit_types",
           "columnsFrom": [
             "unit_type_id"
           ],
           "columnsTo": [
-            "unit_type_id"
+            "id"
           ],
           "onDelete": "set null",
           "onUpdate": "no action"

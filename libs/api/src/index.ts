@@ -10,3 +10,4 @@ export * from './payment';
 export * from './place';
 export * from './variant';
 export * from './supplier';
+export * from './recipe';
