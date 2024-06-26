@@ -15,6 +15,13 @@
       "when": 1719429302667,
       "tag": "0001_brainy_silk_fever",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1719430073213,
+      "tag": "0002_aberrant_mongoose",
+      "breakpoints": true
     }
   ]
 }

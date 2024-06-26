@@ -21,6 +21,6 @@ export const orderController = router({
   findOne: procedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
-      return;
+      return orderService.detail(input.id);
     }),
 });

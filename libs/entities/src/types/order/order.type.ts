@@ -58,6 +58,7 @@ export const orderCreateSchema = z.object({
   customerPhoneNumber: z.string().optional(),
   placeId: z.string().optional(),
   paymentId: z.string(),
+  type: z.string(),
   details: z.array(
     z.object({
       productId: z.string(),

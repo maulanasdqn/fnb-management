@@ -22,8 +22,8 @@ export const orders = pgTable('orders', {
     onDelete: 'set null',
   }),
   invoiceNumber: text('invoice_number').notNull(),
-  status: text('status'),
-  type: text('type'),
+  status: text('status').default('pending'),
+  type: text('type').default('Dine In'),
   servedBy: uuid('served_by').references(() => users.id, {
     onDelete: 'set null',
   }),
