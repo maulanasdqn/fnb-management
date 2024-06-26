@@ -15,6 +15,13 @@
       "when": 1719403325339,
       "tag": "0001_complex_eternals",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1719420829057,
+      "tag": "0002_thick_firebrand",
+      "breakpoints": true
     }
   ]
 }

@@ -4,7 +4,6 @@ import { unitTypes } from '../unit/unit-type.schema';
 import { users } from '../me/user.schema';
 import { relations } from 'drizzle-orm';
 import { ingredientLogs } from './ingredient-log.schema';
-import { productIngredients } from '../product/product.schema';
 
 export const ingredients = pgTable('ingredients', {
   name: text('name').notNull(),
@@ -38,5 +37,4 @@ export const ingredientRelations = relations(ingredients, ({ one, many }) => ({
     references: [users.id],
     relationName: 'updated_by',
   }),
-  productIngredients: many(productIngredients),
 }));
