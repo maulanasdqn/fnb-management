@@ -1,12 +1,14 @@
-import { integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { boolean, integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { customers } from '../customer/customer.schema';
 import { places } from '../place/place.schema';
 import { payments } from '../payment/payment.schema';
 import { baseSchema } from '../base/base.schema';
 import { users } from '../me/user.schema';
+import { orderDetails } from './order-detail.schema';
 
 export const orders = pgTable('orders', {
+  isPaid: boolean('is_paid').default(false),
   customerId: uuid('customer_id')
     .notNull()
     .references(() => customers.id, {
@@ -28,7 +30,7 @@ export const orders = pgTable('orders', {
   ...baseSchema,
 });
 
-export const orderRelations = relations(orders, ({ one }) => ({
+export const orderRelations = relations(orders, ({ one, many }) => ({
   customer: one(customers, {
     fields: [orders.customerId],
     references: [customers.id],
@@ -38,7 +40,6 @@ export const orderRelations = relations(orders, ({ one }) => ({
     fields: [orders.placeId],
     references: [places.id],
   }),
-
   payment: one(payments, {
     fields: [orders.paymentId],
     references: [payments.id],
@@ -48,4 +49,5 @@ export const orderRelations = relations(orders, ({ one }) => ({
     references: [users.id],
     relationName: 'served_by',
   }),
+  details: many(orderDetails),
 }));

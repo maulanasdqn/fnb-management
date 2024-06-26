@@ -1,6 +1,6 @@
 {
-  "id": "98f2983e-02f4-4fcd-bebf-8cd4ebfb3068",
-  "prevId": "5daf3d99-a87d-40ee-9088-57857b2690ad",
+  "id": "227381a7-f162-4884-b573-fede3d2443de",
+  "prevId": "c6efe4db-1dad-4e2a-b890-0a534ecd9e1c",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -479,6 +479,13 @@
       "name": "orders",
       "schema": "",
       "columns": {
+        "is_paid": {
+          "name": "is_paid",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
         "customer_id": {
           "name": "customer_id",
           "type": "uuid",
@@ -683,6 +690,76 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.order_variant_options": {
+      "name": "order_variant_options",
+      "schema": "",
+      "columns": {
+        "order_detail_id": {
+          "name": "order_detail_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "variant_option_id": {
+          "name": "variant_option_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "order_variant_options_order_detail_id_order_details_id_fk": {
+          "name": "order_variant_options_order_detail_id_order_details_id_fk",
+          "tableFrom": "order_variant_options",
+          "tableTo": "order_details",
+          "columnsFrom": [
+            "order_detail_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "order_variant_options_variant_option_id_variant_options_id_fk": {
+          "name": "order_variant_options_variant_option_id_variant_options_id_fk",
+          "tableFrom": "order_variant_options",
+          "tableTo": "variant_options",
+          "columnsFrom": [
+            "variant_option_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.payments": {
       "name": "payments",
       "schema": "",
@@ -776,101 +853,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.product_ingredients": {
-      "name": "product_ingredients",
-      "schema": "",
-      "columns": {
-        "product_id": {
-          "name": "product_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "ingredient_id": {
-          "name": "ingredient_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "unit_type_id": {
-          "name": "unit_type_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "amount": {
-          "name": "amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "product_ingredients_product_id_products_id_fk": {
-          "name": "product_ingredients_product_id_products_id_fk",
-          "tableFrom": "product_ingredients",
-          "tableTo": "products",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "product_ingredients_ingredient_id_ingredients_id_fk": {
-          "name": "product_ingredients_ingredient_id_ingredients_id_fk",
-          "tableFrom": "product_ingredients",
-          "tableTo": "ingredients",
-          "columnsFrom": [
-            "ingredient_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "product_ingredients_unit_type_id_unit_types_id_fk": {
-          "name": "product_ingredients_unit_type_id_unit_types_id_fk",
-          "tableFrom": "product_ingredients",
-          "tableTo": "unit_types",
-          "columnsFrom": [
-            "unit_type_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.product_variants": {
       "name": "product_variants",
       "schema": "",
@@ -957,6 +939,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "recipe_id": {
+          "name": "recipe_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "price_selling": {
           "name": "price_selling",
           "type": "integer",
@@ -1017,6 +1005,19 @@
           "tableTo": "product_categories",
           "columnsFrom": [
             "product_category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "products_recipe_id_recipes_id_fk": {
+          "name": "products_recipe_id_recipes_id_fk",
+          "tableFrom": "products",
+          "tableTo": "recipes",
+          "columnsFrom": [
+            "recipe_id"
           ],
           "columnsTo": [
             "id"

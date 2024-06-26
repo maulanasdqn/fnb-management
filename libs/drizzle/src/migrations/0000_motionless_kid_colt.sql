@@ -89,6 +89,14 @@ CREATE TABLE IF NOT EXISTS "order_details" (
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "order_variant_options" (
+	"order_detail_id" uuid NOT NULL,
+	"variant_option_id" uuid NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "payments" (
 	"name" text NOT NULL,
 	"account_name" text NOT NULL,
@@ -106,16 +114,6 @@ CREATE TABLE IF NOT EXISTS "places" (
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "product_ingredients" (
-	"product_id" uuid,
-	"ingredient_id" uuid,
-	"unit_type_id" uuid,
-	"amount" integer NOT NULL,
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"created_at" timestamp with time zone DEFAULT now(),
-	"updated_at" timestamp with time zone DEFAULT now()
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "product_variants" (
 	"product_id" uuid,
 	"variant_option_id" uuid,
@@ -127,6 +125,7 @@ CREATE TABLE IF NOT EXISTS "product_variants" (
 CREATE TABLE IF NOT EXISTS "products" (
 	"name" text NOT NULL,
 	"product_category_id" uuid,
+	"recipe_id" uuid,
 	"price_selling" integer NOT NULL,
 	"image" text,
 	"description" text,
@@ -306,19 +305,13 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "product_ingredients" ADD CONSTRAINT "product_ingredients_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "order_variant_options" ADD CONSTRAINT "order_variant_options_order_detail_id_order_details_id_fk" FOREIGN KEY ("order_detail_id") REFERENCES "public"."order_details"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "product_ingredients" ADD CONSTRAINT "product_ingredients_ingredient_id_ingredients_id_fk" FOREIGN KEY ("ingredient_id") REFERENCES "public"."ingredients"("id") ON DELETE set null ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "product_ingredients" ADD CONSTRAINT "product_ingredients_unit_type_id_unit_types_id_fk" FOREIGN KEY ("unit_type_id") REFERENCES "public"."unit_types"("id") ON DELETE set null ON UPDATE no action;
+ ALTER TABLE "order_variant_options" ADD CONSTRAINT "order_variant_options_variant_option_id_variant_options_id_fk" FOREIGN KEY ("variant_option_id") REFERENCES "public"."variant_options"("id") ON DELETE set null ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -337,6 +330,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "products" ADD CONSTRAINT "products_product_category_id_product_categories_id_fk" FOREIGN KEY ("product_category_id") REFERENCES "public"."product_categories"("id") ON DELETE set null ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "products" ADD CONSTRAINT "products_recipe_id_recipes_id_fk" FOREIGN KEY ("recipe_id") REFERENCES "public"."recipes"("id") ON DELETE set null ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -420,7 +419,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "recipe_ingredients" ADD CONSTRAINT "recipe_ingredients_unit_type_id_ingredients_unit_type_id_fk" FOREIGN KEY ("unit_type_id") REFERENCES "public"."ingredients"("unit_type_id") ON DELETE set null ON UPDATE no action;
+ ALTER TABLE "recipe_ingredients" ADD CONSTRAINT "recipe_ingredients_unit_type_id_unit_types_id_fk" FOREIGN KEY ("unit_type_id") REFERENCES "public"."unit_types"("id") ON DELETE set null ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
