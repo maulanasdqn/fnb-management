@@ -4,35 +4,37 @@ import { baseSchema } from '../base/base.schema';
 import { productCategories } from './product-category.schema';
 import { users } from '../me/user.schema';
 import { orderDetails } from '../order/order-detail.schema';
-import { ingredients } from '../ingredient/ingredient.schema';
-import { unitTypes } from '../unit/unit-type.schema';
 import { variantOptions } from '../variant/variant-option.schema';
+import { recipes } from '../recipe/recipe.schema';
 
 export const products = pgTable('products', {
   name: text('name').notNull(),
   productCategoryId: uuid('product_category_id').references(
-    () => productCategories.id
+    () => productCategories.id,
+    { onDelete: 'set null' }
   ),
+  recipeId: uuid('recipe_id').references(() => recipes.id, {
+    onDelete: 'set null',
+  }),
   priceSelling: integer('price_selling').notNull(),
   image: text('image'),
   description: text('description'),
-  createdBy: uuid('created_by').references(() => users.id),
-  updatedBy: uuid('updated_by').references(() => users.id),
-  ...baseSchema,
-});
-
-export const productIngredients = pgTable('product_ingredients', {
-  productId: uuid('product_id').references(() => products.id),
-  ingredientId: uuid('ingredient_id').references(() => ingredients.id),
-  unitTypeId: uuid('unit_type_id').references(() => unitTypes.id),
-  amount: integer('amount').notNull(),
+  createdBy: uuid('created_by').references(() => users.id, {
+    onDelete: 'set null',
+  }),
+  updatedBy: uuid('updated_by').references(() => users.id, {
+    onDelete: 'set null',
+  }),
   ...baseSchema,
 });
 
 export const productVariants = pgTable('product_variants', {
-  productId: uuid('product_id').references(() => products.id),
+  productId: uuid('product_id').references(() => products.id, {
+    onDelete: 'cascade',
+  }),
   variantOptionId: uuid('variant_option_id').references(
-    () => variantOptions.id
+    () => variantOptions.id,
+    { onDelete: 'cascade' }
   ),
   ...baseSchema,
 });
@@ -47,24 +49,6 @@ export const productVariantRelations = relations(
     variant: one(variantOptions, {
       fields: [productVariants.variantOptionId],
       references: [variantOptions.id],
-    }),
-  })
-);
-
-export const productIngredientRelations = relations(
-  productIngredients,
-  ({ one }) => ({
-    product: one(products, {
-      fields: [productIngredients.productId],
-      references: [products.id],
-    }),
-    ingredient: one(ingredients, {
-      fields: [productIngredients.ingredientId],
-      references: [ingredients.id],
-    }),
-    unitType: one(unitTypes, {
-      fields: [productIngredients.unitTypeId],
-      references: [unitTypes.id],
     }),
   })
 );
@@ -85,5 +69,8 @@ export const productRelations = relations(products, ({ one, many }) => ({
     references: [users.id],
     relationName: 'updated_by',
   }),
-  productIngredients: many(productIngredients),
+  recipe: one(recipes, {
+    fields: [products.recipeId],
+    references: [recipes.id],
+  }),
 }));

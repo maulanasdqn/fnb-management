@@ -1,16 +1,9 @@
-import {
-  pgTable,
-  text,
-  uuid,
-  integer,
-  doublePrecision,
-} from 'drizzle-orm/pg-core';
+import { pgTable, text, uuid, doublePrecision } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base/base.schema';
 import { unitTypes } from '../unit/unit-type.schema';
 import { users } from '../me/user.schema';
 import { relations } from 'drizzle-orm';
 import { ingredientLogs } from './ingredient-log.schema';
-import { productIngredients } from '../product/product.schema';
 import { stockOpnames } from '../stock-opname/stock-opname.schema';
 
 export const ingredients = pgTable('ingredients', {
@@ -19,9 +12,13 @@ export const ingredients = pgTable('ingredients', {
   amount: doublePrecision('amount').notNull(),
   unitTypeId: uuid('unit_type_id')
     .notNull()
-    .references(() => unitTypes.id),
-  createdBy: uuid('created_by').references(() => users.id),
-  updatedBy: uuid('updated_by').references(() => users.id),
+    .references(() => unitTypes.id, { onDelete: 'set null' }),
+  createdBy: uuid('created_by').references(() => users.id, {
+    onDelete: 'set null',
+  }),
+  updatedBy: uuid('updated_by').references(() => users.id, {
+    onDelete: 'set null',
+  }),
   ...baseSchema,
 });
 
@@ -42,5 +39,4 @@ export const ingredientRelations = relations(ingredients, ({ one, many }) => ({
     references: [users.id],
     relationName: 'updated_by',
   }),
-  productIngredients: many(productIngredients),
 }));

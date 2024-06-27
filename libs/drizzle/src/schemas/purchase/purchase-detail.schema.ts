@@ -8,13 +8,13 @@ import { unitTypes } from '../unit/unit-type.schema';
 export const purchaseDetails = pgTable('purchase_details', {
   purchaseId: uuid('purchase_id')
     .notNull()
-    .references(() => purchases.id),
+    .references(() => purchases.id, { onDelete: 'cascade' }),
   ingredientId: uuid('ingredient_id')
     .notNull()
-    .references(() => ingredients.id),
+    .references(() => ingredients.id, { onDelete: 'set null' }),
   unitTypeId: uuid('unit_type_id')
     .notNull()
-    .references(() => unitTypes.id),
+    .references(() => unitTypes.id, { onDelete: 'set null' }),
   amount: integer('amount').notNull(),
   price: integer('price').notNull(),
   ...baseSchema,

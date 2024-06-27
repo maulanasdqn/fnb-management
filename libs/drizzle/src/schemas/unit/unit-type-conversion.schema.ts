@@ -6,10 +6,10 @@ import { unitTypes } from './unit-type.schema';
 export const unitTypeConversions = pgTable('unit_type_conversions', {
   fromUnitTypeId: uuid('from_unit_type_id')
     .notNull()
-    .references(() => unitTypes.id),
+    .references(() => unitTypes.id, { onDelete: 'cascade' }),
   toUnitTypeId: uuid('to_unit_type_id')
     .notNull()
-    .references(() => unitTypes.id),
+    .references(() => unitTypes.id, { onDelete: 'cascade' }),
   conversionFactor: doublePrecision('conversion_factor').notNull(),
   ...baseSchema,
 });

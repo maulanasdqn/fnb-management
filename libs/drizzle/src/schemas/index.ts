@@ -17,4 +17,5 @@ export * from './variant/variant.schema';
 export * from './variant/variant-option.schema';
 export * from './purchase';
 export * from './supplier/supplier.schema';
+export * from './recipe/recipe.schema';
 export * from './stock-opname/stock-opname.schema';

@@ -1,6 +1,7 @@
 import { integer, pgTable, text } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { baseSchema } from '../base/base.schema';
+import { orders } from '../order/order.schema';
 
 export const payments = pgTable('payments', {
   name: text('name').notNull(),
@@ -10,4 +11,6 @@ export const payments = pgTable('payments', {
   ...baseSchema,
 });
 
-export const paymentRelations = relations(payments, ({ many }) => ({}));
+export const paymentRelations = relations(payments, ({ many }) => ({
+  orders: many(orders),
+}));
