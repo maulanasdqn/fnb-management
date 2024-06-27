@@ -12,3 +12,4 @@ export * from './unit';
 export * from './variant';
 export * from './ingredient';
 export * from './recipe';
+export * from './stock-opname';

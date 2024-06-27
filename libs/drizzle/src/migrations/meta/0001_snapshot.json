@@ -1,6 +1,6 @@
 {
-  "id": "98f2983e-02f4-4fcd-bebf-8cd4ebfb3068",
-  "prevId": "5daf3d99-a87d-40ee-9088-57857b2690ad",
+  "id": "3a39bd34-5c08-46ab-8190-3771e9c50020",
+  "prevId": "010a79c5-1e7d-4748-9e06-4acbcb9aaa27",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -121,7 +121,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "ingredients_created_by_users_id_fk": {
@@ -134,7 +134,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "ingredients_updated_by_users_id_fk": {
@@ -147,7 +147,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -216,7 +216,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -303,7 +303,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -384,7 +384,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "roles_to_permissions_permission_id_permissions_id_fk": {
@@ -397,7 +397,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -481,7 +481,7 @@
       "columns": {
         "customer_id": {
           "name": "customer_id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -551,19 +551,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "orders_customer_id_customers_id_fk": {
-          "name": "orders_customer_id_customers_id_fk",
-          "tableFrom": "orders",
-          "tableTo": "customers",
-          "columnsFrom": [
-            "customer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
         "orders_place_id_places_id_fk": {
           "name": "orders_place_id_places_id_fk",
           "tableFrom": "orders",
@@ -574,7 +561,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "orders_payment_id_payments_id_fk": {
@@ -587,7 +574,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "orders_served_by_users_id_fk": {
@@ -600,7 +587,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -663,7 +650,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "order_details_order_id_orders_id_fk": {
@@ -676,7 +663,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -838,7 +825,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "product_ingredients_ingredient_id_ingredients_id_fk": {
@@ -851,7 +838,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "product_ingredients_unit_type_id_unit_types_id_fk": {
@@ -864,7 +851,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -921,7 +908,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "product_variants_variant_option_id_variant_options_id_fk": {
@@ -934,7 +921,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -1021,7 +1008,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "products_created_by_users_id_fk": {
@@ -1034,7 +1021,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "products_updated_by_users_id_fk": {
@@ -1047,7 +1034,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -1184,7 +1171,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "unit_type_conversions_to_unit_type_id_unit_types_id_fk": {
@@ -1197,7 +1184,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -1309,7 +1296,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "variant_options_unit_type_id_unit_types_id_fk": {
@@ -1322,7 +1309,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "variant_options_variant_id_variants_id_fk": {
@@ -1335,7 +1322,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -1410,7 +1397,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "purchase_details_ingredient_id_ingredients_id_fk": {
@@ -1423,7 +1410,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
         "purchase_details_unit_type_id_unit_types_id_fk": {
@@ -1436,7 +1423,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -1511,7 +1498,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -1567,13 +1554,13 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.recipe_ingredients": {
-      "name": "recipe_ingredients",
+    "public.stock_opnames": {
+      "name": "stock_opnames",
       "schema": "",
       "columns": {
-        "recipe_id": {
-          "name": "recipe_id",
-          "type": "uuid",
+        "amount": {
+          "name": "amount",
+          "type": "double precision",
           "primaryKey": false,
           "notNull": true
         },
@@ -1586,12 +1573,6 @@
         "unit_type_id": {
           "name": "unit_type_id",
           "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "amount": {
-          "name": "amount",
-          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -1619,22 +1600,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "recipe_ingredients_recipe_id_recipes_id_fk": {
-          "name": "recipe_ingredients_recipe_id_recipes_id_fk",
-          "tableFrom": "recipe_ingredients",
-          "tableTo": "recipes",
-          "columnsFrom": [
-            "recipe_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "recipe_ingredients_ingredient_id_ingredients_id_fk": {
-          "name": "recipe_ingredients_ingredient_id_ingredients_id_fk",
-          "tableFrom": "recipe_ingredients",
+        "stock_opnames_ingredient_id_ingredients_id_fk": {
+          "name": "stock_opnames_ingredient_id_ingredients_id_fk",
+          "tableFrom": "stock_opnames",
           "tableTo": "ingredients",
           "columnsFrom": [
             "ingredient_id"
@@ -1642,12 +1610,12 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "recipe_ingredients_unit_type_id_unit_types_id_fk": {
-          "name": "recipe_ingredients_unit_type_id_unit_types_id_fk",
-          "tableFrom": "recipe_ingredients",
+        "stock_opnames_unit_type_id_unit_types_id_fk": {
+          "name": "stock_opnames_unit_type_id_unit_types_id_fk",
+          "tableFrom": "stock_opnames",
           "tableTo": "unit_types",
           "columnsFrom": [
             "unit_type_id"
@@ -1655,53 +1623,10 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.recipes": {
-      "name": "recipes",
-      "schema": "",
-      "columns": {
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }
