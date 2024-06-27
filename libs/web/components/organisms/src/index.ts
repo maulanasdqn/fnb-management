@@ -3,3 +3,4 @@ export * from './sidebar';
 export * from './navbar';
 export * from './data-table';
 export * from './modal';
+export * from './permission-table';

@@ -10,11 +10,16 @@ export const ControlledFieldCheckbox = <T extends FieldValues>(
   }
 ): ReactElement => {
   const { field } = useController<T>(props);
+  const handleChange = () => {
+    field.onChange?.(props.value);
+    props.onChange?.(props.value);
+  };
   return (
     <FieldCheckbox
       {...props}
       {...field}
-      onChange={() => field.onChange?.(props.value)}
+      checked={props.checked}
+      onChange={handleChange}
     />
   );
 };
