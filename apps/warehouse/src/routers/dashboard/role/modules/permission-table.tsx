@@ -2,8 +2,9 @@ import { Button } from '@fms/atoms';
 import { TRoleSingleResponse, TRoleUpdateRequest } from '@fms/entities';
 import { ControlledFieldCheckbox } from '@fms/organisms';
 import { capitalizeWords } from '@fms/utilities';
+import { userService } from '@fms/web-services';
 import { FC, ReactElement, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 type Permission = {
   id: string;
@@ -13,6 +14,7 @@ type Permission = {
   parent: string;
   checked?: boolean;
 };
+
 type TPermissionTable = {
   isCollapse: boolean;
   data: TRoleSingleResponse['data'];
@@ -21,48 +23,57 @@ type TPermissionTable = {
 };
 
 export const PermissionTable: FC<TPermissionTable> = (props): ReactElement => {
-  const { control, watch } = useFormContext<TRoleUpdateRequest>();
+  const { control, setValue } = useFormContext<TRoleUpdateRequest>();
 
   const [collapsedGroups, setCollapsedGroups] = useState<{
     [key: string]: boolean;
   }>({});
 
-  const currentPermissions = watch('permissions');
+  const currentPermissions = useWatch({ control, name: 'permissionIds' }) || [];
+  const checkedPermissionsSet = new Set(currentPermissions);
 
-  const checkedPermissionsSet = new Set(currentPermissions?.map((cp) => cp.id));
-
-  // Define the type for the accumulator
   type GroupedPermissions = {
     [key: string]: { [key: string]: (Permission & { checked: boolean })[] };
   };
 
-  // Initialize the groupedPermissions with the correct type
+  const userData = userService.getUserData();
+  const rolePermissions = new Set(
+    props.data?.permissions?.map((perm: Permission) => perm.id) || []
+  );
+
   const groupedPermissions =
-    props?.data?.permissions?.reduce<GroupedPermissions>(
-      (acc, permission) => {
-        const group = permission.group;
-        const parent = permission.parent;
+    userData.role?.permissions.reduce<GroupedPermissions>((acc, permission) => {
+      const group = permission.group;
+      const parent = permission.parent;
 
-        // Determine if the permission is checked by looking up its ID in the set
-        const isChecked = checkedPermissionsSet.has(permission.id);
+      const isChecked =
+        rolePermissions.has(permission.id) &&
+        checkedPermissionsSet.has(permission.id);
 
-        // Add the checked property to the permission
-        const permissionWithChecked = { ...permission, checked: isChecked };
+      const permissionWithChecked = { ...permission, checked: isChecked };
 
-        // Ensure the group and parent keys are initialized in the accumulator
-        if (!acc[group]) acc[group] = {};
-        if (!acc[group][parent]) acc[group][parent] = [];
+      if (!acc[group]) acc[group] = {};
+      if (!acc[group][parent]) acc[group][parent] = [];
 
-        // Push the updated permission into the correct group and parent
-        acc[group][parent].push(permissionWithChecked);
+      acc[group][parent].push(permissionWithChecked);
 
-        return acc;
-      },
-      {} as GroupedPermissions // Explicitly cast the initial value to GroupedPermissions
-    );
+      return acc;
+    }, {} as GroupedPermissions);
 
   const handleGroupCollapse = (group: string) => {
     setCollapsedGroups((prev) => ({ ...prev, [group]: !prev[group] }));
+  };
+
+  const handlePermissionChange = (permission: Permission) => {
+    const updatedPermissions = [...currentPermissions];
+
+    if (updatedPermissions.includes(permission.id)) {
+      updatedPermissions.splice(updatedPermissions.indexOf(permission.id), 1);
+    } else {
+      updatedPermissions.push(permission.id);
+    }
+
+    setValue('permissionIds', updatedPermissions);
   };
 
   const sortedGroupKeys =
@@ -104,12 +115,12 @@ export const PermissionTable: FC<TPermissionTable> = (props): ReactElement => {
                             <td className="border-b border-grey-100 px-2 py-2">
                               {capitalizeWords(parent)}
                             </td>
-                            <td className="border-b border-grey-100 px-2 py-2 ">
+                            <td className="border-b border-grey-100 px-2 py-2">
                               <div className="grid grid-flow-row grid-cols-4 gap-2 items-center place-self-center">
                                 {permissions.map((permission, index) => (
-                                  <div key={permission.key}>
+                                  <div key={permission.id}>
                                     <ControlledFieldCheckbox
-                                      name={`permissions.${index}`}
+                                      name={`permissionIds.${index}`}
                                       control={control}
                                       value={{
                                         id: permission.id,
@@ -117,7 +128,15 @@ export const PermissionTable: FC<TPermissionTable> = (props): ReactElement => {
                                       }}
                                       text={capitalizeWords(permission.name)}
                                       size="sm"
-                                      checked={permission.checked}
+                                      checked={
+                                        permission.checked ||
+                                        currentPermissions.includes(
+                                          permission.id
+                                        )
+                                      }
+                                      onChange={() =>
+                                        handlePermissionChange(permission)
+                                      }
                                     />
                                   </div>
                                 ))}

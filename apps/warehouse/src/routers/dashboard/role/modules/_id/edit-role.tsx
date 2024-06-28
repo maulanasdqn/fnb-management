@@ -1,4 +1,4 @@
-import { Button } from '@fms/atoms';
+import { Button, ToastWrapper } from '@fms/atoms';
 import { TRoleUpdateRequest, roleUpdateSchema } from '@fms/entities';
 import { ControlledFieldText } from '@fms/organisms';
 import { trpc } from '@fms/trpc-client';
@@ -8,38 +8,45 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PermissionTable } from '../permission-table';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userService } from '@fms/web-services';
-
+import { toast } from 'react-toastify';
 export const EditRole: FC = (): ReactElement => {
+  
   const navigate = useNavigate();
   const params = useParams();
-  const { data, isPending } = trpc.role.findOne.useQuery({
+  const { data } = trpc.role.findOne.useQuery({
     id: params.id as string,
   });
-
+  const {mutate,isPending} = trpc.role.update.useMutation();
   const methods = useForm<TRoleUpdateRequest>({
     resolver: zodResolver(roleUpdateSchema),
     mode: 'all',
   });
 
   const onSubmit = methods.handleSubmit((data) => {
-    console.log(data);
+    mutate(data,{
+      onSuccess: () => {
+        toast.success('Role Permission Berhasil diperbarui');
+        setTimeout(() => {
+          navigate('/dashboard/role');
+        }, 2000);
+      }
+    });
+   console.log(data);
   });
 
   const userData = userService.getUserData();
 
   useEffect(() => {
     methods.reset({
-      id: userData?.role.id,
-      name: userData?.role?.name,
-      permissions: userData?.role?.permissions?.map((x) => ({
-        id: x.id,
-        name: x.name,
-      })),
-    });
+      id: data?.data?.id,
+      name: data?.data?.name,
+      permissionIds: data?.data?.permissions?.map((permission) => permission.id),
+  });
   }, [data, methods.reset]);
 
   return (
     <section className="w-full min-h-screen">
+      <ToastWrapper/>
       <div>
         <p className="text-grey-400">
           Roles List / <span className="text-success-600">Edit</span>
