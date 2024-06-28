@@ -35,9 +35,9 @@ export const recipeIngredientRelations = relations(
       fields: [recipeIngredients.ingredientId],
       references: [ingredients.id],
     }),
-    unitType: one(ingredients, {
+    unitType: one(unitTypes, {
       fields: [recipeIngredients.unitTypeId],
-      references: [ingredients.unitTypeId],
+      references: [unitTypes.id],
     }),
     recipe: one(recipes, {
       fields: [recipeIngredients.recipeId],
