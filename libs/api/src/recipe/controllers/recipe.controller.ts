@@ -1,48 +1,42 @@
-// import { router, procedure } from '@fms/trpc-server';
+import { router, procedure } from '@fms/trpc-server';
 
-// import {
-//   recipeResponseSchema,
-//   recipeQueryParamSchema,
-//   recipeCreateRequestSchema,
-//   recipeUpdateRequestSchema,
-//   queryParamsSchema,
-//   dataSingleResponseSchema,
-// } from '@fms/entities';
+import {
+  queryParamsSchema,
+  recipeCreateSchema,
+  recipeUpdateSchema,
+} from '@fms/entities';
+import { z } from 'zod';
+import { recipeService } from '../services/recipe.service';
+export const recipeController = router({
+  index: procedure.input(queryParamsSchema).query(async ({ input }) => {
+    return await recipeService.pagination(input);
+  }),
 
-// export const recipeController = router({
-//   findMany: procedure
-//     .output(recipeResponseSchema.array())
-//     .input(queryParamsSchema)
-//     .query(async ({ input }) => {
-//       console.log('test');
-//       return await findMany(input);
-//     }),
+  detail: procedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      return await recipeService.detail(input.id);
+    }),
 
-//   findOne: procedure
-//     .output(recipeResponseSchema)
-//     .input(recipeQueryParamSchema.pick({ id: true }))
-//     .query(async ({ input }) => {
-//       return await findOne(input.id as string);
-//     }),
+  create: procedure.input(recipeCreateSchema).mutation(async ({ input }) => {
+    return await recipeService.create(input);
+  }),
 
-//   create: procedure
-//     .output(recipeResponseSchema)
-//     .input(recipeCreateRequestSchema)
-//     .mutation(async ({ input }) => {
-//       return await create(input);
-//     }),
+  update: procedure.input(recipeUpdateSchema).mutation(async ({ input }) => {
+    return await recipeService.update(input);
+  }),
 
-//   update: procedure
-//     .output(recipeResponseSchema)
-//     .input(recipeUpdateRequestSchema)
-//     .mutation(async ({ input }) => {
-//       return await update(input);
-//     }),
-
-//   destroy: procedure
-//     .output(dataSingleResponseSchema(recipeResponseSchema))
-//     .input(recipeQueryParamSchema.pick({ id: true }))
-//     .mutation(async ({ input }) => {
-//       return await destroy(input.id as string);
-//     }),
-// });
+  delete: procedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return await recipeService.delete(input.id);
+    }),
+});

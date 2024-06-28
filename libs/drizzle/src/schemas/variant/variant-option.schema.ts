@@ -8,12 +8,16 @@ import { unitTypes } from '../unit/unit-type.schema';
 
 export const variantOptions = pgTable('variant_options', {
   name: text('name').notNull(),
-  ingredientId: uuid('ingredient_id').references(() => ingredients.id),
-  unitTypeId: uuid('unit_type_id').references(() => unitTypes.id),
+  ingredientId: uuid('ingredient_id').references(() => ingredients.id, {
+    onDelete: 'set null',
+  }),
+  unitTypeId: uuid('unit_type_id').references(() => unitTypes.id, {
+    onDelete: 'set null',
+  }),
   amount: integer('amount'),
   variantId: uuid('variant_id')
     .notNull()
-    .references(() => variants.id),
+    .references(() => variants.id, { onDelete: 'cascade' }),
   ...baseSchema,
 });
 

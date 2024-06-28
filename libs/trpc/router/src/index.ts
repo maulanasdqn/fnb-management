@@ -14,6 +14,8 @@ import {
   placeController,
   variantController,
   supplierController,
+  recipeController,
+  stockOpnameController,
 } from '@fms/api-libs';
 
 export const appRouter = router({
@@ -31,5 +33,7 @@ export const appRouter = router({
   place: placeController,
   variant: variantController,
   supplier: supplierController,
+  recipe: recipeController,
+  stockOpname: stockOpnameController,
 });
 export type appRouter = typeof appRouter;

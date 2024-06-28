@@ -5,6 +5,12 @@ export const orderDetailSchema = z.object({
   product: z.object({
     id: z.string(),
     name: z.string(),
+    varianOptions: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      })
+    ),
   }),
   quantity: z.number(),
   price: z.number(),

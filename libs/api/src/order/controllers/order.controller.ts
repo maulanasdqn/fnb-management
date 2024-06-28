@@ -1,18 +1,26 @@
 import { router, procedure } from '@fms/trpc-server';
-import { create, findMany, findOne } from '../services/order.service';
-import { orderCreateRequestSchema, queryParamsSchema } from '@fms/entities';
+import {
+  orderCreateSchema,
+  orderUpdateSchema,
+  queryParamsSchema,
+} from '@fms/entities';
+
+import { orderService } from '../services/order.service';
+import { z } from 'zod';
 
 export const orderController = router({
-  create: procedure
-    .input(orderCreateRequestSchema)
-    .mutation(async ({ input }) => {
-      return await create(input);
+  create: procedure.input(orderCreateSchema).mutation(async ({ input }) => {
+    return await orderService.create(input);
+  }),
+  update: procedure.input(orderUpdateSchema).mutation(async ({ input }) => {
+    return await orderService.update(input);
+  }),
+  findMany: procedure.input(queryParamsSchema).query(async ({ input }) => {
+    return await orderService.pagination(input);
+  }),
+  findOne: procedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      return orderService.detail(input.id);
     }),
-
-  findMany: procedure.query(async () => {
-    return findMany();
-  }),
-  findOne: procedure.input(queryParamsSchema).query(async ({ input }) => {
-    return await findOne(input?.id as string);
-  }),
 });

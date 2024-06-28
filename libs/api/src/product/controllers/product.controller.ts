@@ -7,8 +7,6 @@ import {
   destroy,
 } from '../services/product.service';
 import {
-  responseSchema,
-  productSchema,
   productCreateSchema,
   productUpdateSchema,
   queryParamsSchema,
@@ -16,13 +14,9 @@ import {
 import { z } from 'zod';
 
 export const productController = router({
-  findMany: procedure
-    .output(responseSchema(productSchema))
-    .input(queryParamsSchema)
-    .query(async ({ input }) => {
-      return await findMany(input);
-    }),
-
+  findMany: procedure.input(queryParamsSchema).query(async ({ input }) => {
+    return await findMany(input);
+  }),
   findOne: procedure
     .input(
       z.object({

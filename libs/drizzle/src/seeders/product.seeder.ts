@@ -33,12 +33,19 @@ export const seedProduct = async <T extends Record<string, unknown>>(
           .where(eq(schema.productCategories.name, 'Coffee')),
       ]);
 
+      const recipes = await db
+        .select({ id: schema.recipes.id, name: schema.recipes.name })
+        .from(schema.recipes);
+
       const [createLatte, createCoffeeMilk] = await Promise.all([
         tx
           .insert(schema.products)
           .values([
             {
               name: 'Latte',
+              recipeId: recipes?.find(
+                (val: { id: string; name: string }) => val.name === 'Latte'
+              )?.id as string,
               productCategoryId: productCategory[0].id,
               priceSelling: 15000,
               image:
@@ -55,6 +62,9 @@ export const seedProduct = async <T extends Record<string, unknown>>(
             {
               name: 'Coffee Milk',
               productCategoryId: productCategory[0].id,
+              recipeId: recipes?.find(
+                (val: { id: string; name: string }) => val.name === 'Espresso'
+              )?.id as string,
               priceSelling: 10000,
               image:
                 'https://sleepyowl.co/cdn/shop/files/YHF02067_7-min_e5b148de-a62d-460d-99c2-6fe83013965e.jpg?v=1656418725',
