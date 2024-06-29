@@ -15,6 +15,7 @@ export const variantOptions = pgTable('variant_options', {
     onDelete: 'set null',
   }),
   amount: integer('amount'),
+  price: integer('price'),
   variantId: uuid('variant_id')
     .notNull()
     .references(() => variants.id, { onDelete: 'cascade' }),

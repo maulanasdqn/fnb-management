@@ -22,6 +22,7 @@ export const variantService = {
           columns: {
             id: true,
             name: true,
+            price: true,
           },
           with: {
             productVariants: {
@@ -38,6 +39,7 @@ export const variantService = {
       options: el.variantOptions.map((option) => ({
         id: option.id,
         name: option.name,
+        price: option.price,
       })),
     }));
   },
@@ -84,6 +86,7 @@ export const variantService = {
             id: true,
             name: true,
             amount: true,
+            price: true,
           },
           with: {
             ingredient: {
@@ -138,6 +141,7 @@ export const variantService = {
           ingredientId: option.ingredientId,
           unitTypeId: option.unitTypeId,
           amount: option.amount,
+          price: option.price,
         });
       }
     });
@@ -170,6 +174,7 @@ export const variantService = {
             ingredientId: option.ingredientId,
             unitTypeId: option.unitTypeId,
             amount: option.amount,
+            price: option.price,
           });
         }
       }
@@ -197,6 +202,7 @@ export const variantService = {
           columns: {
             id: true,
             name: true,
+            price: true,
           },
         },
       },
@@ -208,6 +214,7 @@ export const variantService = {
       options: el.variantOptions.map((option) => ({
         id: option.id,
         name: option.name,
+        price: option.price,
       })),
     }));
   },
