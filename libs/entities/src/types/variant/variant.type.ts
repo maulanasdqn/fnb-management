@@ -4,7 +4,13 @@ import { baseSchema, TBaseResponse } from '../common';
 export const variantProductSchema = z.object({
   id: z.string(),
   name: z.string(),
-  options: z.array(z.object({ id: z.string(), name: z.string() })),
+  options: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      price: z.number().nullable().optional(),
+    })
+  ),
 });
 
 export const variantOptionSchema = z.object({
@@ -16,6 +22,7 @@ export const variantOptionSchema = z.object({
         id: z.string(),
         name: z.string(),
         amount: z.number().nullable().optional(),
+        price: z.number().nullable().optional(),
         ingredient: z
           .object({
             id: z.string(),
@@ -44,6 +51,7 @@ export const variantOptionCreateSchema = z.object({
       ingredientId: z.string(),
       unitTypeId: z.string(),
       amount: z.number(),
+      price: z.number().nullable().optional(),
     })
   ),
 });
@@ -57,6 +65,7 @@ export const variantOptionUpdateSchema = z.object({
       ingredientId: z.string(),
       unitTypeId: z.string(),
       amount: z.number(),
+      price: z.number().nullable().optional(),
     })
   ),
 });
