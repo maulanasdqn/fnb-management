@@ -1,7 +1,12 @@
 import * as argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
-import { TPermission, TPermissionGroup } from '@fms/entities';
+import {
+  TCCommonObject,
+  TOption,
+  TPermission,
+  TPermissionGroup,
+} from '@fms/entities';
 
 config();
 export const encryptPassword = async (password: string): Promise<string> => {
@@ -74,4 +79,22 @@ export const groupPermissions = (data: TPermission[]): TPermissionGroup[] => {
       permissions,
     })),
   }));
+};
+
+export const dropdownOptions = (props: TCCommonObject[]): TOption[] => {
+  return props?.map((val) => {
+    const result: TOption = {
+      label: val.name,
+      value: val.id,
+    };
+
+    if (val?.data) {
+      result.data = val.data.map((val) => ({
+        name: val.name,
+        id: val.id,
+      }));
+    }
+
+    return result;
+  });
 };

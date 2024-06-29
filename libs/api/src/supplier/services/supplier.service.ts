@@ -1,5 +1,6 @@
 import {
   TQueryParams,
+  TSupplier,
   TSupplierCreateRequest,
   TSupplierResponse,
   TSupplierSingleResponse,
@@ -89,5 +90,12 @@ export const supplierService = {
     return {
       message: 'Delete Supplier Success',
     };
+  },
+  findAllWithSearch: async (search?: string): Promise<TSupplier[]> => {
+    return await db
+      .select()
+      .from(suppliers)
+      .where(ilike(suppliers.fullName, `%${search || ''}%`))
+      .orderBy(asc(suppliers.fullName));
   },
 };

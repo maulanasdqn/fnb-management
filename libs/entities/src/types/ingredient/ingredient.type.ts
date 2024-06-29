@@ -31,4 +31,6 @@ export type TIngredient = z.infer<typeof ingredientSchema>;
 export type TIngredientCreateRequest = z.infer<typeof ingredientCreateSchema>;
 export type TIngredientUpdateRequest = z.infer<typeof ingredientUpdateSchema>;
 export type TIngredientSingleResponse = TBaseResponse<TIngredient>;
-export type TIngredientResponse = TBaseResponse<TIngredient[]>;
+export type TIngredientResponse = TBaseResponse<
+  Omit<TIngredient, 'stock' | 'logs'>[]
+>;

@@ -65,6 +65,14 @@ export const seedIngredient = async (db: any) => {
         )?.id,
       },
       {
+        name: 'Water',
+        price: 12430034,
+        amount: 3,
+        unitTypeId: unitTypes.find(
+          (unit: { id: string; name: string }) => unit.name === 'Liter'
+        )?.id,
+      },
+      {
         name: 'Espresso',
         price: 232045,
         amount: 2,

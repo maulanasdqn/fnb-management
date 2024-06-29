@@ -1,4 +1,5 @@
 import {
+  TPayment,
   TPaymentCreateRequest,
   TPaymentResponse,
   TPaymentSingleResponse,
@@ -88,5 +89,12 @@ export const paymentService = {
     return {
       data,
     };
+  },
+  findAllWithSearch: async (search?: string): Promise<TPayment[]> => {
+    return await db
+      .select()
+      .from(payments)
+      .where(ilike(payments.name, `%${search || ''}%`))
+      .orderBy(asc(payments.name));
   },
 };

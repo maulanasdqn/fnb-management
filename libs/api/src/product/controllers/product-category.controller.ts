@@ -8,21 +8,14 @@ import {
   queryParamsSchema,
 } from '@fms/entities';
 import { z } from 'zod';
-
-import {
-  findMany,
-  findOne,
-  create,
-  update,
-  destroy,
-} from '../services/product-category.service';
+import { productCategoryService } from '../services/product-category.service';
 
 export const productCategoryController = router({
   findMany: procedure
     .output(responseSchema(productCategorySchema))
     .input(queryParamsSchema)
     .query(async ({ input }) => {
-      return await findMany(input);
+      return await productCategoryService.pagination(input);
     }),
 
   findOne: procedure
@@ -32,19 +25,19 @@ export const productCategoryController = router({
       })
     )
     .query(async ({ input }) => {
-      return await findOne(input?.id as string);
+      return await productCategoryService.detail(input?.id as string);
     }),
 
   create: procedure
     .input(productCategoryCreateSchema)
     .mutation(async ({ input }) => {
-      return await create(input);
+      return await productCategoryService.create(input);
     }),
 
   update: procedure
     .input(productCategoryUpdateSchema)
     .mutation(async ({ input }) => {
-      return await update(input);
+      return await productCategoryService.update(input);
     }),
 
   delete: procedure
@@ -54,6 +47,6 @@ export const productCategoryController = router({
       })
     )
     .mutation(async ({ input }) => {
-      return await destroy(input.id as string);
+      return await productCategoryService.delete(input.id as string);
     }),
 });

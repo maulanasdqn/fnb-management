@@ -2,10 +2,11 @@ import { z } from 'zod';
 import { baseSchema, TBaseResponse } from '../common';
 
 export const supplierSchema = z.object({
+  id: z.string(),
   fullName: z.string(),
   address: z.string(),
   phoneNumber: z.string(),
-  ...baseSchema.shape,
+  ...baseSchema.omit({ id: true }).shape,
 });
 
 export const supplierCreateSchema = z.object({

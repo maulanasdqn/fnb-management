@@ -3,8 +3,9 @@ import { baseSchema, TBaseResponse } from '../common';
 import { z } from 'zod';
 
 export const productCategorySchema = z.object({
+  id: z.string(),
   name: z.string(),
-  ...baseSchema.shape,
+  ...baseSchema.omit({ id: true }).shape,
 });
 
 export const productCategoryCreateSchema = z.object({

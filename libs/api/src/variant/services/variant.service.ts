@@ -1,7 +1,8 @@
 import { db, productVariants, variantOptions, variants } from '@fms/drizzle';
-import { asc, eq, ilike } from 'drizzle-orm';
+import { asc, eq, ilike, like } from 'drizzle-orm';
 import {
   TQueryParams,
+  TVariantOption,
   TVariantOptionCreateRequest,
   TVariantOptionResponse,
   TVariantOptionSingleResponse,
@@ -187,5 +188,27 @@ export const variantService = {
     return {
       message: 'Delete Variant Success',
     };
+  },
+  findAllWithSearch: async (search?: string): Promise<TVariantOption[]> => {
+    const data = await db.query.variants.findMany({
+      where: like(variants.name, `%${search || ''}%`),
+      with: {
+        variantOptions: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return data.map((el) => ({
+      id: el.id,
+      name: el.name,
+      options: el.variantOptions.map((option) => ({
+        id: option.id,
+        name: option.name,
+      })),
+    }));
   },
 };
