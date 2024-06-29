@@ -11,7 +11,7 @@ import { variantService } from '../../variant/services/variant.service';
 
 export const dropdownController = router({
   productCategory: procedure
-    .input(z.object({ search: z.string() }))
+    .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await productCategoryService.findAllWithSearch(
         input.search
@@ -21,7 +21,7 @@ export const dropdownController = router({
       );
     }),
   recipe: procedure
-    .input(z.object({ search: z.string() }))
+    .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await recipeService.findAllWithSearch(input.search);
       return dropdownOptions(
@@ -29,7 +29,7 @@ export const dropdownController = router({
       );
     }),
   ingredient: procedure
-    .input(z.object({ search: z.string() }))
+    .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await ingredientService.findAllWithSearch(input.search);
       return dropdownOptions(
@@ -37,7 +37,7 @@ export const dropdownController = router({
       );
     }),
   place: procedure
-    .input(z.object({ search: z.string() }))
+    .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await placeService.findAllWithSearch(input.search);
       return dropdownOptions(
@@ -45,7 +45,7 @@ export const dropdownController = router({
       );
     }),
   payment: procedure
-    .input(z.object({ search: z.string() }))
+    .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await paymentService.findAllWithSearch(input.search);
       return dropdownOptions(
@@ -53,7 +53,7 @@ export const dropdownController = router({
       );
     }),
   supplier: procedure
-    .input(z.object({ search: z.string() }))
+    .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await supplierService.findAllWithSearch(input.search);
       return dropdownOptions(
@@ -61,7 +61,7 @@ export const dropdownController = router({
       );
     }),
   variant: procedure
-    .input(z.object({ search: z.string() }))
+    .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await variantService.findAllWithSearch(input.search);
       return dropdownOptions(
