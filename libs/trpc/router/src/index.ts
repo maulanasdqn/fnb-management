@@ -16,6 +16,7 @@ import {
   supplierController,
   recipeController,
   stockOpnameController,
+  dropdownController,
 } from '@fms/api-libs';
 
 export const appRouter = router({
@@ -35,5 +36,6 @@ export const appRouter = router({
   supplier: supplierController,
   recipe: recipeController,
   stockOpname: stockOpnameController,
+  dropdown: dropdownController,
 });
 export type appRouter = typeof appRouter;

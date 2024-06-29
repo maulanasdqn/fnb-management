@@ -2,8 +2,9 @@ import { z } from 'zod';
 import { baseSchema, TBase, TBaseResponse } from '../common';
 
 export const placeSchema = z.object({
+  id: z.string(),
   name: z.string(),
-  ...baseSchema.shape,
+  ...baseSchema.omit({ id: true }).shape,
 });
 
 export const placeCreateSchema = z.object({

@@ -1,4 +1,5 @@
 import {
+  TPlace,
   TPlaceCreateRequest,
   TPlaceResponse,
   TPlaceSingleResponse,
@@ -83,5 +84,13 @@ export const placeService = {
       .then((data) => data[0]);
 
     return { data };
+  },
+
+  findAllWithSearch: async (search?: string): Promise<TPlace[]> => {
+    return await db
+      .select()
+      .from(places)
+      .where(ilike(places.name, `%${search || ''}%`))
+      .orderBy(asc(places.name));
   },
 };

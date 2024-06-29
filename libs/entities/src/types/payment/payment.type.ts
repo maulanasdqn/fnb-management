@@ -2,11 +2,12 @@ import { z } from 'zod';
 import { baseSchema, TBaseResponse } from '../common';
 
 export const paymentSchema = z.object({
+  id: z.string(),
   name: z.string(),
   accountName: z.string(),
   accountNumber: z.string(),
   amount: z.number().nullable(),
-  ...baseSchema.shape,
+  ...baseSchema.omit({ id: true }).shape,
 });
 
 export const paymentCreateSchema = z.object({

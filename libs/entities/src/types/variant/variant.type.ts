@@ -15,19 +15,21 @@ export const variantOptionSchema = z.object({
       z.object({
         id: z.string(),
         name: z.string(),
-        amount: z.number().nullable(),
+        amount: z.number().nullable().optional(),
         ingredient: z
           .object({
             id: z.string(),
             name: z.string(),
           })
-          .nullable(),
+          .nullable()
+          .optional(),
         unitType: z
           .object({
             id: z.string(),
             name: z.string(),
           })
-          .nullable(),
+          .nullable()
+          .optional(),
       })
     )
     .optional(),
