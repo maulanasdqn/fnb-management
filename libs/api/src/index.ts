@@ -12,3 +12,4 @@ export * from './variant';
 export * from './supplier';
 export * from './recipe';
 export * from './stock-opname';
+export * from './dropdown';

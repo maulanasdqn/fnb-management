@@ -258,7 +258,19 @@ export type TLineChart = {
     }>;
   };
 };
+export type TCCommonObject = {
+  id: string;
+  name: string;
+  data?: {
+    id?: string;
+    name?: string;
+  }[];
+};
 
-export type TOption = { value: string; label: string; additional?: string };
+export type TOption = {
+  value: string;
+  label: string;
+  data?: { id?: string; name?: string }[];
+};
 
 export * from './style';

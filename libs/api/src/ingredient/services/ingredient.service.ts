@@ -1,87 +1,54 @@
 import { db, ingredients, unitTypeConversions } from '@fms/drizzle';
 import {
+  TIngredient,
   TIngredientCreateRequest,
   TIngredientResponse,
   TIngredientSingleResponse,
   TIngredientUpdateRequest,
   TQueryParams,
 } from '@fms/entities';
-import { and, eq, or } from 'drizzle-orm';
+import { asc, eq, ilike } from 'drizzle-orm';
 
 export const ingredientService = {
-  findMany: async (params?: TQueryParams) => {
-    const dataUnitConversions = await db.query.unitTypeConversions.findMany({
-      columns: {
-        id: true,
-        conversionFactor: true,
+  findMany: async (params?: TQueryParams): Promise<TIngredientResponse> => {
+    const page = params?.page || 1;
+    const perPage = params?.perPage || 10;
+    const offset = (page - 1) * perPage;
+
+    const data = await db
+      .select({
+        id: ingredients.id,
+        name: ingredients.name,
+        price: ingredients.price,
+        amount: ingredients.amount,
+        createdAt: ingredients.createdAt,
+        updatedAt: ingredients.updatedAt,
+      })
+      .from(ingredients)
+      .where(ilike(ingredients.name, `%${params?.search || ''}%`))
+      .limit(perPage)
+      .offset(params?.search ? 0 : offset)
+      .orderBy(asc(ingredients.name));
+
+    const count = await db
+      .select({ id: ingredients.id })
+      .from(ingredients)
+      .then((res) => res.length);
+
+    const totalPage = Math.ceil(count / perPage);
+    const nextPage = page < totalPage ? Number(page) + 1 : null;
+    const prevPage = page > 1 ? Number(page - 1) : null;
+
+    return {
+      meta: {
+        page,
+        nextPage,
+        prevPage,
+        perPage,
+        totalPage,
       },
-      with: {
-        fromUnitType: {
-          columns: {
-            id: true,
-            name: true,
-          },
-        },
-        toUnitType: {
-          columns: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    });
-
-    const data = await db.query.ingredients.findMany({
-      columns: {
-        id: true,
-        name: true,
-        price: true,
-        amount: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-      with: {
-        unitType: {
-          columns: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    });
-
-    if (!data || data.length === 0) {
-      throw new Error('Ingredients not found');
-    }
-
-    const response = data.map((ingredient) => {
-      const stockInBaseUnit = ingredient.amount;
-      const baseUnitName = ingredient.unitType.name;
-
-      const stock = { [baseUnitName]: stockInBaseUnit };
-
-      for (const conversion of dataUnitConversions) {
-        if (conversion.fromUnitType.name === ingredient.unitType.name) {
-          stock[conversion.toUnitType.name] =
-            stockInBaseUnit * conversion.conversionFactor;
-        } else if (conversion.toUnitType.name === ingredient.unitType.name) {
-          stock[conversion.fromUnitType.name] =
-            stockInBaseUnit / conversion.conversionFactor;
-        }
-      }
-
-      return {
-        id: ingredient.id,
-        name: ingredient.name,
-        price: ingredient.price,
-        amount: ingredient.amount,
-        createdAt: ingredient.createdAt,
-        updatedAt: ingredient.updatedAt,
-        stock,
-      };
-    });
-
-    return response;
+      data,
+    };
   },
   findOne: async (id: string): Promise<TIngredientSingleResponse> => {
     const data = await db.query.ingredients.findFirst({
@@ -181,5 +148,19 @@ export const ingredientService = {
     return {
       message: 'Update Ingredient Success',
     };
+  },
+  findAllWithSearch: async (
+    search?: string
+  ): Promise<Omit<TIngredient, 'logs' | 'stock' | 'amount' | 'price'>[]> => {
+    return await db
+      .select({
+        id: ingredients.id,
+        name: ingredients.name,
+        createdAt: ingredients.createdAt,
+        updatedAt: ingredients.updatedAt,
+      })
+      .from(ingredients)
+      .where(ilike(ingredients.name, `%${search?.search || ''}%`))
+      .orderBy(asc(ingredients.name));
   },
 };

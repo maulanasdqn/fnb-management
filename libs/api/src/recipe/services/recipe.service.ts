@@ -168,4 +168,17 @@ export const recipeService = {
       message: 'Delete Recipe Success',
     };
   },
+  findAllWithSearch: async (search?: string): Promise<TRecipe[]> => {
+    return await db
+      .select({
+        id: recipes.id,
+        name: recipes.name,
+        description: recipes.description,
+        createdAt: recipes.createdAt,
+        updatedAt: recipes.updatedAt,
+      })
+      .from(recipes)
+      .where(ilike(recipes.name, `%${search?.search || ''}%`))
+      .orderBy(asc(recipes.name));
+  },
 };
