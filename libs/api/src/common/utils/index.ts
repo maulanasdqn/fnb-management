@@ -82,7 +82,7 @@ export const groupPermissions = (data: TPermission[]): TPermissionGroup[] => {
 };
 
 export const dropdownOptions = (props: TCCommonObject[]): TOption[] => {
-  return props.map((val) => {
+  return props?.map((val) => {
     const result: TOption = {
       label: val.name,
       value: val.id,

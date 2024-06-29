@@ -8,6 +8,7 @@ import { placeService } from '../../place/services/place.service';
 import { paymentService } from '../../payment/services/payment.service';
 import { supplierService } from '../../supplier/services/supplier.service';
 import { variantService } from '../../variant/services/variant.service';
+import { TCCommonObject } from '@fms/entities';
 
 export const dropdownController = router({
   productCategory: procedure
@@ -16,41 +17,31 @@ export const dropdownController = router({
       const result = await productCategoryService.findAllWithSearch(
         input.search
       );
-      return dropdownOptions(
-        result.map((val) => ({ id: val.id, name: val.name }))
-      );
+      return dropdownOptions(result as TCCommonObject[]);
     }),
   recipe: procedure
     .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await recipeService.findAllWithSearch(input.search);
-      return dropdownOptions(
-        result.map((val) => ({ id: val.id, name: val.name }))
-      );
+      return dropdownOptions(result as TCCommonObject[]);
     }),
   ingredient: procedure
     .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await ingredientService.findAllWithSearch(input.search);
-      return dropdownOptions(
-        result.map((val) => ({ id: val.id, name: val.name }))
-      );
+      return dropdownOptions(result as TCCommonObject[]);
     }),
   place: procedure
     .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await placeService.findAllWithSearch(input.search);
-      return dropdownOptions(
-        result.map((val) => ({ id: val.id, name: val.name }))
-      );
+      return dropdownOptions(result as TCCommonObject[]);
     }),
   payment: procedure
     .input(z.object({ search: z.string().optional() }))
     .query(async ({ input }) => {
       const result = await paymentService.findAllWithSearch(input.search);
-      return dropdownOptions(
-        result.map((val) => ({ id: val.id, name: val.name }))
-      );
+      return dropdownOptions(result as TCCommonObject[]);
     }),
   supplier: procedure
     .input(z.object({ search: z.string().optional() }))
