@@ -21,7 +21,8 @@
     "client:build": "nx build client",
     "warehouse:dev": "nx serve warehouse",
     "warehouse:e2e": "nx e2e warehouse-e2e",
-    "warehouse:build": "nx build warehouse"
+    "warehouse:build": "nx build warehouse",
+    "build:prod": "nx run-many --target=build ---all --prod"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
