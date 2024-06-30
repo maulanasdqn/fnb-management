@@ -4,6 +4,11 @@
   "sourceRoot": "apps/backoffice/src",
   "projectType": "application",
   "tags": [],
-  "// targets": "to see all targets run: nx show project backoffice --web",
-  "targets": {}
+  "targets": {
+    "serve": {
+      "options": {
+        "port": 4202
+      }
+    }
+  }
 }
