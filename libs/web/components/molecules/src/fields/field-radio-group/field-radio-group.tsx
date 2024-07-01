@@ -1,5 +1,5 @@
 import { InputRadio } from '@fms/atoms';
-import { TInputMolecule, TInputSpecial, TOption, TRadioOption } from '@fms/entities';
+import { TInputMolecule, TInputSpecial, TRadioOption } from '@fms/entities';
 import { Fieldset } from '@fms/templates';
 import { clsx } from 'clsx';
 import { ReactElement, forwardRef } from 'react';

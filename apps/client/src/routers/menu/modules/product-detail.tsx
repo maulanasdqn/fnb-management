@@ -174,12 +174,6 @@ export const ProductDetail: FC<
     ? 0
     : Number(data?.priceSelling);
 
-  // console.log({
-  //   topping: totalToppingPrice,
-  //   variant: getVariantPrice,
-  //   priceActual: priceActual,
-  // });
-
   const price = match({
     topping: totalToppingPrice,
     variant: getVariantPrice,
@@ -230,9 +224,6 @@ export const ProductDetail: FC<
     .with({ variant: 0, topping: undefined }, () => priceActual)
     .with({ topping: 0, variant: undefined }, () => priceActual)
     .otherwise(() => priceActual);
-  // console.log(totalToppingPrice);
-  // console.log(selectedToppings);
-  // console.log(orderData);
   return loading ? (
     <div key={data?.id} className="w-full min-h-screen bg-white p-4">
       <div className="flex flex-col gap-y-2">
