@@ -8,7 +8,7 @@ import {
   userService,
 } from '@fms/web-services';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginRequestSchema } from '@fms/entities';
+import { loginRequestSchema, TUser } from '@fms/entities';
 import { z } from 'zod';
 import { trpc } from '@fms/trpc-client';
 
@@ -37,7 +37,7 @@ export const LoginPage: FC = (): ReactElement => {
         if (resp) {
           tokenService.setAccessToken(resp?.token?.accessToken);
           tokenService.setRefreshToken(resp?.token?.refreshToken);
-          userService.setUserData(resp?.user);
+          userService.setUserData(resp?.user as TUser);
         }
       },
       onError: (error) => {
