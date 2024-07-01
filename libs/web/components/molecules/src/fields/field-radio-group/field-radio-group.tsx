@@ -1,19 +1,14 @@
 import { InputRadio } from '@fms/atoms';
-import { TInputMolecule, TInputSpecial, TOption } from '@fms/entities';
+import { TInputMolecule, TInputSpecial, TOption, TRadioOption } from '@fms/entities';
 import { Fieldset } from '@fms/templates';
 import { clsx } from 'clsx';
 import { ReactElement, forwardRef } from 'react';
 
 export const FieldRadioGroup = forwardRef<
   HTMLInputElement,
-  Omit<
-    TInputSpecial &
-      TInputMolecule & {
-        options: TOption[];
-      },
-    'onChange'
-  > & {
-    onChange?: (value?: string | number | boolean) => void;
+  Omit<TInputSpecial & TInputMolecule & {options: TRadioOption[];},'onChange'> & {
+    onChange?: (value?: {id:string; name:string;}| number | boolean) => void;
+    value: {id:string; name:string;};
   }
 >((props, ref): ReactElement => {
   const className = clsx(
@@ -33,8 +28,8 @@ export const FieldRadioGroup = forwardRef<
             <InputRadio
               {...props}
               ref={ref}
-              checked={props.value === option.value}
-              onChange={() => props?.onChange?.(option.value)}
+              checked={props?.value?.id === option.value.id}
+              onChange={() =>  props?.onChange?.(option.value)}
             />
           </div>
         </label>

@@ -165,16 +165,26 @@ export type TControlledSelect<T extends FieldValues> = UseControllerProps<T> &
 export type TControlledInputSpecial<T extends FieldValues> =
   UseControllerProps<T> & TInputSpecial & TInputMolecule;
 
+export type TRadioOption = {
+  label: string;
+  additional: string;
+  value: {
+    id: string;
+    name: string;
+  };
+};
 export type TControlledInputRadioGroup<T extends FieldValues> =
   UseControllerProps<T> &
     Omit<
       TInputSpecial &
         TInputMolecule & {
-          options: TOption[];
+          options: TRadioOption[];
         },
       'onChange'
     > & {
-      onChange?: (value?: string | number | boolean) => void;
+      onChange?: (
+        value?: { id: string; name: string } | number | boolean
+      ) => void;
     };
 
 export type TControlledTextArea<T extends FieldValues> = UseControllerProps<T> &
