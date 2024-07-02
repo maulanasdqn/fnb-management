@@ -8,7 +8,7 @@ import {
   userService,
 } from '@fms/web-services';
 import { trpc } from '@fms/trpc-client';
-import { loginRequestSchema } from '@fms/entities';
+import { loginRequestSchema, TUser } from '@fms/entities';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
@@ -30,35 +30,34 @@ export const LoginPage: FC = (): ReactElement => {
 
   const { mutate, isPending } = trpc.auth.login.useMutation();
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    window.location.href = '/dashboard';
-    // mutate(data, {
-    //   onSuccess: (resp) => {
-    //     setIsAuthenticated(true);
-    //     if (resp) {
-    //       tokenService.setAccessToken(resp?.token?.accessToken);
-    //       tokenService.setRefreshToken(resp?.token?.refreshToken);
-    //       userService.setUserData(resp?.user);
-    //     }
-    //   },
-    //   onError: (error) => {
-    //     setErrorMessage(error.message);
-    //   },
-    // });
+    mutate(data, {
+      onSuccess: (resp) => {
+        setIsAuthenticated(true);
+        if (resp) {
+          tokenService.setAccessToken(resp?.token?.accessToken);
+          tokenService.setRefreshToken(resp?.token?.refreshToken);
+          userService.setUserData(resp?.user as TUser);
+        }
+      },
+      onError: (error) => {
+        setErrorMessage(error.message);
+      },
+    });
   });
   useEffect(() => {
     setTimeout(() => {
       setErrorMessage(null);
     }, 3000);
   }, [errorMessage]);
+
   return (
     <div className="bg-grey-100 flex items-center justify-center w-full h-screen text-white">
       <form
         onSubmit={onSubmit}
-        className="bg-white shadow-sm rounded-lg p-6 md:w-1/3 w-1/2 h-2/3 flex-col justify-start flex"
+        className="flex flex-col justify-start gap-y-4 bg-white w-3/4 h-2/5 shadow-sm rounded-lg p-6 md:w-2/3 md:h-1/3 lg:w-1/3 lg:h-auto  "
       >
        <div className="flex flex-col gap-y-2">
-          <h1 className="text-black text-3xl font-medium">Login Backoffice</h1>
+          <h1 className="text-black text-xl md:text-2xl font-medium">Login Backoffice</h1>
           {errorMessage && (
             <span className="text-error-500 bg-error-50 border border-error-500 rounded-lg p-2 text-center">
               {errorMessage}

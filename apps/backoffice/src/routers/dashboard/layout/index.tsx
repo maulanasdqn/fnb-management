@@ -7,7 +7,7 @@ export const DashboardLayout: FC = (): ReactElement => {
     { name: 'Home', path: '#' },
     { name: 'Stock Opname', path: '/stock-opnmae' },
     { name: 'Request Purchase', path: 'req-purchase' },
-    { name: 'Logout', path: '/auth/login' },
+    { name: 'Logout', path: '/auth/logout' },
   ];
   return (
     <div className="max-w-auto relative">
