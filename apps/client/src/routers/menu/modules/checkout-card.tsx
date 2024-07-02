@@ -36,25 +36,25 @@ export const CheckoutCard: FC<TCheckoutCard> = (props): ReactElement => {
           <p className="font-bold">
             Size :{' '}
             <span className="font-normal">
-              {props?.order?.variant?.variant}
+              {props?.order?.variant?.variant.name}
             </span>
           </p>
           <p className="font-bold">
             Ice Level :{' '}
             <span className="font-normal">
-              {props?.order?.variant?.iceLevel}
+              {props?.order?.variant?.iceLevel.name}
             </span>
           </p>
           <p className="font-bold">
             Sugar level :{' '}
             <span className="font-normal">
-              {props?.order?.variant?.sugarLevel}
+              {props?.order?.variant?.sugarLevel.name}
             </span>
           </p>
           <p className="font-bold">
             Pilihan Toping :{' '}
             <span className="font-normal">
-              {props?.order?.variant?.topping}
+              {props?.order.variant?.topping?.map((data) => data.name).join(', ')}
             </span>
           </p>
         </div>

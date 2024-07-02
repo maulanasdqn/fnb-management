@@ -63,7 +63,7 @@ export const orderCreateSchema = z.object({
     z.object({
       productId: z.string(),
       quantity: z.number(),
-      variantOptionIds: z.array(z.string()).optional(),
+      variantOptionIds: z.array(z.string()),
     })
   ),
 });
