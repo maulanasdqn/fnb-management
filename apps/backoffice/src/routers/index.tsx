@@ -40,7 +40,7 @@ export const router = createBrowserRouter([
       {
         path: '',
         element: <Dashboard />,
-        loader: () => pagePermission([PERMISSION_DASHBOARD.READ_DASHBOARD]),
+        // loader: () => pagePermission([PERMISSION_DASHBOARD.READ_DASHBOARD]),
       },
       {
         path: 'detail',
@@ -49,12 +49,12 @@ export const router = createBrowserRouter([
       {
         path: 'stock-opname',
         element: <DashboardStockOpname />,
-        loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
+        // loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
       },
       {
         path: 'req-purchase',
         element: <DashboardRequestPurchase />,
-        loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
+        // loader: () => pagePermission([PERMISSION_PURCHASE.REQUEST_PURCHASE]),
       },
     ],
   },

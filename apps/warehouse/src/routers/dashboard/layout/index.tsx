@@ -7,6 +7,7 @@ import {
   PERMISSION_PURCHASE,
   PERMISSION_ROLE,
   PERMISSION_TRANSACTION,
+  TUser,
 } from '@fms/entities';
 import { Icon } from '@iconify/react';
 import { userService } from '@fms/web-services';
@@ -59,7 +60,7 @@ export const DashboardLayout: FC = (): ReactElement => {
   ];
   return (
     <div className="flex bg-grey-50 h-screen overflow-hidden">
-      <Sidebar userData={userService.getUserData()} menu={sidebarMenu} />
+      <Sidebar userData={userService.getUserData() as TUser} menu={sidebarMenu} />
       <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
         <div className="max-w-screen-2xl p-4 md:p-6 2xl:p-10">
           <main>
