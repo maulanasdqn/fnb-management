@@ -1,9 +1,12 @@
 export enum EOrderStatus {
-  ORDERED = 'ordered',
-  DELIVERED = 'delivered',
-  CANCELED = 'canceled',
-  PENDING = 'pending',
-  PROCESSING = 'processing',
+  ORDERRECEIVED = 'Order Received',
+  ORDERCONFIRMED = 'Order Confirmed',
+  SERVED = 'Served',
+  COMPLETED = 'Completed',
+  CANCELED = 'Cancelled',
+  REFUNDED = 'Refunded',
+  INQUEUE = 'In Queue',
+  ONHOLD = 'On Hold',
 }
 
 export enum EOrderType {
