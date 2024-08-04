@@ -43,7 +43,7 @@ export const seedVariant = async <T extends Record<string, unknown>>(
       await tx.insert(schema.variantOptions).values([
         {
           name: 'Less Sugar',
-          variantId: variantIce.id,
+          variantId: variantSugar.id,
         },
         {
           name: 'Extra Sugar',
@@ -60,7 +60,7 @@ export const seedVariant = async <T extends Record<string, unknown>>(
       await tx.insert(schema.variantOptions).values([
         {
           name: 'Medium',
-          variantId: variantIce.id,
+          variantId: variantSize.id,
         },
         {
           name: 'Large',
