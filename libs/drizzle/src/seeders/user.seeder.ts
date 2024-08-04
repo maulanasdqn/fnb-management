@@ -46,8 +46,8 @@ export const seedSuperAdmin = async (db: any) => {
 
     console.log('Creating Super Admin user... 🚀');
     await db.insert(schema.users).values({
-      fullname: 'admin1',
-      username: 'admin1@admin.com',
+      fullname: 'admin',
+      username: 'admin',
       roleId: createRoleSuperAdmin.id,
       password: hashedPassword,
     });
