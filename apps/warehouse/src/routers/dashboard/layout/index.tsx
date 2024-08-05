@@ -5,8 +5,10 @@ import {
   PERMISSION_INGREDIENTS,
   PERMISSION_PRODUCT,
   PERMISSION_PURCHASE,
+  PERMISSION_RECIPE,
   PERMISSION_ROLE,
   PERMISSION_TRANSACTION,
+  PERMISSION_USER,
   TUser,
 } from '@fms/entities';
 import { Icon } from '@iconify/react';
@@ -25,6 +27,18 @@ export const DashboardLayout: FC = (): ReactElement => {
       icon: <Icon icon="fa:shopping-cart" />,
       path: '/dashboard/ingredient',
       permissions: [PERMISSION_INGREDIENTS.READ_INGREDIENT],
+    },
+    {
+      name: 'User',
+      icon: <Icon icon="fa:user" />,
+      path: '/dashboard/user',
+      permissions: [PERMISSION_USER.READ_USER],
+    },
+    {
+      name: 'Recipe',
+      icon: <Icon icon="fa:coffee" />,
+      path: '/dashboard/recipe',
+      permissions: [PERMISSION_RECIPE.READ_RECIPE],
     },
     {
       name: 'Product',

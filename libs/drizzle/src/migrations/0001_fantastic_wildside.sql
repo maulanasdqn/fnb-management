@@ -1,0 +1,1 @@
+ALTER TABLE "variant_options" ADD COLUMN "price" integer;

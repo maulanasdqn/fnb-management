@@ -12,8 +12,8 @@ const Num = (props: {
   const className = clsx(
     'rounded-lg cursor-pointer p-2 w-8 flex items-center justify-center text-sm',
     {
-      'bg-primary-400 hover:bg-primary-600 text-white': props.isActive,
-      'bg-white hover:bg-primary-100 border border-primary-400 text-primary-400':
+      'bg-primary hover:bg-primary text-white': props.isActive,
+      'bg-white hover:bg-primary border border-primary text-primary':
         !props.isActive,
     }
   );
@@ -56,10 +56,10 @@ export const Pagination: FC<{ meta: TMetaResponse }> = (
       <div className="w-fit flex items-center gap-x-2">
         <Icon
           icon="mdi:chevron-left"
-          className="h-fit w-fit bg-grey-50 p-1 rounded-lg cursor-pointer text-primary-400 text-xl"
+          className="h-fit w-fit bg-grey-50 p-1 rounded-lg cursor-pointer text-primary text-xl"
         />
         {Array.from({ length: Math.min(maxButtons, totalPage) }, (_, i) => (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" key={i}>
             <Num
               isActive={i + 1 === Number(page)}
               onClick={() => setPage(i + 1)}
@@ -69,7 +69,7 @@ export const Pagination: FC<{ meta: TMetaResponse }> = (
         ))}
         <Icon
           icon="mdi:chevron-right"
-          className="h-fit w-fit bg-grey-50 p-1 rounded-lg cursor-pointer text-primary-400 text-xl"
+          className="h-fit w-fit bg-grey-50 p-1 rounded-lg cursor-pointer text-primary text-xl"
         />
       </div>
     </div>

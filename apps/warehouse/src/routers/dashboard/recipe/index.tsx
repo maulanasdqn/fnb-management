@@ -1,4 +1,5 @@
 import { Button } from '@fms/atoms';
+import { TRecipeSingleResponse } from '@fms/entities';
 import { DataTable } from '@fms/organisms';
 import { trpc } from '@fms/trpc-client';
 import { formatedDate } from '@fms/utilities';
@@ -6,31 +7,37 @@ import { ColumnDef } from '@tanstack/react-table';
 import { FC, ReactElement, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
-type IngredientData = Omit<
-  {
-    id: string;
-    name: string;
-    price: number;
+type TRecipeTableData = Omit<{
+  id: string;
+  name: string;
+  createdAt?: Date | null | undefined;
+  updatedAt?: Date | null | undefined;
+  description?: string | null | undefined;
+  details?: {
     amount: number;
-    createdAt?: Date | null | undefined;
-    updatedAt?: Date | null | undefined;
-    logs?: { action: string; timestamp: Date }[] | undefined;
-  },
-  'stock' | 'logs'
->;
+    unitType: {
+      id: string;
+      name: string;
+    };
+    ingredient: {
+      id: string;
+      name: string;
+    };
+  }[] | undefined;
+}, 'details'>;
 
-export const DashboardIngredient: FC = (): ReactElement => {
+export const DashboardRecipe: FC = (): ReactElement => {
   const [debounceValue, setDebounceValue] = useState<string>('');
   const [search, setSearch] = useState<string>('');
   const [searchParams] = useSearchParams();
   const { mutate } = trpc.product.delete.useMutation();
-  const { data,refetch } = trpc.ingredient.findMany.useQuery({
+  const { data, refetch } = trpc.recipe.index.useQuery({
     search: debounceValue || undefined,
     page: Number(searchParams.get('page')),
     perPage: Number(searchParams.get('perPage')),
   });
 
-  const columns: ColumnDef<IngredientData>[] = [
+  const columns: ColumnDef<TRecipeTableData>[] = [
     {
       header: 'No',
       accessorKey: 'index',
@@ -50,21 +57,11 @@ export const DashboardIngredient: FC = (): ReactElement => {
       accessorKey: 'name',
     },
     {
-      header: 'Jumlah',
-      accessorKey: 'amount',
-      size: 8,
-      maxSize: 10,
-    },
-    {
-      header: 'Harga',
-      accessorKey: 'price',
-    },
-    {
       header: 'Action',
       accessorKey: 'action',
       cell: ({ row }) => (
         <div className="flex gap-x-3 items-center">
-          <Link to={`${row.original.id}/edit`} key={row.original.id}>
+          <Link to={`${row.original?.id}/edit`} key={row.original?.id}>
             <Button variant={'warning'} title="Edit">
               Edit
             </Button>
@@ -74,7 +71,7 @@ export const DashboardIngredient: FC = (): ReactElement => {
             title="Delete"
             onClick={() => {
               mutate(
-                { id: row?.original?.id as string },
+                { id: row.original?.id as string },
                 {
                   onSuccess: () => {
                     refetch();
@@ -93,8 +90,8 @@ export const DashboardIngredient: FC = (): ReactElement => {
   return (
     <section className="flex flex-col gap-y-4">
       <div className="flex flex-col gap-y-2 w-full">
-        <small className="text-grey-500">Ingredient List /</small>
-        <h1 className="text-3xl font-bold ">Ingredients</h1>
+        <small className="text-grey-500">Recipe List /</small>
+        <h1 className="text-3xl font-bold ">Recipes</h1>
       </div>
       <div className="w-full bg-white rounded-md p-4 shadow-md h-auto">
         <DataTable
@@ -103,7 +100,7 @@ export const DashboardIngredient: FC = (): ReactElement => {
           columns={columns}
           handleSearch={(e) => setSearch(e.target.value)}
           createLink="create"
-          createLabel="+ Tambah Ingredient"
+          createLabel="+ Tambah Resep"
         />
       </div>
     </section>

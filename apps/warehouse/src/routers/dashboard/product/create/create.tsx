@@ -1,6 +1,6 @@
 import { Button, Breadcrumbs, ToastWrapper } from '@fms/atoms';
 import { ControlledFieldSelect, ControlledFieldText } from '@fms/organisms';
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -24,20 +24,26 @@ const schema = z.object({
   category: z.string({ required_error: 'Kategori harus Diisi' }).min(1, {
     message: 'Kategori harus Diisi',
   }),
+  recipeId: z
+    .string({ required_error: 'Resep harus Diisi' })
+    .min(1, { message: 'Resep harus Diisi' }),
 });
 
 type TCreateProduct = z.infer<typeof schema>;
 export const DashboardProductCreate: FC = (): ReactElement => {
+  const [debounceValue, setDebounceValue] = useState<string>('');
   const navigate = useNavigate();
   const { mutate, isPending } = trpc.product.create.useMutation();
-  const { data } = trpc.productCategory.findMany.useQuery();
+  const { data: category } = trpc.dropdown.productCategory.useQuery({
+    search: debounceValue || undefined,
+  });
+  const { data: recipeList } = trpc.dropdown.recipe.useQuery({
+    search: debounceValue || undefined,
+  });
   const breadcrumbsItem = [
     { name: 'Create Data', path: '/dashboard/product/create' },
   ];
-  const category = data?.data?.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
+
   const {
     control,
     handleSubmit,
@@ -55,6 +61,7 @@ export const DashboardProductCreate: FC = (): ReactElement => {
         priceSelling: Number(data?.priceSelling),
         image: data?.image,
         description: data?.description,
+        recipeId: data?.recipeId,
       },
       {
         onSuccess: () => {
@@ -79,17 +86,25 @@ export const DashboardProductCreate: FC = (): ReactElement => {
       <div className="flex items-center justify-center w-full h-full mt-16">
         <form className="w-full" onSubmit={onSubmit}>
           <div className="grid grid-cols-2 gap-4 w-5/6 mx-auto">
-            <div className="col-span-2">
-              <ControlledFieldSelect
-                name="category"
-                control={control}
-                label="Kategori"
-                options={category}
-                required
-                status={errors.category ? 'error' : 'default'}
-                message={errors.category?.message}
-              />
-            </div>
+            <ControlledFieldSelect
+              name="category"
+              control={control}
+              label="Kategori"
+              options={category}
+              required
+              status={errors.category ? 'error' : 'default'}
+              message={errors.category?.message}
+            />
+            <ControlledFieldSelect
+              name="recipeId"
+              control={control}
+              label="Resep"
+              options={recipeList}
+              required
+              status={errors.recipeId ? 'error' : 'default'}
+              message={errors.recipeId?.message}
+            />
+
             <ControlledFieldText
               type="text"
               status={errors.name ? 'error' : 'default'}
