@@ -10,21 +10,43 @@ import { toast } from 'react-toastify';
 import { TIngredientCreateRequest } from '@fms/entities';
 
 export const schema = z.object({
-  name: z.string({ required_error: 'Nama Inggredient harus Diisi' }).min(1, { message: 'Nama Inggredient harus Diisi' }),
-  price: z.string({ required_error: 'Harga Inggredient harus Diisi' }).min(1, { message: 'Harga Inggredient harus Diisi' }),
-  amount: z.string({ required_error: 'Jumlah Inggredient harus Diisi' }).min(1, { message: 'Jumlah Inggredient harus Diisi' }),
-  unitTypeId: z.string({ required_error: 'Satuan Inggredient harus Diisi' }).min(1, { message: 'Satuan Inggredient harus Diisi' }),
+  name: z
+    .string({ required_error: 'Nama Inggredient harus Diisi' })
+    .min(1, { message: 'Nama Inggredient harus Diisi' }),
+  price: z
+    .string({ required_error: 'Harga Inggredient harus Diisi' })
+    .min(1, { message: 'Harga Inggredient harus Diisi' }),
+  amount: z
+    .string({ required_error: 'Jumlah Inggredient harus Diisi' })
+    .min(1, { message: 'Jumlah Inggredient harus Diisi' }),
+  unitTypeId: z
+    .string({ required_error: 'Satuan Inggredient harus Diisi' })
+    .min(1, { message: 'Satuan Inggredient harus Diisi' }),
 });
 
 export const CreateInggredient: FC = (): ReactElement => {
   const [debounceValue, setDebounceValue] = useState<string>('');
   const { mutate, isPending } = trpc.ingredient.create.useMutation();
 
-  const { data: ingredientList } = trpc.dropdown.ingredient.useQuery({
-    search: debounceValue || undefined,
-  });
+  const unitType = [
+    {
+      label: 'gram',
+      value: '53eea5f3-4a5a-4bed-aad4-c350703bde6b',
+    },
+    {
+      label: 'kilogram',
+      value: '65f90004-6219-4ef1-8631-a0c8c36c2a2c',
+    },
+    {
+      label: 'mililiter',
+      value: "5a3b67fc-5965-4488-a51b-27165aba33f5"
+    },
+    {
+      label: "liter",
+      value: "77332082-ae00-47a7-8275-c9cbde30d105"
+    },
+  ];
 
-  console.log(ingredientList);
   const navigate = useNavigate();
   const breadcrumbsItem = [
     { name: 'Create Data', path: '/dashboard/ingredient/create' },
@@ -38,19 +60,22 @@ export const CreateInggredient: FC = (): ReactElement => {
     resolver: zodResolver(schema),
   });
   const onSubmit = handleSubmit((data) => {
-    mutate({
-      name: data?.name,
-      price: Number(data?.price),
-      amount: Number(data?.amount),
-      unitTypeId: data?.unitTypeId,
-    }, {
-      onSuccess: () => {
-        toast.success('Create Ingredient Success');
-        setTimeout(() => {
-          navigate('/dashboard/ingredient');
-        }, 1000);
+    mutate(
+      {
+        name: data?.name,
+        price: Number(data?.price),
+        amount: Number(data?.amount),
+        unitTypeId: data?.unitTypeId,
       },
-    });
+      {
+        onSuccess: () => {
+          toast.success('Create Ingredient Success');
+          setTimeout(() => {
+            navigate('/dashboard/ingredient');
+          }, 1000);
+        },
+      }
+    );
   });
   return (
     <section className="w-full py-4 bg-white shadow-md rounded px-8 h-5/6 ">
@@ -64,17 +89,6 @@ export const CreateInggredient: FC = (): ReactElement => {
       <div className="flex items-center justify-center w-full h-full mt-16">
         <form className="w-full" onSubmit={onSubmit}>
           <div className="grid grid-cols-2 gap-4 w-5/6 mx-auto">
-            <div className="col-span-2">
-              <ControlledFieldSelect
-                name="unitTypeId"
-                control={control}
-                label="Unit type"
-                options={ingredientList}
-                required
-                status={errors.unitTypeId ? 'error' : 'default'}
-                message={errors.unitTypeId?.message}
-              />
-            </div>
             <ControlledFieldText
               type="text"
               status={errors.name ? 'error' : 'default'}
@@ -93,6 +107,7 @@ export const CreateInggredient: FC = (): ReactElement => {
               control={control}
               required
             />
+
             <ControlledFieldText
               status={errors.amount ? 'error' : 'default'}
               message={errors.amount?.message}
@@ -101,6 +116,15 @@ export const CreateInggredient: FC = (): ReactElement => {
               name="amount"
               control={control}
               required
+            />
+            <ControlledFieldSelect
+              name="unitTypeId"
+              control={control}
+              label="Unit type"
+              options={unitType}
+              required
+              status={errors.unitTypeId ? 'error' : 'default'}
+              message={errors.unitTypeId?.message}
             />
             <div className="mt-4 w-full flex gap-x-3 place-content-end col-span-2">
               <Button

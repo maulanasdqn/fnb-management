@@ -13,8 +13,12 @@ export const schema = z.object({
   name: z.string().min(1, { message: 'Nama resep harus Diisi' }),
   details: z.array(
     z.object({
-      ingredientId: z.string({ required_error: 'Ingredient harus Diisi' }).min(1, { message: 'Ingredient harus Diisi' }),
-      amount: z.number({ required_error: 'Jumlah resep harus Diisi' }).min(1, { message: 'Jumlah resep harus Diisi' }),
+      ingredientId: z
+        .string({ required_error: 'Ingredient harus Diisi' })
+        .min(1, { message: 'Ingredient harus Diisi' }),
+      amount: z
+        .string({ required_error: 'Jumlah resep harus Diisi' })
+        .min(1, { message: 'Jumlah resep harus Diisi' }),
       unitTypeId: z
         .string({ required_error: 'Satuan Ingredient harus Diisi' })
         .min(1, { message: 'Satuan Ingredient harus Diisi' }),
@@ -29,7 +33,24 @@ export const CreateRecipe: FC = (): ReactElement => {
   const { data: ingredientList } = trpc.dropdown.ingredient.useQuery({
     search: debounceValue || undefined,
   });
-
+  const unitType = [
+    {
+      label: 'gram',
+      value: '53eea5f3-4a5a-4bed-aad4-c350703bde6b',
+    },
+    {
+      label: 'kilogram',
+      value: '65f90004-6219-4ef1-8631-a0c8c36c2a2c',
+    },
+    {
+      label: 'mililiter',
+      value: '5a3b67fc-5965-4488-a51b-27165aba33f5',
+    },
+    {
+      label: 'liter',
+      value: '77332082-ae00-47a7-8275-c9cbde30d105',
+    },
+  ];
   const navigate = useNavigate();
   const breadcrumbsItem = [
     { name: 'Create Data', path: '/dashboard/ingredient/create' },
@@ -45,9 +66,16 @@ export const CreateRecipe: FC = (): ReactElement => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    mutate(data, {
+    mutate({
+      name: data?.name,
+      description: data?.description,
+      details: [{
+        amount: Number(data?.details?.[0]?.amount),
+        unitTypeId: data?.details?.[0]?.unitTypeId,
+        ingredientId: data?.details?.[0]?.ingredientId,}]
+    }, {
       onSuccess: () => {
-        toast.success('Create Recipe Success');
+        toast.success('Berhasil menambah Resep');
         setTimeout(() => {
           navigate('/dashboard/recipe');
         }, 1000);
@@ -67,33 +95,25 @@ export const CreateRecipe: FC = (): ReactElement => {
       <div className="flex items-center justify-center w-full h-full mt-16">
         <form className="w-full" onSubmit={onSubmit}>
           <div className="grid grid-cols-2 gap-4 w-5/6 mx-auto">
-            <ControlledFieldSelect
-              name={`details.${0}.unitTypeId`}
-              control={control}
-              label="Unit type"
-              options={ingredientList}
-              required
-              status={errors.details?.[0]?.unitTypeId ? 'error' : 'default'}
-              message={errors.details?.[0]?.unitTypeId?.message}
-            />
-            <ControlledFieldSelect
-              name={`details.${0}.ingredientId`}
-              control={control}
-              label="Unit type"
-              options={ingredientList}
-              required
-              status={errors.details?.[0]?.unitTypeId ? 'error' : 'default'}
-              message={errors.details?.[0]?.unitTypeId?.message}
-            />
             <ControlledFieldText
               type="text"
               status={errors.name ? 'error' : 'default'}
               message={errors.name?.message}
-              label="Nama Recipe"
+              label="Nama Resep"
               name="name"
               control={control}
               required
             />
+            <ControlledFieldSelect
+              name={`details.${0}.ingredientId`}
+              control={control}
+              label="Ingredient"
+              options={ingredientList}
+              required
+              status={errors.details?.[0]?.ingredientId ? 'error' : 'default'}
+              message={errors.details?.[0]?.ingredientId?.message}
+            />
+
             <ControlledFieldText
               status={errors.details?.[0]?.amount ? 'error' : 'default'}
               message={errors.details?.[0]?.amount?.message}
@@ -103,8 +123,17 @@ export const CreateRecipe: FC = (): ReactElement => {
               control={control}
               required
             />
+            <ControlledFieldSelect
+              name={`details.${0}.unitTypeId`}
+              control={control}
+              label="Unit type"
+              options={unitType}
+              required
+              status={errors.details?.[0]?.unitTypeId ? 'error' : 'default'}
+              message={errors.details?.[0]?.unitTypeId?.message}
+            />
             <ControlledFieldText
-            status={errors.description ? 'error' : 'default'}
+              status={errors.description ? 'error' : 'default'}
               message={errors.description?.message}
               type="text"
               label="Description"

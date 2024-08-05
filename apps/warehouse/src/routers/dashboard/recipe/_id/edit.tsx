@@ -1,27 +1,41 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { Button, Breadcrumbs, ToastWrapper } from '@fms/atoms';
 import { ControlledFieldSelect, ControlledFieldText } from '@fms/organisms';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { trpc } from '@fms/trpc-client';
 import { toast } from 'react-toastify';
-import { TIngredientUpdateRequest } from '@fms/entities';
+import { TRecipeCreateRequest, TRecipeUpdateRequest } from '@fms/entities';
 
 export const schema = z.object({
-  name: z.string().min(1, { message: 'Nama Inggredient harus Diisi' }),
-  price: z.string().min(1, { message: 'Harga Inggredient harus Diisi' }),
-  amount: z.string().min(1, { message: 'Jumlah Inggredient harus Diisi' }),
-  unitTypeId: z.string({ required_error: 'Satuan Inggredient harus Diisi' }).min(1, { message: 'Satuan Inggredient harus Diisi' }),
+  name: z.string().min(1, { message: 'Nama resep harus Diisi' }),
+  details: z.array(
+    z.object({
+      ingredientId: z
+        .string({ required_error: 'Ingredient harus Diisi' })
+        .min(1, { message: 'Ingredient harus Diisi' }),
+      amount: z
+        .string({ required_error: 'Jumlah resep harus Diisi' })
+        .min(1, { message: 'Jumlah resep harus Diisi' }),
+      unitTypeId: z
+        .string({ required_error: 'Satuan Ingredient harus Diisi' })
+        .min(1, { message: 'Satuan Ingredient harus Diisi' }),
+    })
+  ),
 });
 
-export const UpdateInggredient: FC = (): ReactElement => {
+export const UpdateRecipe: FC = (): ReactElement => {
+  const [debounceValue, setDebounceValue] = useState<string>('');
+  const { mutate, isPending } = trpc.recipe.update.useMutation();
   const params = useParams();
-  const { data } = trpc.ingredient.findOne.useQuery({
+  const { data: recipeData } = trpc.recipe.detail.useQuery({
     id: params.id as string,
   });
-  const { mutate, isPending } = trpc.ingredient.update.useMutation();
+  const { data: ingredientList } = trpc.dropdown.ingredient.useQuery({
+    search: debounceValue || undefined,
+  });
   const unitType = [
     {
       label: 'gram',
@@ -42,41 +56,48 @@ export const UpdateInggredient: FC = (): ReactElement => {
   ];
   const navigate = useNavigate();
   const breadcrumbsItem = [
-    { name: 'Create Data', path: '/dashboard/ingredient/edit' },
+    { name: 'Create Data', path: '/dashboard/ingredient/create' },
   ];
+
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<TIngredientUpdateRequest>({
+  } = useForm<TRecipeUpdateRequest>({
     mode: 'all',
     resolver: zodResolver(schema),
   });
 
-  useEffect(() => {
-    reset(data?.data as TIngredientUpdateRequest);
-  }, [data, reset]);
-
   const onSubmit = handleSubmit((data) => {
     mutate(
       {
-        id: data?.id,
+        id: data.id,
         name: data?.name,
-        price: Number(data?.price),
-        amount: Number(data?.amount),
-        unitTypeId: data?.unitTypeId,
+        description: data?.description,
+        details: [
+          {
+            amount: Number(data?.details?.[0]?.amount),
+            unitTypeId: String(data?.details?.[0]?.unitTypeId),
+            ingredientId: String(data?.details?.[0]?.ingredientId),
+          },       
+        ],
       },
       {
         onSuccess: () => {
-          toast.success('Ingredient Berhasil diperbarui');
+          toast.success('Berhasil memperbarui Resep');
           setTimeout(() => {
-            navigate('/dashboard/ingredient');
+            navigate('/dashboard/recipe');
           }, 1000);
         },
       }
     );
   });
+  
+  useEffect(() => {
+    reset(recipeData?.data as TRecipeUpdateRequest);
+  }, [recipeData, reset]);
+
   return (
     <section className="w-full py-4 bg-white shadow-md rounded px-8 h-5/6 ">
       <ToastWrapper />
@@ -93,37 +114,51 @@ export const UpdateInggredient: FC = (): ReactElement => {
               type="text"
               status={errors.name ? 'error' : 'default'}
               message={errors.name?.message}
-              label="Nama Inggredient"
+              label="Nama Resep"
               name="name"
               control={control}
-            />
-            <ControlledFieldText
-              status={errors.price ? 'error' : 'default'}
-              message={errors.price?.message}
-              type="number"
-              label="Harga Jual"
-              name="price"
-              control={control}
-            />
-            <ControlledFieldText
-              status={errors.amount ? 'error' : 'default'}
-              message={errors.amount?.message}
-              type="number"
-              label="Jumlah"
-              name="amount"
-              control={control}
+              required
             />
             <ControlledFieldSelect
-              name="unitTypeId"
+              name={`details.${0}.ingredientId`}
+              control={control}
+              label="Ingredient"
+              options={ingredientList}
+              required
+              status={errors.details?.[0]?.ingredientId ? 'error' : 'default'}
+              message={errors.details?.[0]?.ingredientId?.message}
+            />
+
+            <ControlledFieldText
+              status={errors.details?.[0]?.amount ? 'error' : 'default'}
+              message={errors.details?.[0]?.amount?.message}
+              type="number"
+              label="Jumlah"
+              name={`details.${0}.amount`}
+              control={control}
+              required
+            />
+            <ControlledFieldSelect
+              name={`details.${0}.unitTypeId`}
               control={control}
               label="Unit type"
               options={unitType}
-              status={errors.unitTypeId ? 'error' : 'default'}
-              message={errors.unitTypeId?.message}
+              required
+              status={errors.details?.[0]?.unitTypeId ? 'error' : 'default'}
+              message={errors.details?.[0]?.unitTypeId?.message}
+            />
+            <ControlledFieldText
+              status={errors.description ? 'error' : 'default'}
+              message={errors.description?.message}
+              type="text"
+              label="Description"
+              name="description"
+              control={control}
+              required
             />
             <div className="mt-4 w-full flex gap-x-3 place-content-end col-span-2">
               <Button
-                type="submit"
+                type="button"
                 variant="primary"
                 variantType="outline"
                 size="sm"

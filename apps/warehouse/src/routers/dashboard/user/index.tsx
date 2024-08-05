@@ -75,8 +75,8 @@ export const DashboardUser: FC = (): ReactElement => {
       return (
         <section className="flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-2 w-full">
-            <small className="text-grey-500">Recipe List /</small>
-            <h1 className="text-3xl font-bold ">Recipes</h1>
+            <small className="text-grey-500">User List /</small>
+            <h1 className="text-3xl font-bold ">Users</h1>
           </div>
           <div className="w-full bg-white rounded-md p-4 shadow-md h-auto">
             <DataTable

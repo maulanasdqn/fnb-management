@@ -1,11 +1,11 @@
 import { Breadcrumbs, Button, ToastWrapper } from '@fms/atoms';
-import { TUserCreateRequest } from '@fms/entities';
+import { TUserUpdateRequest } from '@fms/entities';
 import { ControlledFieldSelect, ControlledFieldText } from '@fms/organisms';
 import { trpc } from '@fms/trpc-client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -16,55 +16,65 @@ export const schema = z.object({
   username: z
     .string({ required_error: 'Username harus diisi' })
     .min(1, { message: 'Username harus diisi' }),
-  password: z
-    .string({ required_error: 'Password tidak boleh kosong' })
-    .min(1, { message: 'Password tidak boleh kosong' }),
+//   password: z
+//     .string({ required_error: 'Password tidak boleh kosong' })
+//     .min(1, { message: 'Password tidak boleh kosong' }),
   roleId: z
     .string({ required_error: 'Role harus diisi' })
     .min(1, { message: 'Role harus diisi' }),
   avatar: z.string().optional(),
 });
-export const CreateUser: FC = (): ReactElement => {
-  const [debounceValue, setDebounceValue] = useState<string>('');
-  const { mutate, isPending } = trpc.user.create.useMutation();
-
+export const UpdateUser: FC = (): ReactElement => {
+  const { mutate, isPending } = trpc.user.update.useMutation();
+  const params = useParams();
+  const { data: userData } = trpc.user.detail.useQuery({
+    id: params.id as string,
+  });
   const { data: roleData } = trpc.role.findMany.useQuery();
-
   const roleType = roleData?.data?.map((role) => ({
     label: role.name,
     value: role.id,
   }));
   const navigate = useNavigate();
   const breadcrumbsItem = [
-    { name: 'Create Data', path: '/dashboard/user/create' },
+    { name: 'Update Data', path: '/dashboard/:id/Edit' },
   ];
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
-  } = useForm<TUserCreateRequest>({
+  } = useForm<TUserUpdateRequest>({
     mode: 'all',
     resolver: zodResolver(schema),
   });
 
   const onSubmit = handleSubmit((data) => {
-    mutate(data, {
+    mutate({
+        id: params.id as string,
+        fullname: data.fullname,
+        username: data.username,
+        roleId: data.roleId,
+        avatar: data.avatar
+    }, {
       onSuccess: () => {
-        toast.success('Behasil menambah user');
+        toast.success('Behasil memperbarui user');
         setTimeout(() => {
           navigate('/dashboard/user');
         }, 1000);
       },
     });
   });
-
+  useEffect(() => {
+    reset(userData?.data as TUserUpdateRequest);
+  }, [userData, reset]);
   return (
     <section className="w-full py-4 bg-white shadow-md rounded px-8 h-5/6 ">
       <ToastWrapper />
       <div className="flex gap-x-1">
         <h1 className="text-grey">
-          Product <span className="text-grey-400"> {'/'} </span>
+          User <span className="text-grey-400"> {'/'} </span>
         </h1>
         <Breadcrumbs items={breadcrumbsItem} />
       </div>
@@ -96,15 +106,6 @@ export const CreateUser: FC = (): ReactElement => {
               type="text"
               label="Username"
               name="username"
-              control={control}
-              required
-            />
-            <ControlledFieldText
-              status={errors.password ? 'error' : 'default'}
-              message={errors.password?.message}
-              type="password"
-              label="Password"
-              name="password"
               control={control}
               required
             />

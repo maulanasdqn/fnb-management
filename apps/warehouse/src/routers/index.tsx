@@ -32,6 +32,8 @@ import { DashboardRecipe } from './dashboard/recipe';
 import { CreateRecipe } from './dashboard/recipe/create/create';
 import { DashboardUser } from './dashboard/user';
 import { CreateUser } from './dashboard/user/create/create';
+import { UpdateRecipe } from './dashboard/recipe/_id/edit';
+import { UpdateUser } from './dashboard/user/_id/edit';
 
 export const router = createBrowserRouter([
   {
@@ -114,7 +116,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'recipe/:id/edit',
-        element: <DashboardRecipe/>,
+        element: <UpdateRecipe/>,
         loader: () => pagePermission([PERMISSION_RECIPE.READ_RECIPE]),
       },
       {
@@ -124,7 +126,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'user/:id/edit',
-        element: <DashboardUser />,
+        element: <UpdateUser />,
         loader: () => pagePermission([PERMISSION_USER.READ_USER]),
       },
       {
