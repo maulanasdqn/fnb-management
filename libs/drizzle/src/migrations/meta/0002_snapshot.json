@@ -1,6 +1,6 @@
 {
-  "id": "d8d52f53-7005-4ca0-82a9-bec26cfcd419",
-  "prevId": "4226c803-c665-4ce9-99f8-b86b6a206f8a",
+  "id": "f4897676-9be4-4456-8b17-524aa21f82ca",
+  "prevId": "d8d52f53-7005-4ca0-82a9-bec26cfcd419",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -521,7 +521,7 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "default": "'pending'"
+          "default": "'ordered'"
         },
         "type": {
           "name": "type",
