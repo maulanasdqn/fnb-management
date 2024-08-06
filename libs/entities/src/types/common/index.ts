@@ -269,8 +269,8 @@ export type TLineChart = {
   };
 };
 export type TCCommonObject = {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   data?: {
     id?: string;
     name?: string;

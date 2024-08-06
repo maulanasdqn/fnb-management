@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { baseSchema, TBaseResponse } from '../common';
 
 export const unitTypeSchema = z.object({
+  id: z.string(),
   name: z.string(),
   conversions: z
     .array(
@@ -15,7 +16,7 @@ export const unitTypeSchema = z.object({
     )
     .optional()
     .nullable(),
-  ...baseSchema.shape,
+  ...baseSchema.omit({ id: true }).shape,
 });
 
 export const unitTypeCreateSchema = z.object({

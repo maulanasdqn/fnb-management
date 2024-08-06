@@ -81,11 +81,13 @@ export const groupPermissions = (data: TPermission[]): TPermissionGroup[] => {
   }));
 };
 
-export const dropdownOptions = (props: TCCommonObject[]): TOption[] => {
+export const dropdownOptions = <T extends TCCommonObject>(
+  props: T[]
+): TOption[] => {
   return props?.map((val) => {
     const result: TOption = {
-      label: val.name,
-      value: val.id,
+      label: val?.name as string,
+      value: val?.id as string,
     };
 
     if (val?.data) {
