@@ -5,7 +5,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ReactElement, useMemo, useState } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { Button, Pagination } from '@fms/atoms';
 import { TDataTable } from './type';
@@ -18,6 +18,9 @@ export const DataTable = <T extends Record<string, unknown>>(
 ): ReactElement => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchValue, setSearchValue] = useState(
+    searchParams.get('search') || ''
+  );
   const memoizeColumns = useMemo(() => props.columns, [props.columns]);
   const memoizeData = useMemo(() => props.data || [], [props.data]);
 
@@ -33,12 +36,17 @@ export const DataTable = <T extends Record<string, unknown>>(
     manualSorting: false,
     manualPagination: true,
   });
-
+  useEffect(() => {
+    const search = searchParams.get('search');
+    if (search !== null && search !== 'null') {
+      setSearchValue(search);
+    }
+  }, [searchParams]);
   return (
     <div className="w-full h-full bg-white p-4 mt-10 rounded-lg">
       <div className="flex items-center gap-x-4">
         <input
-          value={searchParams.get('search') || ''}
+          value={searchValue}
           onChange={(e) => {
             debounce({ delay: 500 }, () => props?.handleSearch?.(e));
             setSearchParams({
@@ -46,6 +54,7 @@ export const DataTable = <T extends Record<string, unknown>>(
               page: String(searchParams.get('page')),
               perPage: String(searchParams.get('perPage')),
             });
+            setSearchValue(e.target.value);
           }}
           className="w-fit my-2 p-2 border-grey-100 border text-grey-400 text-sm focus:outline-none focus:ring-0 focus-visible:ring-0 bg-white placeholder-grey-400 rounded-lg"
           placeholder="Search"
@@ -77,7 +86,7 @@ export const DataTable = <T extends Record<string, unknown>>(
                   <th
                     key={header.id}
                     style={{ width: `${header.getSize()}px` }}
-                    className="p-4 bg-primary-500 text-white"
+                    className="p-4 bg-primary text-white"
                   >
                     <div
                       {...{

@@ -4,7 +4,7 @@ import { DataTable } from '@fms/organisms';
 import { ColumnDef } from '@tanstack/react-table';
 import { FC, ReactElement, Suspense, useState } from 'react';
 import { trpc } from '@fms/trpc-client';
-import { useDebounce } from '@fms/utilities';
+import { formatedDate, useDebounce } from '@fms/utilities';
 import { Link, useSearchParams } from 'react-router-dom';
 export const DashboardProduct: FC = (): ReactElement => {
   const [debounceValue, setDebounceValue] = useState<string>('');
@@ -32,16 +32,10 @@ export const DashboardProduct: FC = (): ReactElement => {
       cell: ({ row }) => row.index + 1,
     },
     {
-      header: 'Gambar',
-      accessorKey: 'image',
+      header: 'Created At',
+      accessorKey: 'createdAt',
       cell: ({ cell }) => (
-        <img
-          width={40}
-          src={
-            cell.row.original?.image ? cell.row.original.image : '/no-photo.jpg'
-          }
-          alt="gambar"
-        />
+        <p>{formatedDate(cell?.row?.original?.createdAt as Date)}</p>
       ),
     },
     {
@@ -100,7 +94,7 @@ export const DashboardProduct: FC = (): ReactElement => {
           handleSearch={(e) => setSearch(e.target.value)}
           createLink="create"
           createLabel="+ Tambah Produk"
-          searchBox
+          
         />
       </div>
     </Suspense>
