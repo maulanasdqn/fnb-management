@@ -30,11 +30,7 @@ export const UpdateUser: FC = (): ReactElement => {
   const { data: userData } = trpc.user.detail.useQuery({
     id: params.id as string,
   });
-  const { data: roleData } = trpc.role.findMany.useQuery();
-  const roleType = roleData?.data?.map((role) => ({
-    label: role.name,
-    value: role.id,
-  }));
+  const {data:roleType} = trpc.dropdown.role.useQuery();
   const navigate = useNavigate();
   const breadcrumbsItem = [
     { name: 'Update Data', path: '/dashboard/:id/Edit' },

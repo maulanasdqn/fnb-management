@@ -27,13 +27,7 @@ export const schema = z.object({
 export const CreateUser: FC = (): ReactElement => {
   const [debounceValue, setDebounceValue] = useState<string>('');
   const { mutate, isPending } = trpc.user.create.useMutation();
-
-  const { data: roleData } = trpc.role.findMany.useQuery();
-
-  const roleType = roleData?.data?.map((role) => ({
-    label: role.name,
-    value: role.id,
-  }));
+  const {data:roleType} = trpc.dropdown.role.useQuery();
   const navigate = useNavigate();
   const breadcrumbsItem = [
     { name: 'Create Data', path: '/dashboard/user/create' },

@@ -3,7 +3,7 @@ import { TCardOverviewSingleResponse } from "./modules/card-overview";
 export const recapData: TCardOverviewSingleResponse[] = [
     {
       title: 'Order',
-      value: 200,
+      value: 2,
       icon: 'gala:bag',
       status: {
         label: '+0.2%',
@@ -12,7 +12,7 @@ export const recapData: TCardOverviewSingleResponse[] = [
     },
     {
       title: 'Pending Order',
-      value: 10,
+      value: 3,
       icon: 'material-symbols-light:pending-actions',
       status: {
         label: '-0.2%',
@@ -21,7 +21,7 @@ export const recapData: TCardOverviewSingleResponse[] = [
     },
     {
       title: 'Completed Order',
-      value: 210,
+      value: 8,
       icon: 'mdi:coffee-maker-complete-outline',
       status: {
         label: '+0.3%',
@@ -30,7 +30,7 @@ export const recapData: TCardOverviewSingleResponse[] = [
     },
     {
       title: 'Product',
-      value: 18,
+      value:5,
       icon: 'mdi:coffee-maker-outline',
       status: {
         label: '+2',

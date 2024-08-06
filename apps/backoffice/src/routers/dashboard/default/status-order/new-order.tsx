@@ -15,8 +15,9 @@ export const NewOrder: FC = (): ReactElement => {
   const [detailModal, setDetailModal] = useState<boolean>(false);
   const { data,refetch } = trpc.order.findMany.useQuery();
   const { mutate } = trpc.order.update.useMutation();
+
   const filterData = data?.data?.filter(
-    (item) => item.status === EOrderStatus.ORDERED
+    (item) => item.status === EOrderStatus.PENDING
   );
   
   const handleDetailClick = (item: TOrderSingleResponse['data']) => {
@@ -96,7 +97,7 @@ export const NewOrder: FC = (): ReactElement => {
                   mutate(
                     {
                       id: currentId,
-                      status: EOrderStatus.PENDING,
+                      status: EOrderStatus.PROCESSING,
                       isPaid: false,
                     },
                     {

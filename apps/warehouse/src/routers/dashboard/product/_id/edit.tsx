@@ -30,12 +30,8 @@ export const DashboardProductEdit: FC = (): ReactElement => {
     reset(data?.data as TProductUpdateRequest);
   }, [data, reset]);
 
-  const { data: category } = trpc.dropdown.productCategory.useQuery({
-    search: debounceValue || undefined,
-  });
-  const { data: recipeList } = trpc.dropdown.recipe.useQuery({
-    search: debounceValue || undefined,
-  });
+  const { data: category } = trpc.dropdown.productCategory.useQuery();
+  const { data: recipeList } = trpc.dropdown.recipe.useQuery();
   const { mutate, isPending } = trpc.product.update.useMutation();
   const onFormSubmit = handleSubmit((data) => {
     return mutate(
@@ -76,6 +72,7 @@ export const DashboardProductEdit: FC = (): ReactElement => {
                 control={control}
                 label="Kategori"
                 options={category}
+                required
               />
               <ControlledFieldSelect
                 name="recipeId"

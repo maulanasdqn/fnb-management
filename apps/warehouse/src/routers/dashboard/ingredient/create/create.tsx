@@ -27,25 +27,7 @@ export const schema = z.object({
 export const CreateInggredient: FC = (): ReactElement => {
   const [debounceValue, setDebounceValue] = useState<string>('');
   const { mutate, isPending } = trpc.ingredient.create.useMutation();
-
-  const unitType = [
-    {
-      label: 'gram',
-      value: '53eea5f3-4a5a-4bed-aad4-c350703bde6b',
-    },
-    {
-      label: 'kilogram',
-      value: '65f90004-6219-4ef1-8631-a0c8c36c2a2c',
-    },
-    {
-      label: 'mililiter',
-      value: "5a3b67fc-5965-4488-a51b-27165aba33f5"
-    },
-    {
-      label: "liter",
-      value: "77332082-ae00-47a7-8275-c9cbde30d105"
-    },
-  ];
+  const {data: unitType}= trpc.dropdown.unitType.useQuery();
 
   const navigate = useNavigate();
   const breadcrumbsItem = [

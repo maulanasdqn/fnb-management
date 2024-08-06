@@ -4,9 +4,9 @@ import { Outlet } from 'react-router-dom';
 
 export const DashboardLayout: FC = (): ReactElement => {
   const navMenu = [
-    { name: 'Home', path: '#' },
-    { name: 'Stock Opname', path: '/stock-opnmae' },
-    { name: 'Request Purchase', path: 'req-purchase' },
+    { name: 'Home', path: '/dashboard' },
+    // { name: 'Stock Opname', path: '/stock-opnmae' },
+    // { name: 'Request Purchase', path: 'req-purchase' },
     { name: 'Logout', path: '/auth/logout' },
   ];
   return (
