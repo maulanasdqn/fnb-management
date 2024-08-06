@@ -5,8 +5,9 @@ import {
   TRoleSingleResponse,
   TRoleCreateRequest,
   TRoleUpdateRequest,
+  TRole,
 } from '@fms/entities';
-import { eq } from 'drizzle-orm';
+import { eq, like } from 'drizzle-orm';
 
 export const create = async (
   request: TRoleCreateRequest
@@ -158,4 +159,12 @@ export const deleteRole = async (id: string): Promise<TRoleSingleResponse> => {
   return {
     message: 'Delete Role Success',
   };
+};
+
+export const findAllRoleWithSearch = async (
+  search?: string
+): Promise<TRole[]> => {
+  return await db.query.roles.findMany({
+    where: like(roles.name, `%${search || ''}%`),
+  });
 };

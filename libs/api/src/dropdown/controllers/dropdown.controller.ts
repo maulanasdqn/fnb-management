@@ -9,54 +9,48 @@ import { paymentService } from '../../payment/services/payment.service';
 import { supplierService } from '../../supplier/services/supplier.service';
 import { variantService } from '../../variant/services/variant.service';
 import { TCCommonObject } from '@fms/entities';
+import { findAllRoleWithSearch } from '../../me/services/role.service';
+import { unitTypeService } from '../../unit-type/services/unit-type.service';
 
 export const dropdownController = router({
-  productCategory: procedure
-    .input(z.object({ search: z.string().optional() }))
-    .query(async ({ input }) => {
-      const result = await productCategoryService.findAllWithSearch(
-        input.search
-      );
-      return dropdownOptions(result as TCCommonObject[]);
-    }),
-  recipe: procedure
-    .input(z.object({ search: z.string().optional() }))
-    .query(async ({ input }) => {
-      const result = await recipeService.findAllWithSearch(input.search);
-      return dropdownOptions(result as TCCommonObject[]);
-    }),
-  ingredient: procedure
-    .input(z.object({ search: z.string().optional() }))
-    .query(async ({ input }) => {
-      const result = await ingredientService.findAllWithSearch(input.search);
-      return dropdownOptions(result as TCCommonObject[]);
-    }),
-  place: procedure
-    .input(z.object({ search: z.string().optional() }))
-    .query(async ({ input }) => {
-      const result = await placeService.findAllWithSearch(input.search);
-      return dropdownOptions(result as TCCommonObject[]);
-    }),
-  payment: procedure
-    .input(z.object({ search: z.string().optional() }))
-    .query(async ({ input }) => {
-      const result = await paymentService.findAllWithSearch(input.search);
-      return dropdownOptions(result as TCCommonObject[]);
-    }),
-  supplier: procedure
-    .input(z.object({ search: z.string().optional() }))
-    .query(async ({ input }) => {
-      const result = await supplierService.findAllWithSearch(input.search);
-      return dropdownOptions(
-        result.map((val) => ({ id: val.id, name: val.fullName }))
-      );
-    }),
-  variant: procedure
-    .input(z.object({ search: z.string().optional() }))
-    .query(async ({ input }) => {
-      const result = await variantService.findAllWithSearch(input.search);
-      return dropdownOptions(
-        result.map((val) => ({ id: val.id, name: val.name, data: val.options }))
-      );
-    }),
+  productCategory: procedure.query(async () => {
+    const result = await productCategoryService.findAllWithSearch();
+    return dropdownOptions(result as TCCommonObject[]);
+  }),
+  recipe: procedure.query(async () => {
+    const result = await recipeService.findAllWithSearch();
+    return dropdownOptions(result as TCCommonObject[]);
+  }),
+  ingredient: procedure.query(async () => {
+    const result = await ingredientService.findAllWithSearch();
+    return dropdownOptions(result as TCCommonObject[]);
+  }),
+  place: procedure.query(async () => {
+    const result = await placeService.findAllWithSearch();
+    return dropdownOptions(result as TCCommonObject[]);
+  }),
+  payment: procedure.query(async () => {
+    const result = await paymentService.findAllWithSearch();
+    return dropdownOptions(result as TCCommonObject[]);
+  }),
+  supplier: procedure.query(async () => {
+    const result = await supplierService.findAllWithSearch();
+    return dropdownOptions(
+      result.map((val) => ({ id: val.id, name: val.fullName }))
+    );
+  }),
+  variant: procedure.query(async () => {
+    const result = await variantService.findAllWithSearch();
+    return dropdownOptions(
+      result.map((val) => ({ id: val.id, name: val.name, data: val.options }))
+    );
+  }),
+  role: procedure.query(async () => {
+    const result = await findAllRoleWithSearch();
+    return dropdownOptions(result as TCCommonObject[]);
+  }),
+  unitType: procedure.query(async () => {
+    const result = await unitTypeService.findAllWithSearch();
+    return dropdownOptions(result as TCCommonObject[]);
+  }),
 });
