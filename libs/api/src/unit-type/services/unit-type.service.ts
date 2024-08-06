@@ -1,12 +1,13 @@
 import { db, unitTypeConversions, unitTypes } from '@fms/drizzle';
 import {
   TQueryParams,
+  TUnitType,
   TUnitTypeCreateRequest,
   TUnitTypeResponse,
   TUnitTypeSingleResponse,
   TUnitTypeUpdateRequest,
 } from '@fms/entities';
-import { asc, eq, ilike } from 'drizzle-orm';
+import { asc, eq, ilike, like } from 'drizzle-orm';
 
 export const unitTypeService = {
   pagination: async (params: TQueryParams): Promise<TUnitTypeResponse> => {
@@ -146,5 +147,10 @@ export const unitTypeService = {
     return {
       message: 'Delete Unit Type Success',
     };
+  },
+  findAllWithSearch: async (search?: string): Promise<TUnitType[]> => {
+    return await db.query.unitTypes.findMany({
+      where: like(unitTypes.name, `%${search || ''}%`),
+    });
   },
 };
