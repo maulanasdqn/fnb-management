@@ -24,7 +24,9 @@ export const Navbar: FC<{ menu: TNavbar[] }> = (props): ReactElement => {
       {isBarOpen && (
         <section className="bg-success-50 min-h-40 w-full z-20 p-10 fixed ">
           <div className="flex w-full justify-between items-center">
-            <h1 className="md:text-xl text-md font-bold">Serasa Erat Kopi</h1>
+            <Link to="/">
+              <h1 className="md:text-xl text-md font-bold">Serasa Erat Kopi</h1>
+            </Link>
             <Icon
               icon="fa:close"
               className="md:text-xl text-md text-error-700"
@@ -38,9 +40,9 @@ export const Navbar: FC<{ menu: TNavbar[] }> = (props): ReactElement => {
                   <Link to={menu.path}>{menu.name}</Link>
                 </li>
               ))}
-              <div>
+              {/* <div>
                 <InputText placeholder="Search" />
-              </div>
+              </div> */}
             </ul>
           </div>
         </section>
@@ -57,7 +59,9 @@ export const Navbar: FC<{ menu: TNavbar[] }> = (props): ReactElement => {
             </div>
           )}
           <figure>
-            <h1 className="text-2xl">Serasa Erat Kopi</h1>
+            <Link to="/">
+              <h1 className="text-2xl">Serasa Erat Kopi</h1>
+            </Link>
           </figure>
         </div>
 

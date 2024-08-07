@@ -58,12 +58,12 @@ export const DashboardLayout: FC = (): ReactElement => {
       path: '/dashboard/request-purchase',
       permissions: [PERMISSION_PURCHASE.REQUEST_PURCHASE],
     },
-    {
-      name: 'History Transaction',
-      icon: <Icon icon="fa:users" />,
-      path: '/dashboard/transaction',
-      permissions: [PERMISSION_TRANSACTION.READ_TRANSACTION],
-    },
+    // {
+    //   name: 'History Transaction',
+    //   icon: <Icon icon="fa:users" />,
+    //   path: '/dashboard/transaction',
+    //   permissions: [PERMISSION_TRANSACTION.READ_TRANSACTION],
+    // },
     {
       name: 'Role',
       icon: <Icon icon="fa:shield" />,

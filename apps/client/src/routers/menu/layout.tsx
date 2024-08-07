@@ -4,10 +4,10 @@ import { Outlet } from 'react-router-dom';
 
 export const MenutLayout: FC = (): ReactElement => {
   const navMenu = [
-    { name: 'Home', path: '#' },
+    { name: 'Home', path: '/' },
     { name: 'Coffee', path: '#' },
     { name: 'Non Coffee', path: '#' },
-    { name: 'Recomendation', path: '#' },
+    // { name: 'Recomendation', path: '#' },
   ];
   return (
     <div className="max-w-auto relative">

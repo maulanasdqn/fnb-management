@@ -48,7 +48,7 @@ export const DashboardRequestPurchase: FC = (): ReactElement => {
       cell({ row }) {
         return (
           <div className="flex gap-x-3 items-center">
-            <Link to={`${row.original.id}/edit`} key={row.original.id}>
+            <Link to={`#`} key={row.original.id}>
               <Button variant={'info'} title="detail">
                 Detail
               </Button>
@@ -72,7 +72,7 @@ export const DashboardRequestPurchase: FC = (): ReactElement => {
         data={data}
         columns={columns}
         handleSearch={(e) => setSearch(e.target.value)}
-        createLink="create"
+        createLink="#"
         createLabel="+ Tambah Data"
       />
     </div>

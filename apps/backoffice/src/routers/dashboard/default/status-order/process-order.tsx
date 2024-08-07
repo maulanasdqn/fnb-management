@@ -15,7 +15,7 @@ export const ProcessOrder: FC = (): ReactElement => {
   >(null);
   const { data, refetch } = trpc.order.findMany.useQuery();
   const filterData = data?.data?.filter(
-    (item) => item.status === EOrderStatus.PENDING
+    (item) => item.status === EOrderStatus.PROCESSING
   );
   const { mutate } = trpc.order.update.useMutation();
   const handleDetailClick = (item: TOrderSingleResponse['data']) => {
